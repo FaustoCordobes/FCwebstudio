@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FC Web Studio — Sitios web tipo carta, para tu negocio</title>
+<meta name="description" content="Diseño y desarrollo de sitios web simples y directos: cartas digitales para restaurantes, sitios de experiencias y páginas para tu marca. San Martín de los Andes, Patagonia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;0,9..144,600;1,9..144,420&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1E1B18;
+    --bg-panel: #262220;
+    --paper: #F3EDE0;
+    --paper-dim: #E7DFCC;
+    --ink: #F3EEE3;
+    --ink-dim: #B7AD9C;
+    --ink-faint: #8A8072;
+    --accent: #D6A24C;
+    --accent-ink: #241C0E;
+    --teal: #5C9285;
+    --line: rgba(243,238,227,0.14);
+    --line-strong: rgba(243,238,227,0.28);
+    --radius: 2px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,.serif{ font-family: 'Fraunces', serif; font-weight: 480; }
+  a{ color: inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  ::selection{ background: var(--accent); color: var(--accent-ink); }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(30,27,24,0.86);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .brand{
+    font-family:'Fraunces', serif; font-weight:600; font-size: 22px;
+    letter-spacing: 0.2px; text-decoration:none; color: var(--ink);
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .brand span{ font-family:'Inter',sans-serif; font-weight:500; font-size:12px; color: var(--ink-faint); }
+  nav.links{ display:flex; align-items:center; gap: 30px; }
+  nav.links a{ text-decoration:none; color: var(--ink-dim); font-size: 14.5px; transition: color .15s ease; }
+  nav.links a:hover{ color: var(--ink); }
+  .nav-cta{
+    background: var(--accent); color: var(--accent-ink);
+    padding: 10px 18px; border-radius: var(--radius);
+    text-decoration:none; font-weight:600; font-size: 14px;
+    white-space: nowrap;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .nav-cta:hover{ background:#E3B25F; transform: translateY(-1px); }
+  .menu-toggle{ display:none; background:none; border:1px solid var(--line-strong); color:var(--ink); width:40px; height:40px; border-radius: var(--radius); cursor:pointer; }
+
+  @media (max-width: 760px){
+    nav.links{
+      position:absolute; top: 100%; left:0; right:0;
+      flex-direction: column; align-items:flex-start; gap:0;
+      background: var(--bg-panel); border-bottom: 1px solid var(--line);
+      max-height:0; overflow:hidden; transition: max-height .25s ease;
+    }
+    nav.links.open{ max-height: 260px; }
+    nav.links a{ padding: 14px 28px; width:100%; border-top:1px solid var(--line); }
+    nav.links .nav-cta{ margin: 14px 28px; }
+    .menu-toggle{ display:block; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding: 84px 0 70px; position: relative; overflow:hidden; }
+  .hero .wrap{ display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 60px; align-items:center; }
+  .kicker{
+    font-size: 12.5px; letter-spacing: 0.06em; color: var(--accent);
+    display:flex; align-items:center; gap:10px; margin-bottom: 22px;
+    font-weight:600;
+  }
+  .kicker::before{ content:""; width:22px; height:1px; background: var(--accent); display:inline-block; }
+  h1.hero-title{
+    font-size: clamp(38px, 5.4vw, 56px);
+    line-height: 1.1; margin: 0 0 22px; max-width: 15ch;
+    font-weight: 480;
+  }
+  h1.hero-title em{ font-style: italic; color: var(--accent); font-weight: 420;}
+  .hero p.lede{ color: var(--ink-dim); max-width: 46ch; font-size: 17px; margin-bottom: 34px; }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 14px 24px; border-radius: var(--radius);
+    text-decoration:none; font-weight:600; font-size:15px;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary{ background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover{ background:#E3B25F; transform: translateY(-1px); }
+  .btn-ghost{ border: 1px solid var(--line-strong); color: var(--ink); }
+  .btn-ghost:hover{ border-color: var(--ink-dim); }
+
+  /* menu-card illustration */
+  .menu-card{
+    background: var(--paper); color: #2B2620; border-radius: 3px;
+    padding: 30px 28px 26px; position:relative;
+    transform: rotate(1.2deg);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+    animation: settle .7s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes settle{
+    from{ opacity:0; transform: rotate(1.2deg) translateY(16px); }
+    to{ opacity:1; transform: rotate(1.2deg) translateY(0); }
+  }
+  .menu-card::before{
+    content:""; position:absolute; inset:8px;
+    border: 1px solid rgba(43,38,32,0.25);
+    pointer-events:none;
+  }
+  .menu-card h3{
+    text-align:center; font-size: 13px; letter-spacing: 0.14em;
+    color: #6B5E45; margin: 0 0 4px; font-weight:600; font-family:'Inter',sans-serif;
+  }
+  .menu-card .title{
+    text-align:center; font-family:'Fraunces',serif; font-size: 24px;
+    margin: 0 0 20px; font-weight:600;
+  }
+  .menu-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap: 10px; padding: 11px 0; border-bottom: 1px dashed rgba(43,38,32,0.28);
+    font-size: 14.5px;
+  }
+  .menu-row:last-of-type{ border-bottom:none; }
+  .menu-row .item b{ font-weight:600; }
+  .menu-row .item small{ display:block; color:#7A6E5B; font-size:12px; margin-top:2px; }
+  .menu-row .tag{ font-size:12px; color:#7A6E5B; white-space:nowrap; }
+  .menu-card .stamp{
+    margin-top: 18px; text-align:center; font-size:11px;
+    letter-spacing:0.1em; color:#9C8E76; font-weight:600;
+  }
+
+  @media (max-width: 900px){
+    .hero .wrap{ grid-template-columns: 1fr; }
+    .menu-card{ transform: rotate(0.6deg); max-width: 420px; }
+  }
+
+  /* ---------- Section shell ---------- */
+  section{ padding: 92px 0; border-top: 1px solid var(--line); }
+  .section-head{ max-width: 640px; margin-bottom: 54px; }
+  .eyebrow-label{
+    font-size: 12.5px; letter-spacing:0.08em; color: var(--teal);
+    font-weight:600; margin-bottom: 14px; display:block;
+  }
+  .section-head h2{ font-size: clamp(28px, 3.4vw, 38px); margin: 0 0 14px; font-weight:480; }
+  .section-head p{ color: var(--ink-dim); font-size: 16px; max-width: 52ch; }
+
+  /* ---------- Servicios (categorías de carta) ---------- */
+  .categories{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--line); border:1px solid var(--line); }
+  .cat{ background: var(--bg); padding: 34px 26px; }
+  .cat .cat-label{
+    font-size: 11.5px; letter-spacing:0.07em; color: var(--ink-faint);
+    font-weight:600; margin-bottom:16px; display:block;
+  }
+  .cat h3{ font-size: 19px; margin: 0 0 12px; font-weight:560; }
+  .cat p{ color: var(--ink-dim); font-size: 14px; margin:0; }
+  @media (max-width: 1000px){ .categories{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px){ .categories{ grid-template-columns: 1fr; } }
+
+  /* ---------- Portfolio ---------- */
+  .works{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .work-card{
+    border: 1px solid var(--line); border-radius: var(--radius); overflow:hidden;
+    text-decoration:none; color: var(--ink); display:block;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .work-card:hover{ border-color: var(--line-strong); transform: translateY(-2px); }
+  .work-preview{
+    height: 190px; position:relative; overflow:hidden;
+    background: #100E0C;
+  }
+  .work-preview.p1{ background: #2A1B12; }
+  .work-preview.p2{ background: #0C1518; }
+  .work-preview.p3{ background: #1B140C; }
+  .work-preview iframe{
+    position:absolute; top:0; left:0;
+    width: 1000%; height: 1000%;
+    transform: scale(0.1); transform-origin: 0 0;
+    border:0; pointer-events:none;
+  }
+  .work-preview::after{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+  }
+  .work-tag{
+    position:absolute; left:14px; bottom:14px; z-index:2;
+    background: rgba(0,0,0,0.55); color:#F3EEE3; font-size:12px; letter-spacing:0.06em;
+    padding: 6px 10px; border-radius: 2px; font-weight:600;
+  }
+  .work-body{ padding: 22px 22px 24px; }
+  .work-body .name{ font-family:'Fraunces',serif; font-size: 21px; margin: 0 0 8px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .work-body .name .arrow{ font-size: 15px; color: var(--accent); font-family:'Inter',sans-serif; }
+  .work-body p{ color: var(--ink-dim); font-size: 14.5px; margin: 0 0 12px; }
+  .work-meta{ font-size: 12.5px; color: var(--ink-faint); }
+
+  .work-more{
+    border: 1px dashed var(--line-strong); border-radius: var(--radius);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding: 40px 24px; color: var(--ink-dim); font-size: 14.5px;
+  }
+  @media (max-width: 980px){ .works{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 620px){ .works{ grid-template-columns: 1fr; } }
+
+  /* ---------- Proceso ---------- */
+  .process{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top:1px solid var(--line); border-left:1px solid var(--line); }
+  .step{ padding: 30px 26px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .step .num{ font-family:'Fraunces',serif; font-style:italic; color: var(--accent); font-size:17px; margin-bottom:14px; display:block; }
+  .step h4{ margin: 0 0 8px; font-size:16.5px; font-weight:600; }
+  .step p{ margin:0; color: var(--ink-dim); font-size:13.8px; }
+  @media (max-width: 860px){ .process{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px){ .process{ grid-template-columns: 1fr; } }
+
+  /* ---------- Contacto ---------- */
+  .contact{
+    background: var(--bg-panel);
+  }
+  .contact-panel{
+    border: 1px solid var(--line-strong); border-radius: 3px;
+    padding: 54px 48px; display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items:center;
+  }
+  .contact-panel h2{ font-size: clamp(26px,3vw,34px); margin:0 0 14px; }
+  .contact-panel p{ color: var(--ink-dim); max-width: 44ch; margin:0; }
+  .contact-actions{ display:flex; flex-direction:column; gap:14px; }
+  .contact-actions .btn{ justify-content:center; width:100%; font-size:16px; padding:16px 22px; }
+  .btn-whatsapp{ background:#3F8F73; color:#F3EEE3; }
+  .btn-whatsapp:hover{ background:#4AA383; transform: translateY(-1px); }
+  .btn-mail{ border:1px solid var(--line-strong); color: var(--ink); }
+  .btn-mail:hover{ border-color: var(--ink-dim); }
+  .contact-note{ font-size:12.5px; color: var(--ink-faint); text-align:center; }
+  @media (max-width: 760px){ .contact-panel{ grid-template-columns: 1fr; padding: 40px 26px; } }
+
+  /* ---------- Footer ---------- */
+  footer{ padding: 40px 0; border-top:1px solid var(--line); }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+  footer .fbrand{ font-family:'Fraunces',serif; font-size:16px; }
+  footer .flinks{ display:flex; gap:22px; font-size:13.5px; color: var(--ink-dim); }
+  footer .flinks a{ text-decoration:none; color: inherit; }
+  footer .flinks a:hover{ color: var(--ink); }
+  footer .floc{ font-size:12.5px; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">FC <span>Web Studio</span></a>
+    <nav class="links" id="navLinks">
+      <a href="#trabajos">Trabajos</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#proceso">Cómo pedís</a>
+      <a href="#contacto" class="nav-cta">Escribime</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <div class="wrap">
+      <div>
+        <h1 class="hero-title">Creo el sitio web<br>para <em>mejorar tus ventas</em>.</h1>
+        <p class="lede">Diseño y armo sitios web simples: cartas digitales para restaurantes, páginas para experiencias y eventos, y sitios de trabajo. Sin vueltas, con pedido directo por WhatsApp.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://wa.me/5492944242906?text=HOLA%20VI%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicios" target="_blank" rel="noopener">Pedir mi sitio por WhatsApp</a>
+          <a class="btn btn-ghost" href="#trabajos">Ver trabajos</a>
+        </div>
+      </div>
+      <div>
+        <div class="menu-card">
+          <h3>CARTA DIGITAL</h3>
+          <div class="title">Tu Negocio</div>
+          <div class="menu-row">
+            <div class="item"><b>Sitio a medida</b><small>Diseño propio, no una plantilla</small></div>
+            <div class="tag">a medida</div>
+          </div>
+          <div class="menu-row">
+            <div class="item"><b>Pedido por WhatsApp</b><small>Botón directo en cada página</small></div>
+            <div class="tag">incluido</div>
+          </div>
+          <div class="menu-row">
+            <div class="item"><b>Listo para el celular</b><small>Se ve bien en cualquier pantalla</small></div>
+            <div class="tag">responsive</div>
+          </div>
+          <div class="menu-row">
+            <div class="item"><b>Entrega rápida</b><small>De la idea al sitio, sin demoras</small></div>
+            <div class="tag">express</div>
+          </div>
+          <div class="stamp">HECHO EN LA PATAGONIA</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Lo que hago</span>
+        <h2>Tres tipos de sitio, un mismo trabajo: que la gente te escriba.</h2>
+        <p>Cada rubro necesita mostrar algo distinto. Elijo la estructura según lo que vendas, no al revés.</p>
+      </div>
+      <div class="categories">
+        <div class="cat">
+          <span class="cat-label">RESTAURANTES Y CAFÉS</span>
+          <h3>Cartas digitales</h3>
+          <p>El menú completo, organizado por categorías, con precios y pedido por WhatsApp a un toque. Reemplaza el PDF que nadie lee bien desde el celular.</p>
+        </div>
+        <div class="cat">
+          <span class="cat-label">EXPERIENCIAS Y EVENTOS</span>
+          <h3>Sitios de reserva</h3>
+          <p>Para locales de juegos, actividades o eventos: qué ofrecés, cómo se reserva y dónde encontrarte, todo en una sola página clara.</p>
+        </div>
+        <div class="cat">
+          <span class="cat-label">MARCAS Y PROYECTOS</span>
+          <h3>Sitios de presentación</h3>
+          <p>Una página propia para mostrar tu trabajo, tu marca o tu proyecto, con la información justa y un enlace directo para contactarte.</p>
+        </div>
+        <div class="cat">
+          <span class="cat-label">EMPRENDIMIENTOS NUEVOS</span>
+          <h3>Arrancá con el pie derecho</h3>
+          <p>Armo la página para empezar con tu emprendimiento de la forma que se debe, desde el primer día.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRABAJOS -->
+  <section id="trabajos">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">La carta de trabajos</span>
+        <h2>Algunos sitios que ya armé</h2>
+        <p>Cada uno pensado para el negocio real que lo pidió. Tocá para ver el sitio en vivo.</p>
+      </div>
+      <div class="works">
+
+        <a class="work-card" href="https://creperia-lo-de-luis.vercel.app/" target="_blank" rel="noopener">
+          <div class="work-preview p1">
+            <iframe src="https://creperia-lo-de-luis.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Creperia Lo de Luis"></iframe>
+            <span class="work-tag">Restaurante</span>
+          </div>
+          <div class="work-body">
+            <div class="name">Creperia Lo de Luis <span class="arrow">Ver sitio ↗</span></div>
+            <p>Carta digital por categorías para la única creperia de San Martín de los Andes, con pedido directo por WhatsApp.</p>
+            <div class="work-meta">San Martín de los Andes · Carta digital</div>
+          </div>
+        </a>
+
+        <a class="work-card" href="https://fito-s-cafeteria.vercel.app/" target="_blank" rel="noopener">
+          <div class="work-preview p3">
+            <iframe src="https://fito-s-cafeteria.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Fito's Cafetería"></iframe>
+            <span class="work-tag">Cafetería</span>
+          </div>
+          <div class="work-body">
+            <div class="name">Fito's Cafetería <span class="arrow">Ver sitio ↗</span></div>
+            <p>Carta digital con tarjetas desplegables para café, pastelería y salados, más pedido de delivery por WhatsApp.</p>
+            <div class="work-meta">San Martín de los Andes · Carta digital</div>
+          </div>
+        </a>
+
+        <a class="work-card" href="https://raikiry0.github.io/the-hunter-vr-/" target="_blank" rel="noopener">
+          <div class="work-preview p2">
+            <iframe src="https://raikiry0.github.io/the-hunter-vr-/" loading="lazy" tabindex="-1" title="Vista previa de The Hunter VR"></iframe>
+            <span class="work-tag">Experiencias</span>
+          </div>
+          <div class="work-body">
+            <div class="name">The Hunter VR <span class="arrow">Ver sitio ↗</span></div>
+            <p>Sitio de presentación para un centro de realidad virtual con más de 90 juegos, reservas por WhatsApp y sus tres sucursales.</p>
+            <div class="work-meta">Patagonia · Sitio de reserva</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso" style="padding-bottom:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Cómo pedís</span>
+        <h2>Del mensaje al sitio, en cuatro pasos.</h2>
+      </div>
+    </div>
+    <div class="wrap" style="padding-bottom:92px;">
+      <div class="process">
+        <div class="step">
+          <span class="num">Paso 1</span>
+          <h4>Me escribís</h4>
+          <p>Por WhatsApp o mail me contás qué necesitás y de qué negocio se trata.</p>
+        </div>
+        <div class="step">
+          <span class="num">Paso 2</span>
+          <h4>Definimos el contenido</h4>
+          <p>Me pasás la info: menú, fotos, horarios, lo que tengas. Si falta algo, te ayudo a ordenarlo.</p>
+        </div>
+        <div class="step">
+          <span class="num">Paso 3</span>
+          <h4>Diseño y armo el sitio</h4>
+          <p>Te muestro un avance para que ajustemos antes de dar por terminado el trabajo.</p>
+        </div>
+        <div class="step">
+          <span class="num">Paso 4</span>
+          <h4>Entrega y listo</h4>
+          <p>Sitio publicado y funcionando, con el botón de WhatsApp ya configurado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="contact">
+    <div class="wrap">
+      <div class="contact-panel">
+        <div>
+          <h2>Hacé tu pedido.</h2>
+          <p>Contame de tu negocio y en un rato te digo cómo seguimos. Respondo por WhatsApp o por mail, lo que te quede más cómodo.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="btn btn-whatsapp" href="https://wa.me/5492944242906?text=HOLA%20VI%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicios" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+          <a class="btn btn-mail" href="mailto:faucordobes@gmail.com?subject=Quiero%20contratar%20tu%20servicio&body=Hola%2C%20vi%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicio%20de%20sitios%20web." target="_blank" rel="noopener">faucordobes@gmail.com</a>
+          <span class="contact-note">+54 9 2944 242906</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="fbrand">FC Web Studio</span>
+    <div class="flinks">
+      <a href="https://wa.me/5492944242906?text=HOLA%20VI%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicios" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="mailto:faucordobes@gmail.com">Mail</a>
+      <a href="https://github.com/raikiry0" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <span class="floc">Sitios web · San Martín de los Andes, Patagonia</span>
+  </div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+
+</body>
+</html>
