@@ -75,9 +75,10 @@
     padding: 10px 18px; border-radius: var(--radius);
     text-decoration:none; font-weight:600; font-size: 14px;
     white-space: nowrap;
-    transition: transform .15s ease, background .15s ease;
+    box-shadow: 0 10px 22px -12px rgba(214,162,76,0.55), 0 22px 34px -12px rgba(214,162,76,0.35);
+    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
   }
-  .nav-cta:hover{ background:#E3B25F; transform: translateY(-1px); }
+  .nav-cta:hover{ background:#E3B25F; transform: translateY(-1px); box-shadow: 0 14px 28px -12px rgba(214,162,76,0.7), 0 26px 40px -10px rgba(214,162,76,0.45); }
   .menu-toggle{ display:none; background:none; border:1px solid var(--line-strong); color:var(--ink); width:40px; height:40px; border-radius: var(--radius); cursor:pointer; }
 
   @media (max-width: 760px){
@@ -110,10 +111,16 @@
     text-decoration:none; font-weight:600; font-size:15.5px;
     transition: transform .15s ease, background .15s ease, border-color .15s ease;
   }
-  .btn-primary{ background: var(--accent); color: var(--accent-ink); }
-  .btn-primary:hover{ background:#E3B25F; transform: translateY(-1px); }
-  .btn-ghost{ border: 1px solid var(--line-strong); color: var(--ink); }
-  .btn-ghost:hover{ border-color: var(--ink-dim); }
+  .btn-primary{
+    background: var(--accent); color: var(--accent-ink);
+    box-shadow: 0 16px 32px -14px rgba(214,162,76,0.6), 0 28px 42px -10px rgba(214,162,76,0.35);
+  }
+  .btn-primary:hover{ background:#E3B25F; transform: translateY(-2px); box-shadow: 0 20px 38px -14px rgba(214,162,76,0.75), 0 32px 48px -10px rgba(214,162,76,0.5); }
+  .btn-ghost{
+    border: 1px solid var(--line-strong); color: var(--ink);
+    box-shadow: 0 12px 26px -16px rgba(0,0,0,0.6), 0 22px 34px -14px rgba(250,247,240,0.09);
+  }
+  .btn-ghost:hover{ border-color: var(--ink-dim); transform: translateY(-2px); box-shadow: 0 16px 30px -16px rgba(0,0,0,0.7), 0 26px 38px -14px rgba(250,247,240,0.14); }
 
   /* menu-card illustration */
   .menu-card{
@@ -173,11 +180,12 @@
   .categories{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .cat{
     background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px;
-    padding: 32px 26px; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    padding: 32px 26px; box-shadow: 0 14px 30px -22px rgba(0,0,0,0.6), 0 26px 40px -18px rgba(214,162,76,0.16);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
   }
   .cat:hover{
     transform: translateY(-5px); border-color: var(--line-strong);
-    box-shadow: 0 26px 46px -22px rgba(0,0,0,0.65);
+    box-shadow: 0 26px 46px -22px rgba(0,0,0,0.75), 0 34px 52px -18px rgba(214,162,76,0.28);
   }
   .cat-icon{
     width: 32px; height:32px; color: var(--accent); margin-bottom: 20px;
@@ -199,11 +207,12 @@
     text-decoration:none; color: var(--ink); display:flex; flex-direction:column;
     align-items:center; text-align:center; background: var(--bg-card);
     padding: 30px 20px 26px;
+    box-shadow: 0 16px 34px -24px rgba(0,0,0,0.65), 0 28px 42px -20px rgba(214,162,76,0.14);
     transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
   }
   .work-card:hover{
     border-color: var(--line-strong); transform: translateY(-6px);
-    box-shadow: 0 30px 56px -24px rgba(0,0,0,0.7);
+    box-shadow: 0 30px 56px -24px rgba(0,0,0,0.8), 0 38px 58px -20px rgba(214,162,76,0.26);
   }
 
   /* dispositivo (mockup de celular) */
@@ -263,10 +272,10 @@
   .contact-panel p{ color: var(--ink-dim); max-width: 44ch; margin:0; }
   .contact-actions{ display:flex; flex-direction:column; gap:14px; }
   .contact-actions .btn{ justify-content:center; width:100%; font-size:16px; padding:16px 22px; }
-  .btn-whatsapp{ background:#3F8F73; color:#F3EEE3; }
-  .btn-whatsapp:hover{ background:#4AA383; transform: translateY(-1px); }
-  .btn-mail{ border:1px solid var(--line-strong); color: var(--ink); }
-  .btn-mail:hover{ border-color: var(--ink-dim); }
+  .btn-whatsapp{ background:#3F8F73; color:#F3EEE3; box-shadow: 0 16px 32px -16px rgba(63,143,115,0.7), 0 28px 42px -12px rgba(63,143,115,0.4); }
+  .btn-whatsapp:hover{ background:#4AA383; transform: translateY(-2px); box-shadow: 0 20px 38px -16px rgba(63,143,115,0.85), 0 32px 48px -12px rgba(63,143,115,0.55); }
+  .btn-mail{ border:1px solid var(--line-strong); color: var(--ink); box-shadow: 0 12px 26px -18px rgba(0,0,0,0.6), 0 22px 34px -16px rgba(250,247,240,0.08); }
+  .btn-mail:hover{ border-color: var(--ink-dim); transform: translateY(-2px); box-shadow: 0 16px 30px -18px rgba(0,0,0,0.7), 0 26px 38px -16px rgba(250,247,240,0.13); }
   .contact-note{ font-size:12.5px; color: var(--ink-faint); text-align:center; }
   @media (max-width: 760px){ .contact-panel{ grid-template-columns: 1fr; padding: 40px 26px; } }
 
@@ -278,6 +287,50 @@
   footer .flinks a{ text-decoration:none; color: inherit; }
   footer .flinks a:hover{ color: var(--ink); }
   footer .floc{ font-size:12.5px; color: var(--ink-faint); }
+
+  /* ---------- Botones flotantes ---------- */
+  .floating-actions{
+    position: fixed; right: 22px; bottom: 22px; z-index: 70;
+    display:flex; flex-direction:column; align-items:flex-end; gap:14px;
+  }
+  .back-to-top{
+    width:46px; height:46px; border-radius:50%;
+    background: var(--bg-panel); border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 14px 28px -14px rgba(0,0,0,0.7), 0 20px 30px -12px rgba(250,247,240,0.10);
+    opacity:0; transform: translateY(10px); pointer-events:none;
+    transition: opacity .25s ease, transform .25s ease, border-color .15s ease;
+    cursor:pointer; color: var(--ink);
+  }
+  .back-to-top svg{ width:18px; height:18px; }
+  .back-to-top.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .back-to-top:hover{ border-color: var(--ink-dim); }
+
+  .wa-float{
+    display:flex; align-items:center; gap:10px;
+  }
+  .wa-float .wa-label{
+    background: var(--bg-panel); color: var(--ink); font-size:13px; font-weight:600;
+    padding: 10px 14px; border-radius: 8px; white-space:nowrap;
+    border:1px solid var(--line-strong);
+    box-shadow: 0 14px 28px -14px rgba(0,0,0,0.7);
+  }
+  .wa-float .wa-btn{
+    width:58px; height:58px; border-radius:50%;
+    background:#3F8F73; display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 16px 32px -10px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.06), 0 26px 40px -10px rgba(63,143,115,0.45);
+    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+    flex-shrink:0;
+  }
+  .wa-float .wa-btn:hover{ background:#4AA383; transform: scale(1.07); box-shadow: 0 20px 36px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.08), 0 32px 48px -8px rgba(63,143,115,0.6); }
+  .wa-float .wa-btn svg{ width:28px; height:28px; }
+
+  @media (max-width: 560px){
+    .floating-actions{ right: 14px; bottom: 14px; }
+    .wa-float .wa-label{ display:none; }
+    .wa-float .wa-btn{ width:52px; height:52px; }
+    .back-to-top{ width:42px; height:42px; }
+  }
 </style>
 </head>
 <body>
@@ -307,7 +360,7 @@
         <h1 class="hero-title">Creo el sitio web<br>para <em>mejorar tus ventas</em>.</h1>
         <p class="lede">Diseño y armo sitios web simples: cartas digitales para restaurantes, páginas para experiencias y eventos, y sitios de trabajo. Sin vueltas, con pedido directo por WhatsApp.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="https://wa.me/5492944242906?text=HOLA%20VI%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicios" target="_blank" rel="noopener">Pedir mi sitio por WhatsApp</a>
+          <a class="btn btn-primary" href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">Pedir mi sitio por WhatsApp</a>
           <a class="btn btn-ghost" href="#trabajos">Ver trabajos</a>
         </div>
       </div>
@@ -492,8 +545,8 @@
           <p>Contame de tu negocio y en un rato te digo cómo seguimos. Respondo por WhatsApp o por mail, lo que te quede más cómodo.</p>
         </div>
         <div class="contact-actions">
-          <a class="btn btn-whatsapp" href="https://wa.me/5492944242906?text=HOLA%20VI%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicios" target="_blank" rel="noopener">Escribir por WhatsApp</a>
-          <a class="btn btn-mail" href="mailto:faucordobes@gmail.com?subject=Quiero%20contratar%20tu%20servicio&body=Hola%2C%20vi%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicio%20de%20sitios%20web." target="_blank" rel="noopener">faucordobes@gmail.com</a>
+          <a class="btn btn-whatsapp" href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+          <a class="btn btn-mail" href="mailto:faucordobes@gmail.com?subject=Quiero%20armar%20mi%20sitio%20web&body=Hola%2C%20quiero%20armar%20mi%20sitio%20web.%20Te%20cuento%20de%20qu%C3%A9%20se%20trata%3A" target="_blank" rel="noopener">faucordobes@gmail.com</a>
           <span class="contact-note">+54 9 2944 242906</span>
         </div>
       </div>
@@ -509,13 +562,25 @@
       FC diseñador web freelancer
     </span>
     <div class="flinks">
-      <a href="https://wa.me/5492944242906?text=HOLA%20VI%20tu%20trabajo%20y%20quiero%20contratar%20tu%20servicios" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">WhatsApp</a>
       <a href="mailto:faucordobes@gmail.com">Mail</a>
       <a href="https://github.com/raikiry0" target="_blank" rel="noopener">GitHub</a>
     </div>
     <span class="floc">Sitios web · San Martín de los Andes, Patagonia</span>
   </div>
 </footer>
+
+<div class="floating-actions">
+  <button class="back-to-top" id="backToTop" aria-label="Volver arriba" title="Volver arriba">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+  </button>
+  <div class="wa-float">
+    <span class="wa-label">Contactá aquí</span>
+    <a class="wa-btn" href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+      <svg viewBox="0 0 32 32" fill="#F3EEE3"><path d="M16.02 3C9.4 3 4 8.4 4 15.02c0 2.23.6 4.32 1.65 6.12L4 29l8.06-1.6a12.9 12.9 0 0 0 3.96.63c6.62 0 12.02-5.4 12.02-12.03C28.04 8.4 22.64 3 16.02 3zm0 21.9c-1.98 0-3.83-.55-5.4-1.5l-.39-.23-4.78.95.98-4.66-.25-.4a9.86 9.86 0 0 1-1.5-5.24C4.68 8.86 9.66 4 16.02 4a10.85 10.85 0 0 1 0 21.9zm5.94-8.14c-.32-.16-1.9-.94-2.2-1.04-.3-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.63-.53-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.11 1.08-1.11 2.64s1.14 3.06 1.3 3.27c.16.21 2.24 3.42 5.43 4.79.76.33 1.35.53 1.81.68.76.24 1.45.21 2 .13.61-.09 1.9-.78 2.17-1.53.27-.75.27-1.4.19-1.53-.08-.13-.29-.21-.61-.37z"/></svg>
+    </a>
+  </div>
+</div>
 
 <script>
   const toggle = document.getElementById('menuToggle');
@@ -528,6 +593,18 @@
     links.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
   }));
+
+  // Botón "volver arriba"
+  const backToTop = document.getElementById('backToTop');
+  const toggleBackToTop = () => {
+    if (window.scrollY > 480) backToTop.classList.add('visible');
+    else backToTop.classList.remove('visible');
+  };
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  toggleBackToTop();
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 </script>
 
 </body>
