@@ -176,6 +176,22 @@
   .section-head h2{ font-size: clamp(28px, 3.4vw, 38px); margin: 0 0 14px; font-weight:480; }
   .section-head p{ color: var(--ink-dim); font-size: 16px; max-width: 52ch; }
 
+  /* ---------- Sobre mí ---------- */
+  .about-stats{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    background: var(--line); border:1px solid var(--line);
+    margin: 40px 0 44px; border-radius: 8px; overflow:hidden;
+  }
+  .about-stats div{ background: var(--bg-card); padding: 26px 22px; }
+  .about-stats .num{ font-family:'Fraunces',serif; font-size: 30px; color: var(--accent); display:block; margin-bottom:6px; }
+  .about-stats .label{ font-size: 13px; color: var(--ink-dim); line-height:1.4; }
+  .tools-strip{ display:flex; flex-wrap:wrap; gap: 10px; }
+  .tool-pill{
+    border:1px solid var(--line); border-radius: 20px; padding: 8px 16px;
+    font-size: 13px; color: var(--ink-dim); background: var(--bg-card);
+  }
+  @media (max-width: 640px){ .about-stats{ grid-template-columns: 1fr; } }
+
   /* ---------- Servicios: cards con icono ---------- */
   .categories{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .cat{
@@ -201,6 +217,17 @@
   @media (max-width: 560px){ .categories{ grid-template-columns: 1fr; } }
 
   /* ---------- Portfolio: grilla de mockups de celular ---------- */
+  .filter-tabs{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 34px; }
+  .filter-tab{
+    font-family:'Inter',sans-serif; font-size: 13.5px; font-weight:600;
+    color: var(--ink-dim); background: var(--bg-card);
+    border: 1px solid var(--line); border-radius: 22px;
+    padding: 9px 18px; cursor:pointer;
+    transition: color .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .filter-tab:hover{ color: var(--ink); border-color: var(--line-strong); }
+  .filter-tab.is-active{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .work-card.is-hidden{ display:none; }
   .works{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 26px; }
   .work-card{
     border: 1px solid var(--line); border-radius: 12px; overflow:hidden;
@@ -342,6 +369,7 @@
       <div class="brand-text">FC<span>diseñador web freelancer</span></div>
     </a>
     <nav class="links" id="navLinks">
+      <a href="#sobre-mi">Sobre mí</a>
       <a href="#trabajos">Trabajos</a>
       <a href="#servicios">Servicios</a>
       <a href="#proceso">Cómo pedís</a>
@@ -386,6 +414,41 @@
           </div>
           <div class="stamp">HECHO EN LA PATAGONIA</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE MÍ -->
+  <section id="sobre-mi">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Sobre mí</span>
+        <h2>Diseño y programo, sin vueltas.</h2>
+        <p>Soy FC, diseñador web freelancer. Arranco cada sitio de cero — sin plantillas genéricas — pensado para que se vea bien en el celular y para que el cliente te escriba directo, sin intermediarios. Trabajo remoto, con base en la Patagonia.</p>
+      </div>
+
+      <div class="about-stats">
+        <div>
+          <span class="num">+4</span>
+          <span class="label">sitios en producción</span>
+        </div>
+        <div>
+          <span class="num">100%</span>
+          <span class="label">responsive, mobile-first</span>
+        </div>
+        <div>
+          <span class="num">1</span>
+          <span class="label">persona: diseño y desarrollo, de punta a punta</span>
+        </div>
+      </div>
+
+      <div class="tools-strip">
+        <span class="tool-pill">HTML5</span>
+        <span class="tool-pill">CSS3</span>
+        <span class="tool-pill">JavaScript</span>
+        <span class="tool-pill">Vercel</span>
+        <span class="tool-pill">GitHub</span>
+        <span class="tool-pill">WhatsApp Business</span>
       </div>
     </div>
   </section>
@@ -435,10 +498,18 @@
         <h2>Algunos sitios que ya armé</h2>
         <p>Cada uno pensado para el negocio real que lo pidió. Tocá para ver el sitio en vivo.</p>
       </div>
-      <div class="works">
+
+      <div class="filter-tabs" role="tablist" aria-label="Filtrar trabajos por categoría">
+        <button class="filter-tab is-active" data-filter="todos">Todos</button>
+        <button class="filter-tab" data-filter="cartas">Cartas digitales</button>
+        <button class="filter-tab" data-filter="experiencias">Experiencias</button>
+        <button class="filter-tab" data-filter="herramientas">Herramientas</button>
+      </div>
+
+      <div class="works" id="worksGrid">
 
         <!-- Cada mockup usa un placeholder como <img>. Reemplazá el "src" por una captura real de tu proyecto -->
-        <a class="work-card" href="https://creperia-lo-de-luis.vercel.app/" target="_blank" rel="noopener">
+        <a class="work-card" data-cat="cartas" href="https://creperia-lo-de-luis.vercel.app/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
             <iframe src="https://creperia-lo-de-luis.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Creperia Lo de Luis"></iframe>
           </div></div>
@@ -450,7 +521,7 @@
           </div>
         </a>
 
-        <a class="work-card" href="https://fito-s-cafeteria.vercel.app/" target="_blank" rel="noopener">
+        <a class="work-card" data-cat="cartas" href="https://fito-s-cafeteria.vercel.app/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
             <iframe src="https://fito-s-cafeteria.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Fito's Cafetería"></iframe>
           </div></div>
@@ -462,7 +533,7 @@
           </div>
         </a>
 
-        <a class="work-card" href="https://the-hunter-vr.vercel.app/" target="_blank" rel="noopener">
+        <a class="work-card" data-cat="experiencias" href="https://the-hunter-vr.vercel.app/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
             <iframe src="https://the-hunter-vr.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de The Hunter VR"></iframe>
           </div></div>
@@ -474,7 +545,7 @@
           </div>
         </a>
 
-        <a class="work-card" href="https://barista-de-bolsillo.vercel.app/" target="_blank" rel="noopener">
+        <a class="work-card" data-cat="herramientas" href="https://barista-de-bolsillo.vercel.app/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
             <iframe src="https://barista-de-bolsillo.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Barista de Bolsillo"></iframe>
           </div></div>
@@ -486,7 +557,7 @@
           </div>
         </a>
 
-        <div class="work-card is-soon">
+        <div class="work-card is-soon" data-cat="herramientas">
           <div class="phone"><div class="phone-screen">
             <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20300%20640%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230E1613%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2323433C%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect%20width%3D%22300%22%20height%3D%22640%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Cg%20opacity%3D%220.55%22%20stroke%3D%22%23F3EEE3%22%20stroke-width%3D%222%22%20fill%3D%22none%22%3E%0A%3Crect%20x%3D%22110%22%20y%3D%22258%22%20width%3D%2280%22%20height%3D%2260%22%20rx%3D%226%22/%3E%0A%3Ccircle%20cx%3D%22130%22%20cy%3D%22276%22%20r%3D%226%22/%3E%0A%3Cpath%20d%3D%22M112%20310l22-20%2016%2014%2020-24%2018%2030%22/%3E%0A%3C/g%3E%0A%3Ctext%20x%3D%22150%22%20y%3D%22355%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2221%22%20fill%3D%22%23F3EEE3%22%20text-anchor%3D%22middle%22%3EComanda%20Caf%C3%A9%3C/text%3E%0A%3Ctext%20x%3D%22150%22%20y%3D%22378%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2212%22%20fill%3D%22%23F3EEE3%22%20opacity%3D%220.6%22%20text-anchor%3D%22middle%22%3EPr%C3%B3ximamente%3C/text%3E%0A%3C/svg%3E" alt="Captura de Comanda Café (próximamente)">
           </div></div>
@@ -604,6 +675,21 @@
   toggleBackToTop();
   backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Filtro de trabajos por categoría
+  const filterTabs = document.querySelectorAll('.filter-tab');
+  const workCards = document.querySelectorAll('#worksGrid .work-card');
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      filterTabs.forEach(t => t.classList.remove('is-active'));
+      tab.classList.add('is-active');
+      const filter = tab.dataset.filter;
+      workCards.forEach(card => {
+        const show = filter === 'todos' || card.dataset.cat === filter;
+        card.classList.toggle('is-hidden', !show);
+      });
+    });
   });
 </script>
 
