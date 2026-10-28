@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo — Sistemas y apps a medida | FC diseñador web freelancer</title>
+<meta name="description" content="Sistemas y apps a medida para negocios: turnos, reservas, pedidos, stock, caja y órdenes de trabajo. Servicios por rubro, trabajos y precios de referencia. San Martín de los Andes, Patagonia.">
+<link rel="icon" href="../logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,480;0,9..144,600;1,9..144,420&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #121110;
+    --bg-panel: #1A1815;
+    --bg-card: #17150F;
+    --paper: #F3EDE0;
+    --ink: #FAF7F0;
+    --ink-dim: #ACA398;
+    --ink-faint: #79716A;
+    --accent: #D6A24C;
+    --accent-ink: #201705;
+    --teal: #5C9285;
+    --line: rgba(250,247,240,0.10);
+    --line-strong: rgba(250,247,240,0.24);
+    --radius: 3px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0; background: var(--bg); color: var(--ink);
+    font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,.serif{ font-family: 'Fraunces', serif; font-weight: 480; }
+  a{ color: inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  ::selection{ background: var(--accent); color: var(--accent-ink); }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+  @media (max-width: 560px){ .wrap{ padding: 0 18px; } }
+
+  /* ---------- Header (igual que la home) ---------- */
+  header{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(30,27,24,0.86); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav{ display:flex; align-items:center; justify-content: space-between; padding: 18px 0; }
+  .brand{
+    font-family:'Fraunces', serif; font-weight:600; font-size: 20px;
+    text-decoration:none; color: var(--ink); display:flex; align-items:center; gap:11px;
+  }
+  .brand img{ height: 38px; width:auto; }
+  .brand .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
+  .brand .brand-text span{ font-family:'Inter',sans-serif; font-weight:500; font-size:11px; color: var(--ink-faint); }
+  nav.links{ display:flex; align-items:center; gap: 30px; }
+  nav.links a{ text-decoration:none; color: var(--ink-dim); font-size: 14.5px; transition: color .15s ease; }
+  nav.links a:hover, nav.links a[aria-current="page"]{ color: var(--ink); }
+  .nav-cta{
+    background: var(--accent); color: var(--accent-ink) !important;
+    padding: 10px 18px; border-radius: var(--radius);
+    font-weight:600; font-size: 14px !important; white-space: nowrap;
+    box-shadow: 0 10px 22px -12px rgba(214,162,76,0.55), 0 22px 34px -12px rgba(214,162,76,0.35);
+    transition: transform .15s ease, background .15s ease;
+  }
+  .nav-cta:hover{ background:#E3B25F; transform: translateY(-1px); }
+  .menu-toggle{ display:none; background:none; border:1px solid var(--line-strong); color:var(--ink); width:40px; height:40px; border-radius: var(--radius); cursor:pointer; }
+  @media (max-width: 860px){
+    nav.links{
+      position:absolute; top: 100%; left:0; right:0;
+      flex-direction: column; align-items:flex-start; gap:0;
+      background: var(--bg-panel); border-bottom: 1px solid var(--line);
+      max-height:0; overflow:hidden; transition: max-height .25s ease;
+    }
+    nav.links.open{ max-height: 420px; }
+    nav.links a{ padding: 14px 28px; width:100%; border-top:1px solid var(--line); }
+    nav.links .nav-cta{ margin: 14px 28px; width:auto; }
+    .menu-toggle{ display:block; }
+  }
+
+  /* ---------- Botones ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding: 17px 28px; border-radius: var(--radius);
+    text-decoration:none; font-weight:600; font-size:15.5px;
+    transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary{ background: var(--accent); color: var(--accent-ink); box-shadow: 0 16px 32px -14px rgba(214,162,76,0.6), 0 28px 42px -10px rgba(214,162,76,0.35); }
+  .btn-primary:hover{ background:#E3B25F; transform: translateY(-2px); }
+  .btn-ghost{ border: 1px solid var(--line-strong); color: var(--ink); }
+  .btn-ghost:hover{ border-color: var(--ink-dim); transform: translateY(-2px); }
+  .btn-whatsapp{ background:#3F8F73; color:#F3EEE3; box-shadow: 0 16px 32px -16px rgba(63,143,115,0.7); }
+  .btn-whatsapp:hover{ background:#4AA383; transform: translateY(-2px); }
+  .btn-sm{ padding: 10px 16px; font-size: 13.5px; }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding: 112px 0 104px; overflow:hidden; }
+  .hero .wrap{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items:center; }
+  .hero .eyebrow-label{ margin-bottom: 20px; }
+  h1.hero-title{
+    font-size: clamp(40px, 5.6vw, 68px); line-height: 1.05; margin: 0 0 30px;
+    max-width: 14ch; font-weight: 460; letter-spacing: -0.01em;
+  }
+  h1.hero-title em{ font-style: italic; color: var(--accent); font-weight: 420; }
+  .hero p.lede{ color: var(--ink-dim); max-width: 46ch; font-size: 18px; margin: 0 0 40px; }
+  .hero-actions{ display:flex; gap:16px; flex-wrap:wrap; }
+
+  .menu-card{
+    background: var(--paper); color: #2B2620; border-radius: 3px;
+    padding: 30px 28px 24px; position:relative; transform: rotate(-1deg);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+    animation: settle .7s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes settle{ from{ opacity:0; transform: rotate(-1deg) translateY(16px); } to{ opacity:1; transform: rotate(-1deg) translateY(0); } }
+  .menu-card::before{ content:""; position:absolute; inset:8px; border: 1px solid rgba(43,38,32,0.25); pointer-events:none; }
+  .menu-card .kicker{ text-align:center; font-size: 13px; letter-spacing: 0.14em; color: #6B5E45; margin: 0 0 4px; font-weight:600; }
+  .menu-card .title{ text-align:center; font-family:'Fraunces',serif; font-size: 24px; margin: 0 0 18px; font-weight:600; }
+  .menu-row{ display:flex; justify-content:space-between; align-items:baseline; gap: 12px; padding: 11px 0; border-bottom: 1px dashed rgba(43,38,32,0.28); font-size: 14.5px; }
+  .menu-row:last-of-type{ border-bottom:none; }
+  .menu-row b{ font-weight:600; }
+  .menu-row small{ display:block; color:#7A6E5B; font-size:12px; margin-top:2px; line-height:1.4; }
+  .menu-row .tag{ font-size:12px; color:#7A6E5B; white-space:nowrap; }
+  .menu-card .stamp{ margin-top: 16px; text-align:center; font-size:11px; letter-spacing:0.1em; color:#9C8E76; font-weight:600; }
+  @media (max-width: 900px){
+    .hero{ padding: 72px 0 80px; }
+    .hero .wrap{ grid-template-columns: minmax(0,1fr); gap: 48px; }
+    .menu-card{ max-width: 440px; }
+  }
+
+  /* ---------- Secciones ---------- */
+  section{ padding: 92px 0; border-top: 1px solid var(--line); scroll-margin-top: 70px; }
+  .section-head{ max-width: 660px; margin-bottom: 46px; }
+  .eyebrow-label{ font-size: 12.5px; letter-spacing:0.08em; color: var(--teal); font-weight:600; margin-bottom: 14px; display:block; text-transform: uppercase; }
+  .section-head h2{ font-size: clamp(28px, 3.4vw, 38px); margin: 0 0 14px; font-weight:480; line-height:1.15; }
+  .section-head p{ color: var(--ink-dim); font-size: 16px; max-width: 54ch; margin:0; }
+  @media (max-width: 600px){ section{ padding: 64px 0; } }
+
+  /* ---------- Trabajos (sistemas) ---------- */
+  .filter-tabs{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom: 30px; }
+  .filter-tab{
+    font-family:'Inter',sans-serif; font-size: 13.5px; font-weight:600;
+    color: var(--ink-dim); background: var(--bg-card);
+    border: 1px solid var(--line); border-radius: 22px; padding: 9px 18px; cursor:pointer;
+    transition: color .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .filter-tab:hover{ color: var(--ink); border-color: var(--line-strong); }
+  .filter-tab[aria-pressed="true"]{ background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .systems{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 22px; }
+  .sys{
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 26px 24px 24px; display:flex; flex-direction:column;
+    box-shadow: 0 16px 34px -24px rgba(0,0,0,0.65), 0 28px 42px -20px rgba(214,162,76,0.12);
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .sys:hover{ border-color: var(--line-strong); transform: translateY(-4px); }
+  .sys-top{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom: 16px; }
+  .work-tag{ display:inline-block; background: rgba(214,162,76,0.12); color: var(--accent); font-size:11.5px; letter-spacing:0.05em; font-weight:600; padding: 5px 11px; border-radius: 20px; }
+  .estado{ font-size: 11.5px; font-weight:600; display:inline-flex; align-items:center; gap:6px; color: var(--ink-dim); white-space:nowrap; }
+  .estado::before{ content:""; width:7px; height:7px; border-radius:50%; background: currentColor; }
+  .e-pub{ color: #7FC2A6; } .e-demo{ color: var(--accent); } .e-dev{ color: var(--ink-faint); }
+  .sys h3{ font-size: 21px; margin: 0 0 8px; font-weight: 520; line-height:1.2; }
+  .sys p{ color: var(--ink-dim); font-size: 14px; margin: 0 0 16px; }
+  .feats{ list-style:none; padding:0; margin: 0 0 18px; display:flex; flex-wrap:wrap; gap: 6px; }
+  .feats li{ font-size: 12px; color: var(--ink-dim); border: 1px solid var(--line); border-radius: 20px; padding: 4px 10px; }
+  .sys .stack{ font-size: 12px; color: var(--ink-faint); margin-top:auto; padding-top: 4px; margin-bottom: 16px; }
+  .sys .btn{ align-self:flex-start; }
+  @media (max-width: 980px){ .systems{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 620px){ .systems{ grid-template-columns: minmax(0,1fr); } }
+
+  /* ---------- Servicios por rubro ---------- */
+  .jump{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 34px; }
+  .jump a{ font-size: 13px; text-decoration:none; color: var(--ink-dim); border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; margin-right: 10px; }
+  .jump a:hover{ color: var(--accent); border-color: var(--accent); }
+  .rubros{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+  .rubro{
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 28px 26px; scroll-margin-top: 90px; display:flex; flex-direction:column;
+  }
+  .rubro.destacado{ border-color: rgba(214,162,76,0.45); box-shadow: 0 26px 46px -26px rgba(214,162,76,0.35); }
+  .tag-local{ display:inline-block; font-size: 11px; letter-spacing:0.06em; font-weight:600; color: var(--accent-ink); background: var(--accent); padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; align-self:flex-start; }
+  .rubro h3{ font-size: 21px; margin: 0 0 6px; font-weight: 520; }
+  .rubro .ej{ color: var(--ink-faint); font-size: 13.5px; margin: 0 0 18px; }
+  .ofrece{ list-style:none; padding:0; margin: 0 0 20px; }
+  .ofrece li{ display:flex; justify-content:space-between; gap: 14px; padding: 10px 0; border-bottom: 1px dashed var(--line-strong); font-size: 14px; }
+  .ofrece li:last-child{ border-bottom: none; }
+  .ofrece b{ font-weight:600; flex: 0 0 auto; max-width: 45%; }
+  .ofrece span{ color: var(--ink-dim); text-align:right; }
+  .rubro-foot{ margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap: 12px; flex-wrap:wrap; }
+  .rubro-foot .base{ font-size: 12.5px; color: var(--ink-faint); margin:0; }
+  .rubro-foot .base b{ color: var(--ink-dim); font-weight:600; }
+  @media (max-width: 860px){ .rubros{ grid-template-columns: minmax(0,1fr); } }
+  @media (max-width: 480px){
+    .ofrece li{ flex-direction:column; gap:2px; }
+    .ofrece b{ max-width:none; }
+    .ofrece span{ text-align:left; }
+  }
+
+  /* ---------- Extras ---------- */
+  .extras{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 2px; background: var(--line); border:1px solid var(--line); border-radius: 8px; overflow:hidden; }
+  .extras div{ background: var(--bg-card); padding: 26px 24px; }
+  .extras b{ display:block; font-family:'Fraunces',serif; font-weight:520; font-size: 18px; margin-bottom: 6px; }
+  .extras span{ font-size: 14px; color: var(--ink-dim); }
+  @media (max-width: 860px){ .extras{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 560px){ .extras{ grid-template-columns: minmax(0,1fr); } }
+
+  /* ---------- Planes ---------- */
+  .planes{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+  .plan{
+    background: var(--paper); color: #2B2620; border-radius: 3px; padding: 26px 24px 24px; position:relative;
+    box-shadow: 0 24px 44px -24px rgba(0,0,0,0.6);
+  }
+  .plan::before{ content:""; position:absolute; inset:7px; border: 1px solid rgba(43,38,32,0.2); pointer-events:none; }
+  .plan .rub{ font-size: 11.5px; letter-spacing: 0.1em; color:#6B5E45; font-weight:600; text-transform: uppercase; }
+  .plan h3{ font-size: 22px; margin: 6px 0 14px; font-weight:600; }
+  .plan .precio{ display:flex; justify-content:space-between; align-items:baseline; gap: 8px; border-top: 1px dashed rgba(43,38,32,0.3); border-bottom: 1px dashed rgba(43,38,32,0.3); padding: 10px 0; margin-bottom: 12px; }
+  .plan .precio b{ font-family:'Fraunces',serif; font-size: 24px; font-weight:600; }
+  .plan .precio small{ font-size: 12.5px; color:#7A6E5B; text-align:right; }
+  .plan p{ font-size: 13.5px; color:#5E5444; margin: 0; }
+  .nota{ color: var(--ink-faint); font-size: 13px; margin: 26px 0 0; max-width: 78ch; }
+  @media (max-width: 920px){ .planes{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 560px){ .planes{ grid-template-columns: minmax(0,1fr); } }
+
+  /* ---------- Proceso ---------- */
+  .process{ display:grid; grid-template-columns: repeat(4, 1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
+  .step{ padding: 30px 26px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .step .num{ font-family:'Fraunces',serif; font-style:italic; color: var(--accent); font-size:17px; margin-bottom:14px; display:block; }
+  .step h4{ margin: 0 0 8px; font-size:16.5px; font-weight:600; }
+  .step p{ margin:0; color: var(--ink-dim); font-size:13.8px; }
+  @media (max-width: 860px){ .process{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px){ .process{ grid-template-columns: 1fr; } }
+
+  /* ---------- Contacto ---------- */
+  .contact{ background: var(--bg-panel); }
+  .contact-panel{ border: 1px solid var(--line-strong); border-radius: 3px; padding: 54px 48px; display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items:center; }
+  .contact-panel h2{ font-size: clamp(26px,3vw,34px); margin:0 0 14px; }
+  .contact-panel p{ color: var(--ink-dim); max-width: 44ch; margin:0; }
+  .contact-actions{ display:flex; flex-direction:column; gap:14px; }
+  .contact-actions .btn{ width:100%; font-size:16px; padding:16px 22px; }
+  .contact-note{ font-size:12.5px; color: var(--ink-faint); text-align:center; }
+  @media (max-width: 760px){ .contact-panel{ grid-template-columns: 1fr; padding: 40px 24px; } }
+
+  /* ---------- Footer ---------- */
+  footer{ padding: 40px 0; border-top:1px solid var(--line); }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+  footer .fbrand{ font-family:'Fraunces',serif; font-size:16px; display:flex; align-items:center; gap:10px; }
+  footer .fbrand img{ height:26px; width:auto; }
+  footer .flinks{ display:flex; gap:22px; font-size:13.5px; color: var(--ink-dim); flex-wrap:wrap; }
+  footer .flinks a{ text-decoration:none; color: inherit; }
+  footer .flinks a:hover{ color: var(--ink); }
+  footer .floc{ font-size:12.5px; color: var(--ink-faint); }
+
+  /* ---------- Botones flotantes ---------- */
+  .floating-actions{ position: fixed; right: 22px; bottom: 22px; z-index: 70; display:flex; flex-direction:column; align-items:flex-end; gap:14px; }
+  .back-to-top{
+    width:46px; height:46px; border-radius:50%; background: var(--bg-panel); border:1px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center; color: var(--ink); cursor:pointer;
+    opacity:0; transform: translateY(10px); pointer-events:none; transition: opacity .25s ease, transform .25s ease;
+  }
+  .back-to-top svg{ width:18px; height:18px; }
+  .back-to-top.visible{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .wa-float{ display:flex; align-items:center; gap:10px; }
+  .wa-float .wa-label{ background: var(--bg-panel); color: var(--ink); font-size:13px; font-weight:600; padding: 10px 14px; border-radius: 8px; white-space:nowrap; border:1px solid var(--line-strong); }
+  .wa-float .wa-btn{ width:58px; height:58px; border-radius:50%; background:#3F8F73; display:flex; align-items:center; justify-content:center; box-shadow: 0 16px 32px -10px rgba(0,0,0,0.75); transition: transform .15s ease, background .15s ease; flex-shrink:0; }
+  .wa-float .wa-btn:hover{ background:#4AA383; transform: scale(1.07); }
+  .wa-float .wa-btn svg{ width:28px; height:28px; }
+  @media (max-width: 560px){
+    .floating-actions{ right: 14px; bottom: 14px; }
+    .wa-float .wa-label{ display:none; }
+    .wa-float .wa-btn{ width:52px; height:52px; }
+    .back-to-top{ width:42px; height:42px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../">
+      <img src="../logo.png" alt="Logo Fausto Cordobes" width="37" height="38">
+      <div class="brand-text">FC<span>diseñador web freelancer</span></div>
+    </a>
+    <nav class="links" id="navLinks">
+      <a href="../">Inicio</a>
+      <a href="#sistemas">Sistemas</a>
+      <a href="#servicios">Por rubro</a>
+      <a href="#planes">Precios</a>
+      <a href="#proceso">Cómo trabajo</a>
+      <a href="#contacto" class="nav-cta">Escribime</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none;">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow-label">Catálogo de servicios</span>
+        <h1 class="hero-title">Sistemas y apps <em>a medida</em> para tu negocio.</h1>
+        <p class="lede">Además de sitios web, armo sistemas de turnos, reservas, pedidos, stock, caja y órdenes de trabajo. Hechos para cómo trabaja tu negocio, fáciles de usar y con soporte cerca tuyo.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" data-wa="Hola Fausto, vi tu catálogo y quiero consultar por un sistema para mi negocio." href="https://wa.me/5492944242906" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+          <a class="btn btn-ghost" href="#servicios">Ver servicios por rubro</a>
+        </div>
+      </div>
+      <div>
+        <div class="menu-card" aria-label="Lo que incluye cada trabajo">
+          <p class="kicker">LA CARTA DE LA CASA</p>
+          <div class="title">Cómo trabajo</div>
+          <div class="menu-row"><div><b>Sin comisión por venta</b><small>Pedidos y reservas propias, sin pagarle a una app por cada operación</small></div><span class="tag">0%</span></div>
+          <div class="menu-row"><div><b>Precio claro</b><small>Un pago de puesta en marcha y un abono mensual con hosting, copias y soporte</small></div><span class="tag">cerrado</span></div>
+          <div class="menu-row"><div><b>Soporte local</b><small>Capacitación en tu negocio y ayuda con PC e impresoras</small></div><span class="tag">cerca</span></div>
+          <div class="menu-row"><div><b>Probalo antes</b><small>Te muestro una demo de tu rubro antes de que decidas</small></div><span class="tag">demo</span></div>
+          <div class="stamp">HECHO EN LA PATAGONIA</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SISTEMAS -->
+  <section id="sistemas">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Trabajos</span>
+        <h2>Sistemas que ya armé</h2>
+        <p>Cada uno se adapta a otro negocio del mismo rubro. Los que dicen «Demo» se pueden probar con datos de ejemplo.</p>
+      </div>
+      <div class="filter-tabs" id="filtros" role="group" aria-label="Filtrar sistemas por rubro"></div>
+      <div class="systems" id="systems"></div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS POR RUBRO -->
+  <section id="servicios">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Servicios por rubro</span>
+        <h2>Qué le puedo ofrecer a tu negocio</h2>
+        <p>Elegís solo lo que necesitás. Se puede empezar por una parte y sumar el resto después.</p>
+      </div>
+      <nav class="jump" id="jump" aria-label="Ir a un rubro"></nav>
+      <div class="rubros" id="rubros"></div>
+    </div>
+  </section>
+
+  <!-- EXTRAS -->
+  <section id="extras">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Para cualquier rubro</span>
+        <h2>Servicios que suman a todo lo anterior</h2>
+        <p>Se agregan a cualquier sistema o se contratan solos.</p>
+      </div>
+      <div class="extras" id="extrasList"></div>
+    </div>
+  </section>
+
+  <!-- PLANES -->
+  <section id="planes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Planes para empezar</span>
+        <h2>Precios de referencia</h2>
+        <p>Un pago único para dejarlo funcionando y un abono mensual que lo mantiene online.</p>
+      </div>
+      <div class="planes" id="planesGrid"></div>
+      <p class="nota">Precios en pesos argentinos, finales (monotributo, Factura C). El abono incluye hosting, dominio, copias de seguridad, soporte y cambios chicos, y se actualiza cada 3 meses por IPC. Los sistemas de gestión más grandes (clínicas, cooperativas, comercios con stock) se presupuestan a medida después de una reunión.</p>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso" style="padding-bottom:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Cómo trabajo</span>
+        <h2>De la primera charla al sistema funcionando.</h2>
+      </div>
+    </div>
+    <div class="wrap" style="padding-bottom:92px;">
+      <div class="process">
+        <div class="step"><span class="num">Paso 1</span><h4>Charla</h4><p>Me contás cómo trabaja tu negocio hoy y qué te quita más tiempo.</p></div>
+        <div class="step"><span class="num">Paso 2</span><h4>Demo y presupuesto</h4><p>Te muestro una demo de tu rubro y te paso un presupuesto cerrado.</p></div>
+        <div class="step"><span class="num">Paso 3</span><h4>Adaptación</h4><p>Lo ajusto a tu negocio y lo revisamos juntos antes de usarlo.</p></div>
+        <div class="step"><span class="num">Paso 4</span><h4>Puesta en marcha</h4><p>Cargo tus datos, capacito a tu equipo y te acompaño las primeras semanas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="contact">
+    <div class="wrap">
+      <div class="contact-panel">
+        <div>
+          <h2>Contame de tu negocio.</h2>
+          <p>Decime a qué te dedicás y qué te gustaría resolver. Te respondo con una propuesta y, si querés, una demo de tu rubro.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="btn btn-whatsapp" data-wa="Hola Fausto, vi tu catálogo y quiero consultar por un sistema para mi negocio." href="https://wa.me/5492944242906" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+          <a class="btn btn-ghost" href="mailto:faucordobes@gmail.com?subject=Consulta%20por%20un%20sistema&body=Hola%20Fausto%2C%20vi%20tu%20cat%C3%A1logo%20y%20quiero%20consultar%20por%3A" target="_blank" rel="noopener">faucordobes@gmail.com</a>
+          <span class="contact-note">+54 9 2944 242906</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="fbrand"><img src="../logo.png" alt="" width="25" height="26">Propiedad de Cordobes Fausto</span>
+    <div class="flinks">
+      <a href="../">Inicio</a>
+      <a data-wa="Hola Fausto, vi tu catálogo y quiero consultar." href="https://wa.me/5492944242906" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="mailto:faucordobes@gmail.com">Mail</a>
+      <a href="https://github.com/raikiry0" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <span class="floc">Sitios web y sistemas · San Martín de los Andes, Patagonia</span>
+  </div>
+</footer>
+
+<div class="floating-actions">
+  <button class="back-to-top" id="backToTop" aria-label="Volver arriba" title="Volver arriba">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+  </button>
+  <div class="wa-float">
+    <span class="wa-label">Contactá aquí</span>
+    <a class="wa-btn" data-wa="Hola Fausto, vi tu catálogo y quiero consultar." href="https://wa.me/5492944242906" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp">
+      <svg viewBox="0 0 32 32" fill="#F3EEE3"><path d="M16.02 3C9.4 3 4 8.4 4 15.02c0 2.23.6 4.32 1.65 6.12L4 29l8.06-1.6a12.9 12.9 0 0 0 3.96.63c6.62 0 12.02-5.4 12.02-12.03C28.04 8.4 22.64 3 16.02 3zm0 21.9c-1.98 0-3.83-.55-5.4-1.5l-.39-.23-4.78.95.98-4.66-.25-.4a9.86 9.86 0 0 1-1.5-5.24C4.68 8.86 9.66 4 16.02 4a10.85 10.85 0 0 1 0 21.9zm5.94-8.14c-.32-.16-1.9-.94-2.2-1.04-.3-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.69.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.74-.99-2.38-.26-.63-.53-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.11 1.08-1.11 2.64s1.14 3.06 1.3 3.27c.16.21 2.24 3.42 5.43 4.79.76.33 1.35.53 1.81.68.76.24 1.45.21 2 .13.61-.09 1.9-.78 2.17-1.53.27-.75.27-1.4.19-1.53-.08-.13-.29-.21-.61-.37z"/></svg>
+    </a>
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   CONFIGURACIÓN — lo único que tenés que tocar
+   ===================================================== */
+const WHATSAPP = '5492944242906';
+const MOSTRAR_PRECIOS = true;   // false = oculta la sección de precios
+
+// Pegá acá el link de cada demo cuando la publiques.
+// Si queda vacío, el botón dice "Pedir demo por WhatsApp".
+const LINKS = {
+  clinica: '',
+  turnos: '',
+  coopAgua: '',
+  coopLuz: '',
+  mostrador: '',
+  restaurante: '',
+  eventos: '',
+  justa: '',
+  comanda: '',
+  cazacartas: 'https://cazadordecartas-tcg.vercel.app/',
+  web: '../#trabajos'
+};
+
+const RUBROS = [
+  ['salud','Salud'], ['belleza','Belleza'], ['gastro','Gastronomía'], ['comercio','Comercios'],
+  ['eventos','Eventos'], ['cooperativas','Cooperativas'], ['servicios','Profesionales'], ['otros','Otros']
+];
+
+const TRABAJOS = [
+  {k:'clinica', rubro:'salud', nombre:'Centro odontológico', estado:'demo',
+   desc:'Gestión completa de una clínica dental con varios profesionales.',
+   feats:['Agenda por profesional','Reserva online','Odontograma','Historia clínica','Presupuestos','Cobros','Recordatorios'], stack:'Next.js + Supabase en producción'},
+  {k:'turnos', rubro:'belleza', nombre:'Gestor de turnos', estado:'demo',
+   desc:'Turnos online para peluquerías, estéticas, consultorios y profesionales.',
+   feats:['Reserva desde el celular','Sin doble reserva','Recordatorios','Panel del negocio'], stack:'Next.js · Firebase / Supabase'},
+  {k:'coopAgua', rubro:'cooperativas', nombre:'Cooperativa de agua', estado:'demo',
+   desc:'Fichaje de operarios y órdenes de trabajo de las cuadrillas.',
+   feats:['Fichaje con ubicación','Órdenes de trabajo','Fotos y cierre','Panel del jefe','Funciona sin señal'], stack:'PWA · Next.js · Supabase'},
+  {k:'coopLuz', rubro:'cooperativas', nombre:'Cooperativa eléctrica', estado:'dev',
+   desc:'Reclamos de usuarios derivados a cuadrillas, con perfiles para cada puesto.',
+   feats:['Jefe de área','Derivadores en PC','Operarios en celular','Guardias','Reportes'], stack:'Next.js · TypeScript · PostgreSQL'},
+  {k:'mostrador', rubro:'comercio', nombre:'Mostrador · Gestor de inventario', estado:'demo',
+   desc:'Stock, proveedores y caja para comercios y supermercados argentinos.',
+   feats:['Stock y alertas','Proveedores','Gastos','Caja diaria','Exportar a Excel','Facturación ARCA'], stack:'HTML · JavaScript'},
+  {k:'restaurante', rubro:'gastro', nombre:'Gestor para restaurantes', estado:'demo',
+   desc:'Carta, pedidos y control del salón y la cocina.',
+   feats:['Carta QR','Pedidos por WhatsApp','Mercado Pago','Mesas','Stock de insumos','Caja'], stack:'Next.js · Supabase'},
+  {k:'comanda', rubro:'gastro', nombre:'Comanda Café', estado:'dev',
+   desc:'Comandas digitales para cafeterías: el mozo toma el pedido desde el celular y llega directo a la barra.',
+   feats:['Pedido desde el celular','Pantalla de barra','Estado de cada mesa'], stack:'App web'},
+  {k:'eventos', rubro:'eventos', nombre:'Gestor de eventos y locales', estado:'demo',
+   desc:'Reservas de salones y espacios, con calendario y seguimiento de cada evento.',
+   feats:['Calendario de fechas','Reservas y señas','Clientes','Pagos y saldos'], stack:'HTML · JavaScript'},
+  {k:'justa', rubro:'servicios', nombre:'Justa', estado:'demo',
+   desc:'App que conecta personas que necesitan un abogado con profesionales matriculados.',
+   feats:['Perfiles por rol','Casos anónimos','Búsqueda por especialidad'], stack:'HTML · JavaScript · beta'},
+  {k:'cazacartas', rubro:'otros', nombre:'Cazacartas', estado:'pub',
+   desc:'Busca una carta en tiendas TCG argentinas y compara precios y stock en vivo.',
+   feats:['Búsqueda en vivo','5 juegos','Decklists','Lista de deseos','Cuentas'], stack:'Next.js · Supabase · Vercel'},
+  {k:'web', rubro:'otros', nombre:'Páginas para locales', estado:'pub',
+   desc:'Cartas digitales y páginas para locales y emprendimientos, rápidas y pensadas para el celular.',
+   feats:['Diseño a medida','WhatsApp y mapa','Dominio propio'], stack:'HTML · CSS · Vercel'}
+];
+const ESTADOS = {pub:['Publicado','e-pub'], demo:['Demo','e-demo'], dev:['En desarrollo','e-dev']};
+
+const SERVICIOS = [
+  {k:'gastro', t:'Gastronomía', ej:'Restaurantes, bares, cafeterías, rotiserías, heladerías.', base:'Gestor para restaurantes', items:[
+    ['Carta QR','Platos con fotos y precios que cambiás vos.'],
+    ['Pedidos online','Por WhatsApp o con Mercado Pago, sin comisión por pedido.'],
+    ['Reservas de mesa','Con confirmación automática.'],
+    ['Mesas y comandas','Pedidos del salón directo a la cocina.'],
+    ['Stock de insumos','Mercadería, faltantes y compras a proveedores.'],
+    ['Caja y facturación','Ventas del día, platos más vendidos y factura ARCA.']]},
+  {k:'turismo', t:'Turismo', ej:'Cabañas, hosterías, alquileres temporarios, excursiones, alquiler de equipos de ski y bici.', base:'Gestor de turnos y reservas', local:true, items:[
+    ['Reservas online','Disponibilidad y seña con Mercado Pago, sin comisión de plataformas.'],
+    ['Gestión de reservas','Ocupación, ingresos, pagos y saldos.'],
+    ['Alquiler de equipos','Por día, con stock de talles y devoluciones.'],
+    ['Excursiones','Salidas con cupos y lista de pasajeros.'],
+    ['Web en varios idiomas','Español, inglés y portugués.'],
+    ['Bot de WhatsApp','Responde precios y disponibilidad las 24 horas.']]},
+  {k:'comercio', t:'Comercios y supermercados', ej:'Supermercados, almacenes, kioscos, ferreterías, tiendas de ropa, librerías.', base:'Mostrador', items:[
+    ['Stock y proveedores','Productos, alertas de faltantes, compras y costos.'],
+    ['Caja y ventas','Lector de código de barras, cierre de caja y gastos.'],
+    ['Facturación electrónica','Factura ARCA desde el mismo sistema.'],
+    ['Listas de precios','Actualización por porcentaje en un paso.'],
+    ['Cuentas corrientes','Fiado y saldos de clientes.'],
+    ['Catálogo online','Pedidos por WhatsApp con retiro o envío.']]},
+  {k:'salud', t:'Salud', ej:'Consultorios, odontología, kinesiología, nutrición, psicología, veterinarias.', base:'Centro odontológico', items:[
+    ['Agenda por profesional','Sin turnos superpuestos.'],
+    ['Reserva online','El paciente elige día y hora desde el celular.'],
+    ['Recordatorios','Por WhatsApp y email el día anterior.'],
+    ['Ficha del paciente','Datos, alertas, odontograma y notas.'],
+    ['Presupuestos y cobros','Envío por WhatsApp, caja y saldos.'],
+    ['Veterinarias','Ficha por mascota con vacunas y aviso de próxima dosis.']]},
+  {k:'belleza', t:'Belleza y bienestar', ej:'Peluquerías, barberías, estética, uñas, spa.', base:'Gestor de turnos', items:[
+    ['Turnos online','Por profesional y servicio.'],
+    ['Recordatorios','Menos turnos perdidos.'],
+    ['Caja y comisiones','Lo que generó cada empleado.'],
+    ['Venta de productos','Con stock.'],
+    ['Tarjeta de fidelidad','Por ejemplo, el corte número 10 gratis.']]},
+  {k:'deporte', t:'Deporte', ej:'Gimnasios, yoga, pilates, danza, clubes, escuelas deportivas.', base:'Gestor de turnos', items:[
+    ['Socios y cuotas','Estado de cada socio y aviso de vencimiento.'],
+    ['Cobro mensual','Con Mercado Pago o registro de pagos en efectivo.'],
+    ['Asistencias','Con código QR en la entrada.'],
+    ['Clases con cupo','Reserva de clases, canchas o turnos.']]},
+  {k:'eventos', t:'Eventos y salones', ej:'Salones de fiestas, quinchos, espacios para eventos, organizadores.', base:'Gestor de eventos y locales', items:[
+    ['Calendario de fechas','Disponibilidad a la vista, sin superposiciones.'],
+    ['Reservas y señas','Con Mercado Pago y saldos pendientes.'],
+    ['Ficha del evento','Invitados, servicios contratados y proveedores.'],
+    ['Avisos','Recordatorios de pagos y de la fecha al cliente.']]},
+  {k:'educacion', t:'Educación', ej:'Institutos, academias de idiomas o música, apoyo escolar, profes particulares.', base:'Gestor de turnos', items:[
+    ['Inscripciones online','Alumnos por curso.'],
+    ['Cuotas y deudores','Con recordatorio de pago.'],
+    ['Asistencia y notas','Por curso y alumno.'],
+    ['Avisos a familias','Por email o WhatsApp.']]},
+  {k:'tecnico', t:'Servicio técnico y oficios', ej:'Talleres mecánicos, service de celulares y PC, electricistas, plomeros.', base:'Cooperativas y Mostrador', items:[
+    ['Órdenes de reparación','Con número de seguimiento que el cliente consulta.'],
+    ['Presupuestos','Aceptación por WhatsApp.'],
+    ['Historial','Por vehículo o equipo.'],
+    ['Repuestos y cobros','Stock y caja.'],
+    ['Aviso de listo','Mensaje automático cuando termina el trabajo.']]},
+  {k:'cooperativas', t:'Cooperativas y servicios', ej:'Cooperativas de agua y electricidad, municipios, empresas de mantenimiento.', base:'Cooperativa de agua y eléctrica', items:[
+    ['Fichaje del personal','Entrada y salida con hora y ubicación.'],
+    ['Órdenes de trabajo','Asignación a cuadrillas y cierre con fotos.'],
+    ['Reclamos de vecinos','Con prioridad y zona.'],
+    ['Guardias','Quién atiende fuera de horario.'],
+    ['Reportes','Tiempos, horas y trabajos por cuadrilla.']]},
+  {k:'inmobiliaria', t:'Inmobiliarias y consorcios', ej:'Inmobiliarias, administradores de alquileres y consorcios.', base:'A medida', items:[
+    ['Alquileres','Contratos con ajuste por ICL o IPC, cuotas y mora.'],
+    ['Liquidación','Resumen mensual para cada propietario.'],
+    ['Web de propiedades','Con formulario de consulta.'],
+    ['Consorcios','Expensas y reclamos de vecinos.']]},
+  {k:'servicios', t:'Servicios profesionales', ej:'Estudios contables, abogados, escribanías.', base:'Justa', items:[
+    ['Turnos y web','Para que los clientes te encuentren y reserven.'],
+    ['Portal de clientes','Para subir y descargar documentos.'],
+    ['Vencimientos','Avisos automáticos de impuestos o audiencias.'],
+    ['Seguimiento de trámites','Estado visible para el cliente.']]},
+  {k:'logistica', t:'Logística y transporte', ej:'Fletes, mensajería, transporte escolar, remises.', base:'Cooperativas', items:[
+    ['Viajes y pedidos','Con estado y entrega confirmada con foto.'],
+    ['Liquidación a choferes','Lo que corresponde a cada uno.'],
+    ['Transporte escolar','Cuotas y avisos a padres.']]}
+];
+
+const EXTRAS = [
+  ['Página web o landing','Para que te encuentren en Google y te escriban.'],
+  ['Bot de WhatsApp con IA','Responde preguntas frecuentes, horarios y precios.'],
+  ['Automatizaciones','Planillas, avisos y seguimiento de clientes sin hacerlo a mano.'],
+  ['Soporte técnico y PC','Computadoras, impresoras y redes del negocio.'],
+  ['Capacitación','Para que todo tu equipo use el sistema sin problemas.'],
+  ['Mantenimiento mensual','Hosting, copias de seguridad y mejoras chicas.']
+];
+
+// [rubro, nombre, pago único, abono mensual, descripción]
+const PLANES = [
+  ['Emprendimientos','Página web',200000,15000,'Secciones, WhatsApp, mapa y dominio propio.'],
+  ['Emprendimientos','Catálogo online',380000,35000,'Productos, pedidos por WhatsApp y Mercado Pago.'],
+  ['Belleza y salud','Turnos online',420000,40000,'Reserva, recordatorios y panel del negocio.'],
+  ['Gastronomía','Carta QR',250000,25000,'Carta con fotos y QR para las mesas.'],
+  ['Gastronomía','Pedidos online',550000,55000,'Carrito, WhatsApp, Mercado Pago y panel de pedidos.'],
+  ['Gastronomía','Completo',800000,80000,'Pedidos, reservas, cupones y reportes.']
+];
+
+/* ===================================================== */
+const wa = txt => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money = n => new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(n);
+
+document.querySelectorAll('[data-wa]').forEach(a => a.href = wa(a.dataset.wa));
+
+// Sistemas
+let filtro = 'todos';
+function renderSistemas(){
+  const usados = new Set(TRABAJOS.map(t => t.rubro));
+  document.getElementById('filtros').innerHTML = [['todos','Todos'], ...RUBROS.filter(([k]) => usados.has(k))]
+    .map(([k,l]) => `<button class="filter-tab" data-f="${k}" aria-pressed="${filtro===k}">${l}</button>`).join('');
+  document.getElementById('systems').innerHTML = TRABAJOS.filter(t => filtro === 'todos' || t.rubro === filtro).map(t => {
+    const [et, ec] = ESTADOS[t.estado], link = LINKS[t.k];
+    const rub = RUBROS.find(r => r[0] === t.rubro)[1];
+    const externo = link && /^https?:/.test(link);
+    const btn = link
+      ? `<a class="btn btn-ghost btn-sm" href="${esc(link)}" ${externo ? 'target="_blank" rel="noopener"' : ''}>${t.estado==='pub' ? 'Ver ↗' : 'Probar la demo ↗'}</a>`
+      : `<a class="btn btn-ghost btn-sm" href="${wa('Hola Fausto, quiero ver la demo de: '+t.nombre)}" target="_blank" rel="noopener">Pedir demo por WhatsApp</a>`;
+    return `<article class="sys"><div class="sys-top"><span class="work-tag">${rub}</span><span class="estado ${ec}">${et}</span></div>
+      <h3>${esc(t.nombre)}</h3><p>${esc(t.desc)}</p>
+      <ul class="feats">${t.feats.map(f => `<li>${esc(f)}</li>`).join('')}</ul>
+      <span class="stack">${esc(t.stack)}</span>${btn}</article>`;
+  }).join('');
+}
+document.getElementById('filtros').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if (!b) return; filtro = b.dataset.f; renderSistemas();
+});
+renderSistemas();
+
+// Rubros
+document.getElementById('jump').innerHTML = SERVICIOS.map(s => `<a href="#r-${s.k}">${esc(s.t)}</a>`).join('');
+document.getElementById('rubros').innerHTML = SERVICIOS.map(s => `
+  <article class="rubro ${s.local ? 'destacado' : ''}" id="r-${s.k}">
+    ${s.local ? '<span class="tag-local">CLAVE EN SAN MARTÍN DE LOS ANDES</span>' : ''}
+    <h3>${esc(s.t)}</h3><p class="ej">${esc(s.ej)}</p>
+    <ul class="ofrece">${s.items.map(([b,d]) => `<li><b>${esc(b)}</b><span>${esc(d)}</span></li>`).join('')}</ul>
+    <div class="rubro-foot"><p class="base">Basado en: <b>${esc(s.base)}</b></p>
+      <a class="btn btn-ghost btn-sm" href="${wa('Hola Fausto, tengo un negocio de '+s.t.toLowerCase()+' y quiero consultar.')}" target="_blank" rel="noopener">Consultar</a></div>
+  </article>`).join('');
+
+// Extras
+document.getElementById('extrasList').innerHTML = EXTRAS.map(([b,d]) => `<div><b>${esc(b)}</b><span>${esc(d)}</span></div>`).join('');
+
+// Planes
+if (MOSTRAR_PRECIOS){
+  document.getElementById('planesGrid').innerHTML = PLANES.map(([r,n,p,a,d]) => `
+    <div class="plan"><span class="rub">${esc(r)}</span><h3>${esc(n)}</h3>
+      <div class="precio"><b>${money(p)}</b><small>+ ${money(a)}<br>por mes</small></div><p>${esc(d)}</p></div>`).join('');
+} else {
+  document.getElementById('planes').hidden = true;
+  document.querySelectorAll('a[href="#planes"]').forEach(a => a.remove());
+}
+
+// Menú mobile
+const toggle = document.getElementById('menuToggle');
+const links = document.getElementById('navLinks');
+toggle.addEventListener('click', () => {
+  const open = links.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', open);
+});
+links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  links.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false');
+}));
+
+// Volver arriba
+const backToTop = document.getElementById('backToTop');
+const onScroll = () => backToTop.classList.toggle('visible', window.scrollY > 480);
+window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>

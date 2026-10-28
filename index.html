@@ -81,6 +81,13 @@
   .nav-cta:hover{ background:#E3B25F; transform: translateY(-1px); box-shadow: 0 14px 28px -12px rgba(214,162,76,0.7), 0 26px 40px -10px rgba(214,162,76,0.45); }
   .menu-toggle{ display:none; background:none; border:1px solid var(--line-strong); color:var(--ink); width:40px; height:40px; border-radius: var(--radius); cursor:pointer; }
 
+  nav.links a.nav-cta{ color: var(--accent-ink); }
+  nav.links a.nav-catalogo{ color: var(--accent); }
+  nav.links a.nav-catalogo:hover{ color: #E3B25F; }
+  @media (max-width: 1000px) and (min-width: 761px){
+    nav.links{ gap: 20px; }
+    nav.links a{ font-size: 14px; }
+  }
   @media (max-width: 760px){
     nav.links{
       position:absolute; top: 100%; left:0; right:0;
@@ -88,7 +95,7 @@
       background: var(--bg-panel); border-bottom: 1px solid var(--line);
       max-height:0; overflow:hidden; transition: max-height .25s ease;
     }
-    nav.links.open{ max-height: 260px; }
+    nav.links.open{ max-height: 420px; }
     nav.links a{ padding: 14px 28px; width:100%; border-top:1px solid var(--line); }
     nav.links .nav-cta{ margin: 14px 28px; }
     .menu-toggle{ display:block; }
@@ -278,6 +285,28 @@
   .work-card.is-soon{ cursor:default; }
   .work-card.is-soon:hover{ transform:none; box-shadow:none; border-color:var(--line); }
 
+  /* ---------- Sistemas (adelanto del catálogo) ---------- */
+  .sys-grid{ display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 20px; }
+  .sys-card{
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 28px 24px; text-decoration:none; color: var(--ink); display:flex; flex-direction:column;
+    box-shadow: 0 14px 30px -22px rgba(0,0,0,0.6), 0 26px 40px -18px rgba(214,162,76,0.16);
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .sys-card:hover{ transform: translateY(-5px); border-color: var(--line-strong); }
+  .sys-card .cat-label{ font-size: 11.5px; letter-spacing:0.07em; color: var(--ink-faint); font-weight:600; margin-bottom:12px; display:block; }
+  .sys-card h3{ font-size: 19px; margin: 0 0 10px; font-weight:560; }
+  .sys-card p{ color: var(--ink-dim); font-size: 14px; margin:0 0 18px; }
+  .sys-card .estado{ margin-top:auto; font-size: 12px; font-weight:600; color: var(--accent); }
+  .sys-cta{
+    margin-top: 34px; display:flex; justify-content:space-between; align-items:center; gap: 20px; flex-wrap:wrap;
+    border: 1px solid var(--line-strong); border-radius: 3px; padding: 24px 28px;
+  }
+  .sys-cta p{ margin:0; color: var(--ink-dim); max-width: 60ch; }
+  .sys-cta p b{ color: var(--ink); font-weight:600; }
+  @media (max-width: 1000px){ .sys-grid{ grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px){ .sys-grid{ grid-template-columns: 1fr; } .sys-cta{ padding: 22px 20px; } .sys-cta .btn{ width:100%; justify-content:center; } }
+
   /* ---------- Proceso ---------- */
   .process{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top:1px solid var(--line); border-left:1px solid var(--line); }
   .step{ padding: 30px 26px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
@@ -372,7 +401,9 @@
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#trabajos">Trabajos</a>
       <a href="#servicios">Servicios</a>
+      <a href="#sistemas">Sistemas</a>
       <a href="#proceso">Cómo pedís</a>
+      <a href="catalogo/" class="nav-catalogo">Catálogo</a>
       <a href="#contacto" class="nav-cta">Escribime</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
@@ -448,6 +479,10 @@
         <span class="tool-pill">JavaScript</span>
         <span class="tool-pill">Vercel</span>
         <span class="tool-pill">GitHub</span>
+        <span class="tool-pill">Next.js</span>
+        <span class="tool-pill">Supabase</span>
+        <span class="tool-pill">Firebase</span>
+        <span class="tool-pill">Mercado Pago</span>
         <span class="tool-pill">WhatsApp Business</span>
       </div>
     </div>
@@ -573,6 +608,47 @@
     </div>
   </section>
 
+  <!-- SISTEMAS -->
+  <section id="sistemas">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Sistemas y apps</span>
+        <h2>Además de sitios, armo sistemas para tu negocio.</h2>
+        <p>Turnos, reservas, pedidos, stock, caja y órdenes de trabajo. Sin comisión por venta, con un abono mensual claro y soporte cerca tuyo.</p>
+      </div>
+      <div class="sys-grid">
+        <a class="sys-card" href="catalogo/#sistemas">
+          <span class="cat-label">SALUD</span>
+          <h3>Centro odontológico</h3>
+          <p>Agenda por profesional, reserva online, odontograma, historia clínica, presupuestos y cobros.</p>
+          <span class="estado">Demo disponible →</span>
+        </a>
+        <a class="sys-card" href="catalogo/#sistemas">
+          <span class="cat-label">BELLEZA Y PROFESIONALES</span>
+          <h3>Gestor de turnos</h3>
+          <p>El cliente reserva desde el celular, sin turnos superpuestos y con recordatorio automático.</p>
+          <span class="estado">Demo disponible →</span>
+        </a>
+        <a class="sys-card" href="catalogo/#sistemas">
+          <span class="cat-label">COMERCIOS Y GASTRONOMÍA</span>
+          <h3>Mostrador y restaurantes</h3>
+          <p>Stock, proveedores, caja diaria, carta QR, pedidos con Mercado Pago y control del salón.</p>
+          <span class="estado">Demo disponible →</span>
+        </a>
+        <a class="sys-card" href="catalogo/#sistemas">
+          <span class="cat-label">COOPERATIVAS Y EVENTOS</span>
+          <h3>Cuadrillas y salones</h3>
+          <p>Fichaje y órdenes de trabajo para cooperativas de agua y luz, y reservas de salones con señas.</p>
+          <span class="estado">Demo disponible →</span>
+        </a>
+      </div>
+      <div class="sys-cta">
+        <p><b>13 rubros, 11 trabajos y precios de referencia.</b> Mirá qué te puedo ofrecer según tu negocio.</p>
+        <a class="btn btn-primary" href="catalogo/">Ver el catálogo completo</a>
+      </div>
+    </div>
+  </section>
+
   <!-- PROCESO -->
   <section id="proceso" style="padding-bottom:0;">
     <div class="wrap">
@@ -633,6 +709,7 @@
       FC diseñador web freelancer
     </span>
     <div class="flinks">
+      <a href="catalogo/">Catálogo</a>
       <a href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">WhatsApp</a>
       <a href="mailto:faucordobes@gmail.com">Mail</a>
       <a href="https://github.com/raikiry0" target="_blank" rel="noopener">GitHub</a>
