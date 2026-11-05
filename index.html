@@ -410,11 +410,11 @@
       <div class="brand-text">FC<span>diseñador web freelancer</span></div>
     </a>
     <nav class="links" id="navLinks">
+      <a href="#proceso">Cómo pedís</a>
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#trabajos">Trabajos</a>
       <a href="#servicios">Servicios</a>
       <a href="#sistemas">Sistemas</a>
-      <a href="#proceso">Cómo pedís</a>
       <a href="catalogo/" class="nav-catalogo">Catálogo</a>
       <a href="#contacto" class="nav-cta">Escribime</a>
     </nav>
@@ -459,6 +459,182 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- PROCESO (con camino animado) — reemplaza la sección PROCESO anterior completa -->
+  <section id="proceso">
+    <style>
+      .ruta{ position:relative; margin-top:10px; padding:10px 0 20px; }
+      .ruta-svg{ position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+      .ruta-base{ fill:none; stroke:var(--line-strong); stroke-width:2; stroke-dasharray:2 9; stroke-linecap:round; }
+      .ruta-linea{ fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; filter:drop-shadow(0 0 6px rgba(214,162,76,.45)); }
+      .ruta-pasos{ list-style:none; margin:0; padding:0; display:grid; gap:64px; position:relative; }
+      .ruta-paso{ display:grid; grid-template-columns:minmax(0,1fr) 88px minmax(0,1fr); align-items:center; }
+      .ruta-nodo{ grid-column:2; grid-row:1; justify-self:center; position:relative; width:64px; height:64px; border-radius:50%;
+        background:var(--bg-card); border:2px solid var(--line-strong); display:grid; place-items:center;
+        transition:background .45s ease, border-color .45s ease, transform .45s cubic-bezier(.2,.8,.2,1.4), box-shadow .45s ease; }
+      .ruta-nodo svg{ width:26px; height:26px; fill:none; stroke:var(--ink-faint); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; transition:stroke .45s ease; }
+      .ruta-nodo b{ position:absolute; top:-6px; right:-6px; width:24px; height:24px; border-radius:50%; background:var(--bg); border:1px solid var(--line-strong);
+        font:600 12px/22px 'Inter',sans-serif; text-align:center; color:var(--ink-dim); transition:.45s ease; }
+      .ruta-card{ grid-column:3; grid-row:1; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:22px 24px;
+        transition:opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1), border-color .6s ease; }
+      .ruta-paso:nth-child(even) .ruta-card{ grid-column:1; text-align:right; }
+      .ruta-card .num{ font-family:'Fraunces',serif; font-style:italic; color:var(--accent); font-size:17px; margin-bottom:8px; display:block; }
+      .ruta-card h4{ margin:0 0 6px; font-size:17px; font-weight:600; }
+      .ruta-card p{ margin:0; color:var(--ink-dim); font-size:14px; }
+
+      /* Estados animados: solo con JavaScript activo (sin JS se ve todo normal) */
+      .ruta.js .ruta-card{ opacity:.28; transform:translateY(18px); }
+      .ruta.js .ruta-paso.llego .ruta-card{ opacity:1; transform:none; border-color:var(--line-strong); }
+      .ruta.js .ruta-paso.llego .ruta-nodo{ background:var(--accent); border-color:var(--accent); transform:scale(1.08); box-shadow:0 0 0 8px rgba(214,162,76,.14); }
+      .ruta.js .ruta-paso.llego .ruta-nodo svg{ stroke:var(--accent-ink); }
+      .ruta.js .ruta-paso.llego .ruta-nodo b{ background:var(--accent-ink); color:var(--accent); border-color:var(--accent); }
+
+      @media (max-width:720px){
+        .ruta-pasos{ gap:34px; }
+        .ruta-paso{ grid-template-columns:64px minmax(0,1fr); column-gap:18px; }
+        .ruta-nodo{ grid-column:1; width:56px; height:56px; }
+        .ruta-card, .ruta-paso:nth-child(even) .ruta-card{ grid-column:2; text-align:left; padding:18px; }
+      }
+      @media (prefers-reduced-motion:reduce){
+        .ruta-nodo, .ruta-card, .ruta-nodo svg, .ruta-nodo b{ transition:none; }
+      }
+    </style>
+
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Cómo pedís</span>
+        <h2>Del mensaje al sitio, en cinco pasos.</h2>
+      </div>
+    </div>
+    <div class="wrap" style="padding-bottom:92px;">
+      <div class="ruta" id="ruta">
+        <svg class="ruta-svg" aria-hidden="true"><path class="ruta-base"></path><path class="ruta-linea"></path></svg>
+        <ol class="ruta-pasos">
+          <li class="ruta-paso">
+            <span class="ruta-nodo" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5.5h16v10H9l-4 3.5v-3.5H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
+              <b>1</b>
+            </span>
+            <div class="ruta-card">
+              <span class="num">Paso 1</span>
+              <h4>Me escribís</h4>
+              <p>Por WhatsApp o mail me contás qué necesitás y de qué negocio se trata.</p>
+            </div>
+          </li>
+          <li class="ruta-paso">
+            <span class="ruta-nodo" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="5" y="4.5" width="14" height="16" rx="2"/><path d="M9 4.5h6v3H9zM8.5 11.5h7M8.5 14.5h7M8.5 17.5h4"/></svg>
+              <b>2</b>
+            </span>
+            <div class="ruta-card">
+              <span class="num">Paso 2</span>
+              <h4>Definimos el contenido</h4>
+              <p>Me pasás la info: menú, fotos, horarios, lo que tengas. Si falta algo, te ayudo a ordenarlo.</p>
+            </div>
+          </li>
+          <li class="ruta-paso">
+            <span class="ruta-nodo" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="1.5"/><path d="M9 20h6M12 16.5V20M7 8.5h5M7 11.5h3"/><path d="M14.5 12.5l3-3.5"/></svg>
+              <b>3</b>
+            </span>
+            <div class="ruta-card">
+              <span class="num">Paso 3</span>
+              <h4>Diseño y armo el sitio</h4>
+              <p>Te muestro un avance para que ajustemos antes de dar por terminado el trabajo.</p>
+            </div>
+          </li>
+          <li class="ruta-paso">
+            <span class="ruta-nodo" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3.5c3 2 4.5 5 4.5 8.5l-2 3.5h-5l-2-3.5c0-3.5 1.5-6.5 4.5-8.5z"/><circle cx="12" cy="10" r="1.6"/><path d="M9.5 15.5L7 18.5l2.8-.6M14.5 15.5l2.5 3-2.8-.6M12 17.5v3"/></svg>
+              <b>4</b>
+            </span>
+            <div class="ruta-card">
+              <span class="num">Paso 4</span>
+              <h4>Entrega y listo</h4>
+              <p>Sitio publicado y funcionando, con el botón de WhatsApp ya configurado.</p>
+            </div>
+          </li>
+          <li class="ruta-paso">
+            <span class="ruta-nodo" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 13.5v-2a7 7 0 0 1 14 0v2"/><rect x="3.5" y="13" width="3.5" height="5.5" rx="1.2"/><rect x="17" y="13" width="3.5" height="5.5" rx="1.2"/><path d="M19 18.5c0 1.5-1.5 2.5-4 2.5h-2"/></svg>
+              <b>5</b>
+            </span>
+            <div class="ruta-card">
+              <span class="num">Paso 5</span>
+              <h4>Te acompaño después</h4>
+              <p>Con el abono mensual tu sitio sigue online y seguro, y yo me encargo de los cambios chicos y de cualquier consulta.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <script>
+    /* Camino animado: une los íconos con una línea que se dibuja al bajar y "enciende" cada paso */
+    (function(){
+      var ruta = document.getElementById('ruta'); if (!ruta) return;
+      var svg = ruta.querySelector('.ruta-svg'), base = ruta.querySelector('.ruta-base'), linea = ruta.querySelector('.ruta-linea');
+      var pasos = [].slice.call(ruta.querySelectorAll('.ruta-paso'));
+      var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var largo = 0, muestras = [], nodosY = [], actual = 0, objetivo = 0, animando = false;
+      ruta.classList.add('js');
+
+      function armar(){
+        var r = ruta.getBoundingClientRect(), w = r.width, h = r.height;
+        svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        var pts = pasos.map(function(p){
+          var n = p.querySelector('.ruta-nodo').getBoundingClientRect();
+          return { x: n.left - r.left + n.width / 2, y: n.top - r.top + n.height / 2 };
+        });
+        nodosY = pts.map(function(p){ return p.y; });
+        var amp = w > 720 ? Math.min(90, w * .08) : 14;          // cuánto serpentea el camino
+        var d = 'M ' + pts[0].x + ' ' + Math.max(0, pts[0].y - 70) + ' L ' + pts[0].x + ' ' + pts[0].y;
+        for (var i = 1; i < pts.length; i++){
+          var a = pts[i - 1], b = pts[i], dy = b.y - a.y, s = (i % 2 ? 1 : -1) * amp;
+          d += ' C ' + (a.x + s) + ' ' + (a.y + dy * .38) + ', ' + (b.x + s) + ' ' + (b.y - dy * .38) + ', ' + b.x + ' ' + b.y;
+        }
+        var ult = pts[pts.length - 1];
+        d += ' L ' + ult.x + ' ' + Math.min(h, ult.y + 50);
+        base.setAttribute('d', d); linea.setAttribute('d', d);
+        largo = linea.getTotalLength();
+        linea.style.strokeDasharray = largo + ' ' + largo;
+        muestras = [];
+        for (var l = 0; l <= largo; l += 6) muestras.push([l, linea.getPointAtLength(l).y]);
+        muestras.push([largo, linea.getPointAtLength(largo).y]);
+        medir(); if (quieto) actual = objetivo; pintar();
+      }
+      // Cuánta línea dibujar: hasta la altura del 62% de la pantalla
+      function medir(){
+        var y = window.innerHeight * .62 - ruta.getBoundingClientRect().top;
+        var l = 0;
+        for (var i = 0; i < muestras.length; i++){ if (muestras[i][1] <= y) l = muestras[i][0]; else break; }
+        objetivo = l;
+        return y;
+      }
+      function pintar(){
+        linea.style.strokeDashoffset = largo - actual;
+        var yDibujada = actual >= largo ? Infinity : (actual > 0 ? linea.getPointAtLength(actual).y : -1);
+        pasos.forEach(function(p, i){ p.classList.toggle('llego', yDibujada >= nodosY[i] - 2); });
+      }
+      function paso(){
+        actual += (objetivo - actual) * .14;                       // suaviza el avance
+        if (Math.abs(objetivo - actual) < .5) actual = objetivo;
+        pintar();
+        if (actual !== objetivo) requestAnimationFrame(paso); else animando = false;
+      }
+      function alScroll(){
+        medir();
+        if (quieto){ actual = objetivo; pintar(); return; }
+        if (!animando){ animando = true; requestAnimationFrame(paso); }
+      }
+      window.addEventListener('scroll', alScroll, { passive: true });
+      window.addEventListener('resize', function(){ clearTimeout(armar.t); armar.t = setTimeout(armar, 120); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(armar);
+      window.addEventListener('load', armar);
+      armar();
+    })();
+    </script>
   </section>
 
   <!-- SOBRE MÍ -->
@@ -754,40 +930,6 @@
       <div class="sys-cta">
         <p><b>13 rubros, 11 trabajos y precios de referencia.</b> Mirá qué te puedo ofrecer según tu negocio.</p>
         <a class="btn btn-primary" href="catalogo/">Ver el catálogo completo</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROCESO -->
-  <section id="proceso" style="padding-bottom:0;">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow-label">Cómo pedís</span>
-        <h2>Del mensaje al sitio, en cuatro pasos.</h2>
-      </div>
-    </div>
-    <div class="wrap" style="padding-bottom:92px;">
-      <div class="process">
-        <div class="step">
-          <span class="num">Paso 1</span>
-          <h4>Me escribís</h4>
-          <p>Por WhatsApp o mail me contás qué necesitás y de qué negocio se trata.</p>
-        </div>
-        <div class="step">
-          <span class="num">Paso 2</span>
-          <h4>Definimos el contenido</h4>
-          <p>Me pasás la info: menú, fotos, horarios, lo que tengas. Si falta algo, te ayudo a ordenarlo.</p>
-        </div>
-        <div class="step">
-          <span class="num">Paso 3</span>
-          <h4>Diseño y armo el sitio</h4>
-          <p>Te muestro un avance para que ajustemos antes de dar por terminado el trabajo.</p>
-        </div>
-        <div class="step">
-          <span class="num">Paso 4</span>
-          <h4>Entrega y listo</h4>
-          <p>Sitio publicado y funcionando, con el botón de WhatsApp ya configurado.</p>
-        </div>
       </div>
     </div>
   </section>
