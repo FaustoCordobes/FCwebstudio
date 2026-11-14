@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catálogo F-C Web Studio — Sistemas y apps a medida por rubro</title>
-<meta name="description" content="Qué puedo hacer por tu negocio: turnos, reservas, pedidos, stock, caja, facturación ARCA y órdenes de trabajo para gastronomía, comercios, turismo, salud, belleza, cooperativas y más. Trabajos, servicios por rubro y precios de referencia.">
+<meta name="description" content="Qué puedo hacer por tu negocio: turnos, reservas, pedidos, stock, caja, facturación ARCA y órdenes de trabajo para gastronomía, comercios, turismo, salud, belleza, cooperativas y más. Trabajos y servicios por rubro, con presupuesto a medida.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_AR">
 <meta property="og:site_name" content="F-C Web Studio">
 <meta property="og:url" content="https://f-cwebstudio.vercel.app/catalogo/">
 <meta property="og:title" content="Catálogo F-C Web Studio — Sistemas y apps a medida por rubro">
-<meta property="og:description" content="Turnos, reservas, pedidos, stock, caja, facturación ARCA y órdenes de trabajo para gastronomía, comercios, turismo, salud, belleza, cooperativas y más. Trabajos, servicios por rubro y precios.">
+<meta property="og:description" content="Turnos, reservas, pedidos, stock, caja, facturación ARCA y órdenes de trabajo para gastronomía, comercios, turismo, salud, belleza, cooperativas y más. Trabajos y servicios por rubro, con presupuesto a medida.">
 <meta property="og:image" content="https://f-cwebstudio.vercel.app/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -218,22 +218,12 @@
   @media (max-width: 860px){ .extras{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
   @media (max-width: 560px){ .extras{ grid-template-columns: minmax(0,1fr); } }
 
-  /* ---------- Planes ---------- */
-  .planes{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
-  .plan{
-    background: var(--paper); color: #2B2620; border-radius: 3px; padding: 26px 24px 24px; position:relative;
-    box-shadow: 0 24px 44px -24px rgba(0,0,0,0.6);
-  }
-  .plan::before{ content:""; position:absolute; inset:7px; border: 1px solid rgba(43,38,32,0.2); pointer-events:none; }
-  .plan .rub{ font-size: 11.5px; letter-spacing: 0.1em; color:#6B5E45; font-weight:600; text-transform: uppercase; }
-  .plan h3{ font-size: 22px; margin: 6px 0 14px; font-weight:600; }
-  .plan .precio{ display:flex; justify-content:space-between; align-items:baseline; gap: 8px; border-top: 1px dashed rgba(43,38,32,0.3); border-bottom: 1px dashed rgba(43,38,32,0.3); padding: 10px 0; margin-bottom: 12px; }
-  .plan .precio b{ font-family:'Fraunces',serif; font-size: 24px; font-weight:600; }
-  .plan .precio small{ font-size: 12.5px; color:#7A6E5B; text-align:right; }
-  .plan p{ font-size: 13.5px; color:#5E5444; margin: 0; }
-  .nota{ color: var(--ink-faint); font-size: 13px; margin: 26px 0 0; max-width: 78ch; }
-  @media (max-width: 920px){ .planes{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  @media (max-width: 560px){ .planes{ grid-template-columns: minmax(0,1fr); } }
+  /* ---------- Presupuesto ---------- */
+  .presu{ display:flex; justify-content:space-between; align-items:center; gap:32px; flex-wrap:wrap; border:1px solid var(--line-strong); border-radius:3px; padding:40px 44px; }
+  .presu > div{ max-width:620px; }
+  .presu h2{ font-size:clamp(26px,3vw,34px); margin:0 0 12px; font-weight:480; line-height:1.15; }
+  .presu p{ margin:0; color:var(--ink-dim); }
+  @media (max-width:600px){ .presu{ padding:30px 22px; } .presu .btn{ width:100%; } }
 
   /* ---------- Proceso ---------- */
   .process{ display:grid; grid-template-columns: repeat(4, 1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
@@ -298,7 +288,7 @@
       <a href="../">Inicio</a>
       <a href="#sistemas">Sistemas</a>
       <a href="#servicios">Por rubro</a>
-      <a href="#planes">Precios</a>
+      <a href="#planes">Presupuesto</a>
       <a href="#proceso">Cómo trabajo</a>
       <a href="#contacto" class="nav-cta">Escribime</a>
     </nav>
@@ -372,16 +362,17 @@
     </div>
   </section>
 
-  <!-- PLANES -->
+  <!-- PRESUPUESTO -->
   <section id="planes">
     <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow-label">Planes para empezar</span>
-        <h2>Precios de referencia</h2>
-        <p>Un pago único para dejarlo funcionando y un abono mensual que lo mantiene online.</p>
+      <div class="presu">
+        <div>
+          <span class="eyebrow-label">Presupuesto</span>
+          <h2>Cada negocio es distinto, el precio también.</h2>
+          <p>Después de una charla corta te paso un presupuesto cerrado, sin compromiso. Se paga una vez para dejarlo funcionando y un abono mensual que incluye hosting, dominio, copias de seguridad, soporte y cambios chicos.</p>
+        </div>
+        <a class="btn btn-primary" data-wa="Hola Fausto, vi tu catálogo y quiero pedir un presupuesto para mi negocio." href="https://wa.me/5492944242906" target="_blank" rel="noopener">Pedir presupuesto</a>
       </div>
-      <div class="planes" id="planesGrid"></div>
-      <p class="nota">Precios en pesos argentinos, finales (monotributo, Factura C). El abono incluye hosting, dominio, copias de seguridad, soporte y cambios chicos, y se actualiza cada 3 meses por IPC. Los sistemas de gestión más grandes (clínicas, cooperativas, comercios con stock) se presupuestan a medida después de una reunión.</p>
     </div>
   </section>
 
@@ -452,7 +443,6 @@
    CONFIGURACIÓN — lo único que tenés que tocar
    ===================================================== */
 const WHATSAPP = '5492944242906';
-const MOSTRAR_PRECIOS = true;   // false = oculta la sección de precios
 
 // Pegá acá el link de cada demo cuando la publiques.
 // Si queda vacío, el botón dice "Pedir demo por WhatsApp".
@@ -599,20 +589,9 @@ const EXTRAS = [
   ['Mantenimiento mensual','Hosting, copias de seguridad y mejoras chicas.']
 ];
 
-// [rubro, nombre, pago único, abono mensual, descripción]
-const PLANES = [
-  ['Emprendimientos','Página web',200000,15000,'Secciones, WhatsApp, mapa y dominio propio.'],
-  ['Emprendimientos','Catálogo online',380000,35000,'Productos, pedidos por WhatsApp y Mercado Pago.'],
-  ['Belleza y salud','Turnos online',420000,40000,'Reserva, recordatorios y panel del negocio.'],
-  ['Gastronomía','Carta QR',250000,25000,'Carta con fotos y QR para las mesas.'],
-  ['Gastronomía','Pedidos online',550000,55000,'Carrito, WhatsApp, Mercado Pago y panel de pedidos.'],
-  ['Gastronomía','Completo',800000,80000,'Pedidos, reservas, cupones y reportes.']
-];
-
 /* ===================================================== */
 const wa = txt => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const money = n => new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(n);
 
 document.querySelectorAll('[data-wa]').forEach(a => a.href = wa(a.dataset.wa));
 
@@ -653,16 +632,6 @@ document.getElementById('rubros').innerHTML = SERVICIOS.map(s => `
 
 // Extras
 document.getElementById('extrasList').innerHTML = EXTRAS.map(([b,d]) => `<div><b>${esc(b)}</b><span>${esc(d)}</span></div>`).join('');
-
-// Planes
-if (MOSTRAR_PRECIOS){
-  document.getElementById('planesGrid').innerHTML = PLANES.map(([r,n,p,a,d]) => `
-    <div class="plan"><span class="rub">${esc(r)}</span><h3>${esc(n)}</h3>
-      <div class="precio"><b>${money(p)}</b><small>+ ${money(a)}<br>por mes</small></div><p>${esc(d)}</p></div>`).join('');
-} else {
-  document.getElementById('planes').hidden = true;
-  document.querySelectorAll('a[href="#planes"]').forEach(a => a.remove());
-}
 
 // Menú mobile
 const toggle = document.getElementById('menuToggle');
