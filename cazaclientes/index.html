@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cazaclientes</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,480;0,9..144,600;1,9..144,420&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121110; --panel:#1A1815; --card:#17150F; --ink:#FAF7F0; --dim:#ACA398; --faint:#8C8378;
+  --accent:#D6A24C; --accent-ink:#201705; --teal:#7FC2A6; --warn:#E3B25F; --danger:#E08A6F;
+  --line:rgba(250,247,240,.10); --line2:rgba(250,247,240,.24); --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:22px 18px 90px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+header.top h1{margin:0;font-size:28px}
+header.top h1 em{font-style:italic;font-weight:420;color:var(--accent)}
+header.top p{margin:2px 0 0;color:var(--dim);font-size:13.5px}
+.tabs{display:flex;gap:6px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:18px;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--dim);font-weight:600;padding:10px 16px;border-radius:9px;cursor:pointer;min-height:44px;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.tabs .count{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:rgba(250,247,240,.12);font-size:12px;margin-left:4px}
+.tabs button[aria-selected="true"] .count{background:rgba(32,23,5,.18)}
+.view{display:none}.view.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px 14px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+.field .hint{display:block;font-size:12px;color:var(--faint);margin-top:4px}
+.field input,.field select,.field textarea{width:100%;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:9px 11px;min-height:44px}
+.field textarea{min-height:90px;resize:vertical}
+.full{grid-column:1/-1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 16px;border-radius:8px;border:1px solid var(--line2);background:none;cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--dim)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri:hover{background:#E3B25F}
+.btn.wa{background:#3F8F73;border-color:#3F8F73;color:#F3EEE3}
+.btn.sm{min-height:36px;padding:6px 11px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.status{margin:12px 0 0;font-size:13.5px;color:var(--dim);min-height:1.2em}
+.status.err{color:var(--danger)}.status.ok{color:var(--teal)}
+.filters{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:16px 0 10px;font-size:13.5px;color:var(--dim)}
+.filters label{display:flex;gap:7px;align-items:center;cursor:pointer;min-height:36px}
+.filters input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+.filters select{background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:6px 8px;min-height:36px}
+.results{display:grid;gap:10px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;grid-template-columns:62px minmax(0,1fr);gap:4px 14px}
+.score{grid-row:1/4;width:58px;height:58px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--line2);font-family:'Fraunces',Georgia,serif}
+.score b{font-size:22px;line-height:1}
+.score span{font:600 10px/1.2 'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;margin-top:3px}
+.score.alta{background:rgba(214,162,76,.16);border-color:var(--accent);color:var(--accent)}
+.score.media{background:rgba(127,194,166,.10);border-color:rgba(127,194,166,.5);color:var(--teal)}
+.score.baja{color:var(--faint)}
+.res h3{margin:0;font-size:17px;line-height:1.25}
+.res .meta{font-size:12.5px;color:var(--faint)}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.badge{font-size:12px;border-radius:20px;padding:3px 9px;border:1px solid var(--line2);color:var(--dim)}
+.badge.hot{border-color:rgba(214,162,76,.6);color:var(--accent)}
+.badge.ok{border-color:rgba(127,194,166,.45);color:var(--teal)}
+.res .acts{grid-column:2;display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.empty{color:var(--faint);font-size:14px;padding:18px 0}
+.note{font-size:12px;color:var(--faint);margin:14px 0 0}
+/* seguimiento */
+.lead{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:8px}
+.lead .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.lead h3{margin:0;font-size:17px}
+.lead .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px 12px}
+.lead select,.lead input,.lead textarea{width:100%;background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:7px 10px;min-height:40px}
+.lead textarea{min-height:60px}
+.lead .hist{font-size:12.5px;color:var(--faint);margin:0;padding-left:18px}
+.lead.vence{border-color:rgba(214,162,76,.55)}
+.estado{font-size:12px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(250,247,240,.08)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.kpis div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.kpis span{display:block;font-size:12px;color:var(--faint)}
+.kpis b{font-family:'Fraunces',Georgia,serif;font-size:22px}
+/* modal */
+dialog{border:1px solid var(--line2);border-radius:14px;background:var(--panel);color:var(--ink);padding:0;width:min(720px,calc(100vw - 24px));max-height:calc(100vh - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.dlg{padding:18px 20px 20px;display:grid;gap:12px}
+.dlg h2{margin:0;font-size:21px}
+.dlg .sub{margin:0;color:var(--dim);font-size:13.5px}
+.dtabs{display:flex;gap:6px;flex-wrap:wrap}
+.dtabs button{border:1px solid var(--line2);background:none;border-radius:20px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:13.5px;color:var(--dim);min-height:38px}
+.dtabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.dlg textarea,.dlg input{width:100%;background:var(--card);border:1px solid var(--line2);border-radius:8px;padding:10px 12px}
+.dlg textarea{min-height:240px;resize:vertical;line-height:1.5}
+.close{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);background:none;cursor:pointer;color:var(--dim)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:50}
+.toast.on{opacity:1;transform:translateX(-50%)}
+footer{margin-top:28px;font-size:12px;color:var(--faint)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:560px){ .tabs button{padding:10px 11px;font-size:14px} .res{grid-template-columns:52px minmax(0,1fr)} .score{width:50px;height:50px} .score b{font-size:19px} .res .acts{grid-column:1/-1} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Caza<em>clientes</em></h1>
+      <p>Locales sin presencia online, el mensaje justo para cada rubro y el seguimiento de cada contacto.</p>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button type="button" role="tab" data-tab="buscar" aria-selected="true">Buscar locales</button>
+    <button type="button" role="tab" data-tab="seguimiento" aria-selected="false">Seguimiento <span class="count" id="cntLeads">0</span></button>
+    <button type="button" role="tab" data-tab="ajustes" aria-selected="false">Ajustes</button>
+  </nav>
+
+  <!-- BUSCAR -->
+  <section class="view on" id="v-buscar" aria-label="Buscar locales">
+    <div class="card">
+      <div class="fields">
+        <div class="field"><label for="qCiudad">Ciudad</label><input id="qCiudad" placeholder="San Martín de los Andes, Neuquén"></div>
+        <div class="field"><label for="qRubro">Rubro</label><select id="qRubro"></select></div>
+        <div class="field"><label for="qRadio">Radio</label>
+          <select id="qRadio"><option value="2000">2 km</option><option value="5000" selected>5 km</option><option value="10000">10 km</option><option value="20000">20 km</option></select></div>
+        <div class="field"><label for="qFuente">Fuente</label>
+          <select id="qFuente"><option value="ambas">Google + OpenStreetMap</option><option value="osm">Solo OpenStreetMap (gratis)</option><option value="google">Solo Google</option></select>
+          <span class="hint" id="cupo"></span></div>
+        <div class="field full"><label for="qExtra">Buscar algo puntual (opcional)</label><input id="qExtra" placeholder="Ej.: lubricentro, sanguchería, cabañas con pileta"><span class="hint">Si lo completás, en Google se busca esto en vez de los términos del rubro.</span></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" id="btnBuscar" type="button">Buscar locales</button>
+        <button class="btn" id="btnManual" type="button">Agregar un local a mano</button>
+      </div>
+      <p class="status" id="st" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="filters" id="filtros" hidden>
+      <label><input type="checkbox" id="fSinWeb"> Solo sin página web</label>
+      <label><input type="checkbox" id="fTel"> Solo con teléfono</label>
+      <label><input type="checkbox" id="fNuevo" checked> Ocultar los que ya están en seguimiento</label>
+      <label>Oportunidad <select id="fMin"><option value="0">Todas</option><option value="25">Media o alta</option><option value="45">Solo alta</option></select></label>
+      <span id="resCount"></span>
+    </div>
+    <div class="results" id="results"></div>
+    <p class="note" id="attrib" hidden>Datos de Google Maps y © colaboradores de OpenStreetMap (ODbL). Los datos de Google se guardan como máximo 30 días.</p>
+  </section>
+
+  <!-- SEGUIMIENTO -->
+  <section class="view" id="v-seguimiento" aria-label="Seguimiento">
+    <div class="kpis" id="kpis"></div>
+    <div class="filters">
+      <label>Ver <select id="sFiltro">
+        <option value="hoy">Hoy toca escribir</option><option value="todos">Todos</option>
+        <option value="Por contactar">Por contactar</option><option value="Contactado">Contactado</option><option value="Respondió">Respondió</option>
+        <option value="Demo enviada">Demo enviada</option><option value="Cliente">Cliente</option><option value="No interesado">No interesado</option>
+      </select></label>
+      <button class="btn sm" id="btnCsv" type="button">Descargar Excel (CSV)</button>
+      <button class="btn sm" id="btnBackup" type="button">Copia de seguridad</button>
+      <label class="btn sm" for="inBackup">Restaurar copia</label><input id="inBackup" class="sr" type="file" accept=".json,application/json">
+    </div>
+    <div class="results" id="leads"></div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section class="view" id="v-ajustes" aria-label="Ajustes">
+    <div class="card">
+      <div class="fields">
+        <div class="field"><label for="aNombre">Tu nombre</label><input id="aNombre" data-k="nombre"></div>
+        <div class="field"><label for="aMarca">Tu marca</label><input id="aMarca" data-k="marca"></div>
+        <div class="field"><label for="aTel">Tu WhatsApp</label><input id="aTel" data-k="tel" inputmode="tel"></div>
+        <div class="field"><label for="aMail">Tu mail</label><input id="aMail" data-k="mail" type="email"></div>
+        <div class="field full"><label for="aLink">Enlace para mostrar tus trabajos</label><input id="aLink" data-k="link" type="url"></div>
+        <div class="field"><label for="aTrato">Trato en los mensajes</label><select id="aTrato" data-k="trato"><option value="usted">Usted (primer contacto)</option><option value="vos">Vos</option></select></div>
+        <div class="field"><label for="aDias">Días para volver a escribir</label><input id="aDias" data-k="dias" type="number" min="1" max="30"></div>
+        <div class="field"><label for="aClave">Código de acceso</label><input id="aClave" data-k="clave" type="password" autocomplete="off"><span class="hint">El mismo que pusiste en Vercel como ACCESS_CODE.</span></div>
+      </div>
+      <p class="note">Todo se guarda solo en este navegador. Hacé una copia de seguridad desde Seguimiento de vez en cuando.</p>
+    </div>
+  </section>
+
+  <footer>Cazaclientes · herramienta interna de Fausto Cordobes. Mensajes de a uno y con opción de baja: no la uses para envíos masivos.</footer>
+</div>
+
+<dialog id="dlg" aria-labelledby="dTitulo">
+  <div class="dlg" style="position:relative">
+    <button class="close" type="button" id="dClose" aria-label="Cerrar">✕</button>
+    <h2 id="dTitulo"></h2>
+    <p class="sub" id="dSub"></p>
+    <div class="dtabs" role="tablist" aria-label="Canal">
+      <button type="button" role="tab" data-canal="whatsapp" aria-selected="true">WhatsApp</button>
+      <button type="button" role="tab" data-canal="mail" aria-selected="false">Mail</button>
+      <button type="button" role="tab" data-canal="persona" aria-selected="false">En persona</button>
+    </div>
+    <div id="dAsuntoBox" hidden><label class="sr" for="dAsunto">Asunto</label><input id="dAsunto"></div>
+    <label class="sr" for="dTexto">Mensaje</label>
+    <textarea id="dTexto"></textarea>
+    <div class="row" id="dActs"></div>
+  </div>
+</dialog>
+
+<dialog id="dlgManual" aria-labelledby="mTitulo">
+  <form class="dlg" method="dialog" id="fManual" style="position:relative">
+    <h2 id="mTitulo">Agregar un local</h2>
+    <div class="fields">
+      <div class="field"><label for="mNombre">Nombre</label><input id="mNombre" required></div>
+      <div class="field"><label for="mRubro">Rubro</label><select id="mRubro"></select></div>
+      <div class="field"><label for="mTel">Teléfono</label><input id="mTel" inputmode="tel"></div>
+      <div class="field"><label for="mMail">Mail</label><input id="mMail" type="email"></div>
+      <div class="field full"><label for="mNotas">Qué viste</label><input id="mNotas" placeholder="Ej.: carta en PDF, solo Instagram, sin cartel en Google"></div>
+    </div>
+    <div class="row"><button class="btn pri" value="ok">Guardar en seguimiento</button><button class="btn" value="cancel" formnovalidate>Cancelar</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   RUBROS — qué buscar y qué ofrecer en cada uno
+   ========================================================= */
+const RUBROS = {
+  gastro:   {nombre:'Gastronomía', buscar:['restaurantes','cafeterías','rotiserías','pizzerías','heladerías','bares'],
+             osm:['amenity~"^(restaurant|cafe|fast_food|bar|pub|ice_cream|biergarten)$"'],
+             gtipos:/restaurant|cafe|coffee|bakery|bar|pub|meal_|food|ice_cream|pizza|sandwich|confectionery|dessert|brunch|steak|deli/,
+             ofrece:'una carta digital con pedidos por WhatsApp, sin pagar comisión como en PedidosYa', beneficio:'Sus clientes ven la carta en el celular y le piden directo, y usted cambia los precios cuando quiere', busqueda:'dónde comer'},
+  comercio: {nombre:'Comercios', buscar:['ferreterías','almacenes','tiendas de ropa','librerías','verdulerías','kioscos'],
+             osm:['shop~"^(hardware|doityourself|convenience|supermarket|clothes|shoes|books|stationery|greengrocer|butcher|bakery|gift|toys|sports|electronics|furniture|garden_centre|florist|pet|variety_store|wine|alcohol|beverages|deli)$"'],
+             gtipos:/store|supermarket|market|shop|florist|liquor/,
+             ofrece:'un catálogo online con pedidos por WhatsApp y, si le sirve, un sistema de stock y caja', beneficio:'Sus clientes ven qué tiene antes de venir y usted controla la mercadería sin cuaderno', busqueda:'comprar en la zona'},
+  turismo:  {nombre:'Turismo y alojamiento', buscar:['cabañas','hosterías','hoteles','alquiler de esquíes','excursiones'],
+             osm:['tourism~"^(hotel|guest_house|hostel|apartment|chalet|motel|camp_site)$"','shop=travel_agency','shop=ski'],
+             gtipos:/lodging|hotel|hostel|inn|guest_house|motel|campground|cottage|bed_and_breakfast|resort|travel_agency|tour|rental/,
+             ofrece:'una página con reservas online y seña por Mercado Pago, sin pagar comisión a Booking ni a Airbnb', beneficio:'Cada reserva directa le queda entera, sin comisión', busqueda:'alojamiento'},
+  salud:    {nombre:'Salud', buscar:['consultorios','odontólogos','kinesiólogos','veterinarias','psicólogos'],
+             osm:['amenity~"^(dentist|doctors|clinic|veterinary)$"','healthcare~"^(physiotherapist|psychotherapist|dentist|doctor|clinic)$"'],
+             gtipos:/doctor|dentist|physiotherap|veterinar|clinic|health|hospital|psycholog|medical/,
+             ofrece:'turnos online con recordatorio automático', beneficio:'Sus pacientes reservan sin llamar y se pierden menos turnos', busqueda:'un turno'},
+  belleza:  {nombre:'Belleza y bienestar', buscar:['peluquerías','barberías','centros de estética','manicuría','spa'],
+             osm:['shop~"^(hairdresser|beauty|cosmetics|massage|tattoo)$"','leisure=spa'],
+             gtipos:/hair|beauty|barber|nail|spa|salon|massage|tattoo|cosmetic/,
+             ofrece:'turnos online con recordatorio y una tarjeta de fidelidad digital', beneficio:'Sus clientes sacan turno a cualquier hora, sin escribirle', busqueda:'un turno'},
+  deporte:  {nombre:'Deporte', buscar:['gimnasios','estudios de yoga','pilates','canchas de pádel','canchas de fútbol'],
+             osm:['leisure~"^(fitness_centre|sports_centre|sports_hall)$"','sport~"^(padel|yoga|climbing)$"'],
+             gtipos:/gym|fitness|sports|yoga|pilates|padel|stadium|athletic/,
+             ofrece:'un sistema de socios y cuotas con aviso de vencimiento, y reserva de clases o canchas desde el celular', beneficio:'Sabe quién debe la cuota sin revisar el cuaderno', busqueda:'dónde entrenar'},
+  educacion:{nombre:'Educación', buscar:['institutos de inglés','academias','escuelas de música','escuelas de manejo','apoyo escolar'],
+             osm:['amenity~"^(language_school|music_school|driving_school|dancing_school|training|prep_school)$"'],
+             gtipos:/school|academy|tutor|driving|education|training/,
+             ofrece:'inscripciones online y control de cuotas, con avisos a las familias', beneficio:'Inscripciones, cuotas y avisos en un solo lugar', busqueda:'cursos'},
+  oficios:  {nombre:'Oficios y servicio técnico', buscar:['talleres mecánicos','lubricentros','gomerías','service de celulares','electricistas'],
+             osm:['shop~"^(car_repair|tyres|car_parts|mobile_phone|computer|electronics_repair)$"','craft~"^(electrician|plumber|locksmith|carpenter|hvac)$"','amenity=car_wash'],
+             gtipos:/car_repair|car_wash|auto|tire|mechanic|electrician|plumber|locksmith|repair|moving|roofing|contractor|hvac/,
+             ofrece:'un sistema de órdenes de trabajo con aviso al cliente cuando está listo, y una página para que lo encuentren en Google', beneficio:'Cada trabajo queda registrado y el cliente sabe cuándo retirar', busqueda:'un taller o un técnico'},
+  profesionales:{nombre:'Profesionales', buscar:['estudios contables','abogados','inmobiliarias','arquitectos','escribanías'],
+             osm:['office~"^(lawyer|accountant|estate_agent|insurance|architect|notary|tax_advisor)$"'],
+             gtipos:/lawyer|accounting|real_estate|insurance|architect|notary|attorney|consult/,
+             ofrece:'una página profesional con turnos y un portal donde sus clientes siguen sus trámites', beneficio:'Lo encuentran en Google y le consultan directo', busqueda:'un profesional'}
+};
+const OTROS = {nombre:'Otros', ofrece:'una página web simple con WhatsApp, horarios y ubicación', beneficio:'Lo encuentran en Google y le escriben directo', busqueda:'este tipo de negocio'};
+const SOCIAL = /instagram\.com|facebook\.com|fb\.com|linktr\.ee|tiktok\.com|wa\.me|whatsapp\.com|linkin\.bio|beacons\.ai/i;
+const MARKET = [[/pedidosya/i,'PedidosYa'],[/rappi/i,'Rappi'],[/booking\.com/i,'Booking'],[/airbnb/i,'Airbnb'],[/mercadolibre|mercadoshops/i,'Mercado Libre'],[/despegar/i,'Despegar'],[/tripadvisor/i,'Tripadvisor']];
+const ESTADOS = ['Por contactar','Contactado','Respondió','Demo enviada','Cliente','No interesado'];
+
+/* ---------- estado y almacenamiento ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const AJ_DEF = {nombre:'Fausto Cordobes', marca:'F-C Web Studio', tel:'2944242906', mail:'', link:'https://f-cwebstudio.vercel.app/catalogo/', trato:'usted', dias:3, clave:'', ciudad:'San Martín de los Andes, Neuquén'};
+let AJ = Object.assign({}, AJ_DEF, load('cc-ajustes', {}));
+let LEADS = load('cc-leads', []);
+let RES = []; // resultados de la última búsqueda
+const DIA = 864e5;
+const hoy = () => new Date(new Date().toDateString());
+const fmtFecha = t => t ? new Date(t).toLocaleDateString('es-AR') : '—';
+function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),1900); }
+
+// Los datos de Google se borran a los 30 días (condiciones de Google). Lo que anotaste vos queda.
+function purgarGoogle(){
+  let n=0; const ahora=Date.now();
+  LEADS.forEach(l=>{ if (l.g && l.gExp && ahora > l.gExp){ delete l.g; n++; } });
+  if (n){ save('cc-leads', LEADS); }
+}
+purgarGoogle();
+
+/* ---------- cupo de Google ---------- */
+const mesKey = () => { const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1); };
+const usoG = () => { const u=load('cc-uso',{}); return u[mesKey()]||0; };
+function sumarUsoG(){ const u=load('cc-uso',{}); u[mesKey()]=(u[mesKey()]||0)+1; save('cc-uso',u); pintarCupo(); }
+function pintarCupo(){ const n=usoG(); $('#cupo').textContent = `Google este mes: ${n} de 1.000 consultas gratis`; $('#cupo').style.color = n>900 ? 'var(--danger)' : ''; }
+
+/* ---------- utilidades ---------- */
+function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\b(el|la|los|las|de|del|y|restaurante|resto|bar|cafe|hotel|hosteria|cabanas?|s\.?a|srl)\b/g,' ').replace(/\s+/g,' ').trim(); }
+function parecido(a,b){ a=norm(a); b=norm(b); if(!a||!b) return 0; if(a===b) return 1; if(a.includes(b)||b.includes(a)) return .9;
+  const A=new Set(a.split(' ')), B=new Set(b.split(' ')); let c=0; A.forEach(x=>{ if(B.has(x)) c++; }); return c/Math.max(A.size,B.size); }
+function distM(a,b,c,d){ if([a,b,c,d].some(x=>typeof x!=='number')) return 1e9; const R=6371e3, t=Math.PI/180;
+  const x=(d-b)*t*Math.cos((a+c)/2*t), y=(c-a)*t; return Math.sqrt(x*x+y*y)*R; }
+function telWa(t){
+  let d=String(t||'').replace(/\D/g,''); if(!d) return '';
+  if (d.startsWith('549')) return d;
+  if (d.startsWith('54')) d=d.slice(2);
+  d=d.replace(/^0/,'');
+  d=d.replace(/^(\d{2,4})15(\d{6,8})$/,'$1$2');
+  return d.length>=10 ? '549'+d : '';
+}
+function rubroDe(tipo, osmTags, porDefecto){
+  if (tipo){ for (const [k,r] of Object.entries(RUBROS)) if (r.gtipos.test(tipo)) return k; }
+  if (osmTags){
+    const t=osmTags;
+    if (/^(restaurant|cafe|fast_food|bar|pub|ice_cream|biergarten)$/.test(t.amenity||'')) return 'gastro';
+    if (t.tourism || t.shop==='travel_agency' || t.shop==='ski') return 'turismo';
+    if (/^(dentist|doctors|clinic|veterinary)$/.test(t.amenity||'') || t.healthcare) return 'salud';
+    if (/^(hairdresser|beauty|cosmetics|massage|tattoo)$/.test(t.shop||'') || t.leisure==='spa') return 'belleza';
+    if (/^(fitness_centre|sports_centre|sports_hall)$/.test(t.leisure||'')) return 'deporte';
+    if (/school|training/.test(t.amenity||'')) return 'educacion';
+    if (/^(car_repair|tyres|car_parts|mobile_phone|computer|electronics_repair)$/.test(t.shop||'') || t.craft || t.amenity==='car_wash') return 'oficios';
+    if (t.office) return 'profesionales';
+    if (t.shop) return 'comercio';
+  }
+  return porDefecto && porDefecto!=='todos' ? porDefecto : 'otros';
+}
+const infoRubro = k => RUBROS[k] || OTROS;
+
+/* ---------- puntaje de oportunidad ---------- */
+function evaluar(p){
+  const faltas=[]; let s=0;
+  const web = p.web || '';
+  const market = MARKET.find(([re])=>re.test(web));
+  const realWeb = web && !SOCIAL.test(web) && !market;
+  if (p.fuente==='osm' && p.buscoGoogle){ s+=35; faltas.push({t:'No apareció en Google Maps', hot:1, k:'nogoogle'}); }
+  if (!web && !p.social){ s+=40; faltas.push({t:'Sin página web', hot:1, k:'noweb'}); }
+  else if (!web || SOCIAL.test(web)){ s+=34; faltas.push({t:'Solo redes, sin web propia', hot:1, k:'social'}); }
+  else if (market){ s+=25; faltas.push({t:'Depende de '+market[1], hot:1, k:'market', m:market[1]}); }
+  if (!realWeb && p.resenas>=30){ s+=12; faltas.push({t:'Muchos clientes y sin web', hot:1, k:'demanda'}); }
+  if (p.fuente!=='osm'){
+    if (!p.resenas){ s+=10; faltas.push({t:'Sin reseñas', k:'resenas'}); }
+    else if (p.resenas<15){ s+=6; faltas.push({t:'Pocas reseñas ('+p.resenas+')', k:'resenas'}); }
+    if (!p.fotos){ s+=8; faltas.push({t:'Sin fotos en Google', k:'fotos'}); }
+    if (!p.horarios){ s+=5; faltas.push({t:'Sin horarios', k:'horarios'}); }
+    if (p.rating && p.rating<4 && p.resenas>5){ s+=4; faltas.push({t:'Calificación '+p.rating.toFixed(1), k:'rating'}); }
+  }
+  if (web && !SOCIAL.test(web) && !market) faltas.push({t:'Tiene web', ok:1, k:'web'});
+  if (p.resenas>=15) faltas.push({t:p.resenas+' reseñas · '+(p.rating||0).toFixed(1)+'★', ok:1, k:'buenas'});
+  s=Math.min(100,s);
+  return {puntaje:s, nivel: s>=45?'alta':s>=25?'media':'baja', faltas};
+}
+
+/* ---------- búsqueda ---------- */
+async function geocodificar(ciudad){
+  const cache=load('cc-geo',{}); if (cache[ciudad]) return cache[ciudad];
+  const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&accept-language=es&q='+encodeURIComponent(ciudad));
+  const j=await r.json(); if(!j.length) throw new Error('No encontré esa ciudad. Probá con "Ciudad, Provincia".');
+  const g={lat:+j[0].lat, lng:+j[0].lon, nombre:j[0].display_name}; cache[ciudad]=g; save('cc-geo',cache); return g;
+}
+async function buscarOSM(geo, rubro, radio){
+  const claves = rubro==='todos' ? Object.values(RUBROS).flatMap(r=>r.osm) : RUBROS[rubro].osm;
+  const partes = claves.map(f=>`nwr(around:${radio},${geo.lat},${geo.lng})["name"][${f}];`).join('');
+  const q = `[out:json][timeout:25];(${partes});out center tags 400;`;
+  const r = await fetch('https://overpass-api.de/api/interpreter', {method:'POST', body:'data='+encodeURIComponent(q), headers:{'Content-Type':'application/x-www-form-urlencoded'}});
+  if (!r.ok) throw new Error('OpenStreetMap no respondió (código '+r.status+'). Probá de nuevo en un minuto.');
+  const j = await r.json();
+  return (j.elements||[]).map(e=>{
+    const t=e.tags||{};
+    return {
+      id:'o:'+e.type+'/'+e.id, fuente:'osm', nombre:t.name,
+      direccion:[t['addr:street'], t['addr:housenumber']].filter(Boolean).join(' '),
+      lat:e.lat ?? (e.center&&e.center.lat), lng:e.lon ?? (e.center&&e.center.lon),
+      tel:t.phone||t['contact:phone']||t['contact:mobile']||'', email:t.email||t['contact:email']||'',
+      web:t.website||t['contact:website']||'',
+      social:t['contact:instagram']||t['contact:facebook']||t.instagram||t.facebook||'',
+      rubro:rubroDe('', t, rubro), tipoNombre:t.amenity||t.shop||t.tourism||t.office||t.craft||t.leisure||'',
+      osmUrl:'https://www.openstreetmap.org/'+e.type+'/'+e.id
+    };
+  }).filter(x=>x.nombre);
+}
+async function buscarGoogle(geo, rubro, radio, ciudad, extra){
+  const corto = ciudad.split(',')[0].trim();
+  const terminos = extra ? [extra] : (rubro==='todos' ? Object.values(RUBROS).map(r=>r.buscar[0]) : RUBROS[rubro].buscar);
+  const out=[]; const vistos=new Set();
+  for (const term of terminos){
+    if (usoG()>=1000){ throw new Error('Llegaste a las 1.000 consultas gratis de Google este mes. Seguí con OpenStreetMap.'); }
+    const r = await fetch('/api/buscar', {method:'POST', headers:{'Content-Type':'application/json','x-clave':AJ.clave||''},
+      body:JSON.stringify({query:`${term} en ${corto}`, lat:geo.lat, lng:geo.lng, radius:radio})});
+    const j = await r.json().catch(()=>({ok:false,error:'Respuesta inválida del servidor.'}));
+    if (!j.ok) throw new Error(j.error||'Error al buscar en Google.');
+    sumarUsoG();
+    for (const p of j.places){
+      if (vistos.has(p.id) || p.estado==='CLOSED_PERMANENTLY') continue;
+      vistos.add(p.id);
+      out.push(Object.assign(p, {id:'g:'+p.id, placeId:p.id, fuente:'google', rubro:rubroDe(p.tipo, null, rubro)}));
+    }
+    st(`Buscando en Google… ${out.length} locales`, '');
+  }
+  return out;
+}
+function unir(google, osm, buscoGoogle){
+  const res=[...google];
+  for (const o of osm){
+    const m = google.find(g=>parecido(g.nombre,o.nombre)>=.6 && distM(g.lat,g.lng,o.lat,o.lng)<200);
+    if (m){ m.email = m.email || o.email; m.social = m.social || o.social; if(!m.web && o.web) m.web=o.web; m.osmUrl=o.osmUrl; }
+    else res.push(Object.assign(o,{buscoGoogle}));
+  }
+  return res;
+}
+
+async function buscar(){
+  const ciudad = $('#qCiudad').value.trim() || AJ.ciudad;
+  const rubro = $('#qRubro').value, radio = +$('#qRadio').value, fuente = $('#qFuente').value, extra = $('#qExtra').value.trim();
+  AJ.ciudad = ciudad; save('cc-ajustes', AJ);
+  $('#btnBuscar').disabled = true; RES=[]; pintarRes();
+  try{
+    st('Ubicando la ciudad…');
+    const geo = await geocodificar(ciudad);
+    let google=[], osm=[], avisos=[];
+    const usarGoogle = fuente!=='osm', usarOsm = fuente!=='google';
+    if (usarGoogle){
+      if (location.protocol==='file:'){ avisos.push('Google funciona cuando la app está publicada en Vercel; busqué solo en OpenStreetMap.'); }
+      else { try { google = await buscarGoogle(geo, rubro, radio, ciudad, extra); } catch(e){ avisos.push(e.message); } }
+    }
+    if (usarOsm){ st('Buscando en OpenStreetMap…'); try { osm = await buscarOSM(geo, rubro, radio); } catch(e){ avisos.push(e.message); } }
+    const buscoGoogle = google.length>0;
+    RES = unir(google, osm, buscoGoogle).map(p=>Object.assign(p, {ciudad}, evaluar(p)));
+    RES.sort((a,b)=>b.puntaje-a.puntaje);
+    pintarRes();
+    const altas = RES.filter(p=>p.nivel==='alta').length;
+    st(`${RES.length} locales encontrados, ${altas} con oportunidad alta.` + (avisos.length?' '+avisos.join(' '):''), avisos.length && !RES.length ? 'err' : 'ok');
+  }catch(e){ st(e.message || 'No se pudo buscar.', 'err'); }
+  finally{ $('#btnBuscar').disabled = false; }
+}
+function st(m, c=''){ const e=$('#st'); e.textContent=m; e.className='status '+c; }
+
+/* ---------- resultados ---------- */
+function pintarRes(){
+  $('#filtros').hidden = !RES.length; $('#attrib').hidden = !RES.length;
+  const sinWeb=$('#fSinWeb').checked, conTel=$('#fTel').checked, ocultar=$('#fNuevo').checked, min=+$('#fMin').value;
+  const ids = new Set(LEADS.map(l=>l.id));
+  const lista = RES.filter(p=>(!sinWeb || !p.web || SOCIAL.test(p.web) || MARKET.some(([re])=>re.test(p.web))) && (!conTel || p.tel) && (!ocultar || !ids.has(p.id)) && p.puntaje>=min);
+  $('#resCount').textContent = lista.length + ' de ' + RES.length;
+  $('#results').innerHTML = lista.length ? lista.map(p=>{
+    const R=infoRubro(p.rubro);
+    const mapsQ = 'https://www.google.com/maps/search/'+encodeURIComponent(p.nombre+' '+p.ciudad.split(',')[0]);
+    const redesQ = 'https://www.google.com/search?q='+encodeURIComponent('"'+p.nombre+'" '+p.ciudad.split(',')[0]+' instagram OR facebook');
+    return `<article class="res">
+      <div class="score ${p.nivel}" title="Puntaje de oportunidad"><b>${p.puntaje}</b><span>${p.nivel}</span></div>
+      <h3>${esc(p.nombre)}</h3>
+      <div class="meta">${esc(R.nombre)}${p.tipoNombre?' · '+esc(p.tipoNombre):''}${p.direccion?' · '+esc(p.direccion):''}${p.tel?' · '+esc(p.tel):''} · ${p.fuente==='google'?'Google':'OpenStreetMap'}</div>
+      <div class="badges">${p.faltas.map(f=>`<span class="badge ${f.hot?'hot':f.ok?'ok':''}">${esc(f.t)}</span>`).join('')}</div>
+      <div class="acts">
+        <button class="btn pri sm" data-msg="${esc(p.id)}">Mensajes</button>
+        <button class="btn sm" data-guardar="${esc(p.id)}">Guardar en seguimiento</button>
+        <a class="btn sm" href="${esc(p.maps||mapsQ)}" target="_blank" rel="noopener">Ver en Maps</a>
+        ${p.web?`<a class="btn sm" href="${esc(p.web)}" target="_blank" rel="noopener">Ver su web</a>`:''}
+        <a class="btn sm" href="${esc(redesQ)}" target="_blank" rel="noopener">Buscar sus redes</a>
+      </div>
+    </article>`;
+  }).join('') : (RES.length ? '<p class="empty">Ningún local cumple esos filtros.</p>' : '');
+}
+
+/* ---------- mensajes ---------- */
+function T(vos, usted){ return AJ.trato==='vos' ? vos : usted; }
+function hallazgo(p){
+  const k = new Set(p.faltas.map(f=>f.k));
+  const ciudad = (p.ciudad||AJ.ciudad).split(',')[0];
+  const R = infoRubro(p.rubro);
+  if (k.has('nogoogle')) return `Busqué ${p.nombre} en Google Maps y no lo encontré, así que mucha gente que busca ${R.busqueda} en ${ciudad} no ${T('te','los')} ve.`;
+  if (k.has('market')){ const m=p.faltas.find(f=>f.k==='market').m; return `Vi que ${T('usás','usan')} ${m}. Con ${T('tu','su')} propia página esos clientes ${T('te','le')} llegan directo y sin comisión.`; }
+  if (k.has('social')) return `Vi que ${T('tenés','tienen')} redes, pero no una página propia que aparezca cuando alguien busca ${R.busqueda} en ${ciudad}.`;
+  if (k.has('demanda') || (k.has('noweb') && p.resenas>=15)) return `Vi que ${p.nombre} tiene ${p.resenas} reseñas en Google${p.rating?' con '+p.rating.toFixed(1)+' estrellas':''}, pero no tiene una página propia donde mostrar todo eso.`;
+  if (k.has('noweb')) return `Vi que ${p.nombre} no tiene página web, y hoy la mayoría busca ${R.busqueda} desde el celular.`;
+  return `Vi ${T('tu','su')} página y se me ocurrió algo que ${T('te','le')} puede servir.`;
+}
+function mensajes(p){
+  const R = infoRubro(p.rubro);
+  const saludo = T('¡Hola! ', '¡Hola! Buen día. ');
+  const yo = `Soy ${AJ.nombre}, de ${AJ.marca}, y hago páginas y apps para negocios de la zona.`;
+  const baja = T('Si no te interesa, decímelo y no te vuelvo a escribir.', 'Si no le interesa, avíseme y no le vuelvo a escribir.');
+  const wa = `${saludo}${yo}\n\n${hallazgo(p)}\n\nLes armo ${R.ofrece}. ${R.beneficio}.\n\n${T('Si querés, te preparo','Si quiere, le preparo')} una prueba con ${T('tu','su')} local para que ${T('veas','vea')} cómo quedaría, sin compromiso. Acá ${T('podés','puede')} ver mis trabajos: ${AJ.link}\n\n${baja}`;
+  const asunto = `${p.nombre}: una idea para que ${T('te','lo')} encuentren y ${T('te','le')} escriban más`;
+  const mail = `${T('Hola','Hola, buen día')}:\n\n${yo}\n\n${hallazgo(p)}\n\nPara ${p.nombre} pensé en ${R.ofrece}. ${R.beneficio}.\n\nCómo trabajo:\n• ${T('Te','Le')} muestro una prueba armada con ${T('tu','su')} local antes de decidir.\n• Un pago para dejarlo funcionando y un abono mensual con hosting, dominio, copias de seguridad y soporte.\n• Soporte en persona: ${T('te','le')} explico todo con paciencia.\n\nMis trabajos: ${AJ.link}\n${T('Si te interesa','Si le interesa')}, ${T('respondeme','responda')} este mail o ${T('escribime','escríbame')} al WhatsApp ${AJ.tel}.\n\nSaludos,\n${AJ.nombre}\n${AJ.marca}\n\n${baja}`;
+  const persona = `GUION PARA LA VISITA — ${p.nombre}\n\n1. Presentate: "${yo}"\n\n2. Lo que viste: "${hallazgo(p)}"\n\n3. Preguntá antes de ofrecer: "¿Qué es lo que más ${T('te','le')} complica hoy: que ${T('te','le')} hagan los pedidos o reservas, controlar la caja o que no falte mercadería?"\n\n4. Mostrá en el celular: una demo de su rubro o tus trabajos (${AJ.link}). Ofrecé: ${R.ofrece}.\n\n5. Hablá de lo que gana: ${R.beneficio}. Sin comisión por venta y con soporte en persona.\n\n6. Cerrá con un paso chico: "${T('Te','Le')} armo una prueba con ${T('tu','su')} local y ${T('te','se')} la muestro esta semana, sin compromiso. ¿Qué día ${T('te','le')} queda bien?"\n\nSi dice…\n• "Ya tengo Instagram": Instagram no aparece cuando alguien busca en Google, y no toma pedidos ni reservas solo.\n• "Es caro": empezamos por lo más simple y lo vamos sumando; ${T('te','le')} paso un presupuesto cerrado.\n• "No tengo tiempo": yo cargo todo; solo necesito fotos y precios.\n\nDejale tu tarjeta con el QR y anotá cuándo volver.`;
+  return {whatsapp:wa.replace(/\n{3,}/g,'\n\n'), asunto, mail, persona};
+}
+
+let ACT = null, CANAL='whatsapp', MSG=null;
+function buscarItem(id){ return RES.find(p=>p.id===id) || LEADS.find(l=>l.id===id); }
+function datosDe(x){ // une datos guardados del seguimiento con los de Google vigentes
+  if (!x) return null;
+  if (x.estado===undefined) return x;
+  const g = x.g || {};
+  return Object.assign({}, x, {tel:x.tel||g.tel||'', web:g.web||x.web||'', resenas:g.resenas||0, rating:g.rating||0, maps:g.maps||''});
+}
+function abrirMensajes(id){
+  const x = datosDe(buscarItem(id)); if (!x) return;
+  ACT = x; MSG = mensajes(x);
+  $('#dTitulo').textContent = x.nombre;
+  $('#dSub').textContent = [infoRubro(x.rubro).nombre, x.tel||'sin teléfono', x.email||'sin mail'].join(' · ');
+  setCanal('whatsapp');
+  $('#dlg').showModal();
+}
+function setCanal(c){
+  CANAL=c;
+  document.querySelectorAll('.dtabs button').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.canal===c)));
+  $('#dAsuntoBox').hidden = c!=='mail';
+  $('#dAsunto').value = MSG.asunto;
+  $('#dTexto').value = MSG[c];
+  const w = telWa(ACT.tel);
+  const acts = [];
+  if (c==='whatsapp') acts.push(w ? `<a class="btn wa" id="dEnviar" href="https://wa.me/${w}?text=${encodeURIComponent(MSG.whatsapp)}" target="_blank" rel="noopener">Abrir WhatsApp</a>` : `<span class="note" style="margin:0">Sin teléfono para WhatsApp. Copiá el mensaje.</span>`);
+  if (c==='mail') acts.push(`<a class="btn wa" id="dEnviar" href="mailto:${encodeURIComponent(ACT.email||'')}?subject=${encodeURIComponent(MSG.asunto)}&body=${encodeURIComponent(MSG.mail)}">Abrir en mi correo</a>`);
+  acts.push(`<button class="btn" type="button" id="dCopiar">Copiar</button>`);
+  acts.push(`<button class="btn pri" type="button" id="dMarcar">${c==='persona'?'Marcar como visitado':'Marcar como contactado'}</button>`);
+  $('#dActs').innerHTML = acts.join('');
+  $('#dCopiar').onclick = async ()=>{ const txt=(c==='mail'?'Asunto: '+$('#dAsunto').value+'\n\n':'')+$('#dTexto').value; try{ await navigator.clipboard.writeText(txt); toast('Copiado'); }catch(e){ $('#dTexto').select(); document.execCommand('copy'); toast('Copiado'); } };
+  $('#dMarcar').onclick = ()=>{ registrar(ACT.id, c); $('#dlg').close(); };
+  const env = $('#dEnviar'); if (env) env.addEventListener('click', ()=>{ // usa el texto editado
+    if (c==='whatsapp') env.href = `https://wa.me/${w}?text=${encodeURIComponent($('#dTexto').value)}`;
+    if (c==='mail') env.href = `mailto:${encodeURIComponent(ACT.email||'')}?subject=${encodeURIComponent($('#dAsunto').value)}&body=${encodeURIComponent($('#dTexto').value)}`;
+  });
+}
+
+/* ---------- seguimiento ---------- */
+function aLead(p){
+  const l = {id:p.id, nombre:p.nombre, rubro:p.rubro, ciudad:p.ciudad, fuente:p.fuente, puntaje:p.puntaje, nivel:p.nivel,
+    faltas:p.faltas, email:p.email||'', social:p.social||'', estado:'Por contactar', proximo:Date.now(), notas:'', hist:[], creado:Date.now()};
+  if (p.fuente==='google'){ l.placeId=p.placeId; l.g={tel:p.tel, web:p.web, resenas:p.resenas, rating:p.rating, maps:p.maps}; l.gExp=Date.now()+30*DIA; }
+  else { l.tel=p.tel||''; l.web=p.web||''; l.osmUrl=p.osmUrl; }
+  return l;
+}
+function guardar(id, silencioso){
+  if (LEADS.some(l=>l.id===id)){ if(!silencioso) toast('Ya está en seguimiento'); return LEADS.find(l=>l.id===id); }
+  const p = RES.find(x=>x.id===id); if (!p) return null;
+  const l = aLead(p); LEADS.unshift(l); save('cc-leads', LEADS); pintarLeads(); pintarRes();
+  if (!silencioso) toast('Guardado en seguimiento'); return l;
+}
+function registrar(id, canal){
+  const l = guardar(id, true) || LEADS.find(x=>x.id===id); if (!l) return;
+  const nombres = {whatsapp:'WhatsApp', mail:'mail', persona:'visita'};
+  if (l.estado==='Por contactar') l.estado='Contactado';
+  l.hist.unshift({f:Date.now(), t:'Contacto por '+nombres[canal]});
+  l.proximo = hoy().getTime() + (+AJ.dias||3)*DIA;
+  save('cc-leads', LEADS); pintarLeads(); pintarRes();
+  toast(`Listo. Te recuerdo volver a escribir el ${fmtFecha(l.proximo)}`);
+}
+function pintarLeads(){
+  $('#cntLeads').textContent = LEADS.length;
+  const f = $('#sFiltro').value, h = hoy().getTime()+DIA-1;
+  const activos = l => !['Cliente','No interesado'].includes(l.estado);
+  const lista = LEADS.filter(l => f==='todos' ? true : f==='hoy' ? (activos(l) && l.proximo<=h) : l.estado===f)
+    .sort((a,b)=>(a.proximo||0)-(b.proximo||0));
+  const c = e => LEADS.filter(l=>l.estado===e).length;
+  const cont = LEADS.filter(l=>l.estado!=='Por contactar').length;
+  $('#kpis').innerHTML = `<div><span>Hoy toca</span><b>${LEADS.filter(l=>activos(l)&&l.proximo<=h).length}</b></div><div><span>Contactados</span><b>${cont}</b></div><div><span>Respondieron</span><b>${c('Respondió')+c('Demo enviada')+c('Cliente')}</b></div><div><span>Demos</span><b>${c('Demo enviada')}</b></div><div><span>Clientes</span><b>${c('Cliente')}</b></div><div><span>Tasa de cierre</span><b>${cont?Math.round(c('Cliente')/cont*100):0}%</b></div>`;
+  $('#leads').innerHTML = lista.length ? lista.map(x=>{
+    const l = datosDe(x); const vence = activos(l) && l.proximo<=h;
+    return `<article class="lead ${vence?'vence':''}">
+      <div class="top"><h3>${esc(l.nombre)}</h3><span class="estado">${esc(l.estado)} · ${esc(infoRubro(l.rubro).nombre)} · ${l.puntaje} pts</span></div>
+      <div class="grid">
+        <div><label class="sr" for="e-${esc(l.id)}">Estado</label><select id="e-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="estado">${ESTADOS.map(e=>`<option ${e===l.estado?'selected':''}>${e}</option>`).join('')}</select></div>
+        <div><label class="sr" for="p-${esc(l.id)}">Volver a escribir</label><input id="p-${esc(l.id)}" type="date" data-lead="${esc(l.id)}" data-f="proximo" value="${l.proximo?new Date(l.proximo).toISOString().slice(0,10):''}" title="Volver a escribir"></div>
+        <div><label class="sr" for="t-${esc(l.id)}">Teléfono</label><input id="t-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="tel" inputmode="tel" placeholder="Teléfono" value="${esc(x.tel||'')}"></div>
+        <div><label class="sr" for="m-${esc(l.id)}">Mail</label><input id="m-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="email" type="email" placeholder="Mail" value="${esc(l.email||'')}"></div>
+      </div>
+      <label class="sr" for="n-${esc(l.id)}">Notas</label><textarea id="n-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="notas" placeholder="Notas: qué respondió, qué le interesa…">${esc(l.notas||'')}</textarea>
+      ${!x.tel && x.g && x.g.tel ? `<p class="note" style="margin:0">Teléfono de Google: ${esc(x.g.tel)} (se borra el ${fmtFecha(x.gExp)}). Si lo vas a usar, copialo arriba.</p>`:''}
+      ${x.fuente==='google' && !x.g ? `<p class="note" style="margin:0">Los datos de Google ya se borraron (pasaron 30 días). Volvé a buscarlo para actualizarlos.</p>`:''}
+      <div class="row"><button class="btn pri sm" data-msg="${esc(l.id)}">Mensajes</button><button class="btn sm" data-borrar="${esc(l.id)}">Quitar</button></div>
+      ${l.hist&&l.hist.length?`<ul class="hist">${l.hist.slice(0,4).map(h=>`<li>${fmtFecha(h.f)} — ${esc(h.t)}</li>`).join('')}</ul>`:''}
+    </article>`;
+  }).join('') : `<p class="empty">${f==='hoy'?'No tenés a nadie para escribir hoy.':'No hay locales en esta lista.'}</p>`;
+}
+function csv(){
+  const cols=['nombre','rubro','ciudad','estado','puntaje','tel','email','web','proximo','notas','fuente'];
+  const rows=[cols.join(';')].concat(LEADS.map(x=>{ const l=datosDe(x); return cols.map(c=>{
+    let v = c==='rubro'?infoRubro(l.rubro).nombre : c==='proximo'?fmtFecha(l.proximo) : (l[c]??'');
+    return '"'+String(v).replace(/"/g,'""')+'"'; }).join(';'); }));
+  const blob=new Blob(['﻿'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cazaclientes-seguimiento.csv'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', e=>{
+  const t = e.target.closest('[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal]'); if (!t) return;
+  if (t.dataset.tab){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b===t))); document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.tab)); if(t.dataset.tab==='seguimiento') pintarLeads(); }
+  if (t.dataset.msg) abrirMensajes(t.dataset.msg);
+  if (t.dataset.guardar) guardar(t.dataset.guardar);
+  if (t.dataset.canal) setCanal(t.dataset.canal);
+  if (t.dataset.borrar){ if (t.dataset.sure){ LEADS=LEADS.filter(l=>l.id!==t.dataset.borrar); save('cc-leads',LEADS); pintarLeads(); toast('Quitado'); } else { t.dataset.sure='1'; t.textContent='¿Seguro? Tocá de nuevo'; setTimeout(()=>{ if(t.isConnected){ delete t.dataset.sure; t.textContent='Quitar'; } },3000); } }
+});
+document.addEventListener('change', e=>{
+  const t=e.target;
+  if (t.dataset.lead){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(!l) return;
+    const f=t.dataset.f; const old=l[f];
+    l[f] = f==='proximo' ? (t.value? new Date(t.value+'T00:00:00').getTime() : null) : t.value;
+    if (f==='estado' && old!==t.value){ l.hist.unshift({f:Date.now(), t:'Estado: '+t.value}); if (t.value==='Respondió'||t.value==='Demo enviada') l.proximo = hoy().getTime()+2*DIA; }
+    save('cc-leads',LEADS); if (f==='estado') pintarLeads(); }
+  if (['fSinWeb','fTel','fNuevo','fMin'].includes(t.id)) pintarRes();
+  if (t.id==='sFiltro') pintarLeads();
+  if (t.dataset.k){ AJ[t.dataset.k] = t.type==='number' ? (+t.value||AJ_DEF[t.dataset.k]) : t.value; save('cc-ajustes',AJ); }
+});
+document.addEventListener('input', e=>{ const t=e.target; if (t.dataset.lead && t.dataset.f==='notas'){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(l){ l.notas=t.value; save('cc-leads',LEADS); } } });
+$('#btnBuscar').onclick = buscar;
+$('#qCiudad').addEventListener('keydown', e=>{ if(e.key==='Enter') buscar(); });
+$('#dClose').onclick = ()=>$('#dlg').close();
+$('#btnCsv').onclick = ()=> LEADS.length ? csv() : toast('Todavía no hay locales en seguimiento');
+$('#btnBackup').onclick = ()=>{ const blob=new Blob([JSON.stringify({version:1, leads:LEADS, ajustes:Object.assign({},AJ,{clave:''})},null,1)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cazaclientes-copia-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(a.href); };
+$('#inBackup').onchange = async e=>{ const f=e.target.files[0]; if(!f) return; try{ const j=JSON.parse(await f.text()); if(!Array.isArray(j.leads)) throw 0;
+  const ids=new Set(LEADS.map(l=>l.id)); let n=0; j.leads.forEach(l=>{ if(l&&l.id&&!ids.has(l.id)){ LEADS.push(l); n++; } }); purgarGoogle(); save('cc-leads',LEADS); pintarLeads(); toast(n+' locales restaurados'); }catch(_){ toast('Ese archivo no es una copia válida'); } e.target.value=''; };
+$('#btnManual').onclick = ()=>{ $('#fManual').reset(); $('#dlgManual').showModal(); };
+$('#dlgManual').addEventListener('close', ()=>{
+  if ($('#dlgManual').returnValue!=='ok') return;
+  const nombre=$('#mNombre').value.trim(); if(!nombre) return;
+  const l={id:'m:'+Date.now(), nombre, rubro:$('#mRubro').value, ciudad:AJ.ciudad, fuente:'manual', puntaje:0, nivel:'baja', faltas:[], tel:$('#mTel').value.trim(), email:$('#mMail').value.trim(), web:'', estado:'Por contactar', proximo:Date.now(), notas:$('#mNotas').value.trim(), hist:[], creado:Date.now()};
+  if (/pdf|instagram|sin web|no tiene/i.test(l.notas)){ l.faltas=[{t:'Sin página web', hot:1, k:'noweb'}]; l.puntaje=30; l.nivel='media'; }
+  LEADS.unshift(l); save('cc-leads',LEADS); pintarLeads(); toast('Guardado en seguimiento');
+});
+
+/* ---------- inicio ---------- */
+const opts = ['<option value="todos">Todos los rubros</option>'].concat(Object.entries(RUBROS).map(([k,r])=>`<option value="${k}">${r.nombre}</option>`)).join('');
+$('#qRubro').innerHTML = opts; $('#qRubro').value='gastro';
+$('#mRubro').innerHTML = Object.entries(RUBROS).map(([k,r])=>`<option value="${k}">${r.nombre}</option>`).join('') + '<option value="otros">Otros</option>';
+$('#qCiudad').value = AJ.ciudad;
+document.querySelectorAll('[data-k]').forEach(i=>{ i.value = AJ[i.dataset.k] ?? ''; });
+pintarCupo(); pintarLeads();
+</script>
+</body>
+</html>

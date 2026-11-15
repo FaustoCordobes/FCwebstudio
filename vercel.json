@@ -1,0 +1,5 @@
+{
+  "functions": {
+    "api/buscar.js": { "maxDuration": 15 }
+  }
+}
