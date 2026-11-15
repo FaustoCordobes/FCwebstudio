@@ -74,6 +74,23 @@ header.top p{margin:2px 0 0;color:var(--dim);font-size:13.5px}
 .paso h2 span{font:600 11px/1 'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(127,194,166,.5);border-radius:20px;padding:3px 8px;margin-left:6px;vertical-align:middle}
 .paso p{margin:0 0 10px;color:var(--dim);font-size:13.5px}
 .btn.maps{border-color:rgba(127,194,166,.5)}
+/* ciudades */
+.ciudades{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:2px 0 6px;margin:-6px 0 14px}
+.ciudades .lbl{flex:none;font-size:12.5px;color:var(--faint);font-weight:600;margin-right:2px}
+.ciudades button{flex:none;border:1px solid var(--line2);background:none;border-radius:20px;padding:7px 13px;cursor:pointer;font-weight:600;font-size:13.5px;color:var(--dim);min-height:40px}
+.ciudades button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.ciudades button small{font-weight:600;opacity:.75;margin-left:4px}
+.ciudades form{display:flex;gap:6px;flex:none}
+.ciudades[hidden],.ciudades form[hidden],.ciudades button[hidden]{display:none}
+.porciudad td:first-child{white-space:nowrap}
+.ciudades input{background:var(--panel);border:1px solid var(--line2);border-radius:20px;padding:7px 12px;min-height:40px;width:190px}
+.porciudad{width:100%;border-collapse:collapse;font-size:13.5px}
+.porciudad th,.porciudad td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right}
+.porciudad th:first-child,.porciudad td:first-child{text-align:left}
+.porciudad th{font-size:12px;color:var(--faint);font-weight:600}
+.porciudad tr[data-ciudad]{cursor:pointer}
+.porciudad tr[data-ciudad]:hover td{background:rgba(250,247,240,.04)}
+details.card summary{cursor:pointer;font-weight:600;min-height:28px}
 /* mapa */
 .mapa-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
 .mapa-top{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 12px;margin-bottom:10px}
@@ -140,11 +157,18 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
     <button type="button" role="tab" data-tab="ajustes" aria-selected="false">Ajustes</button>
   </nav>
 
+  <div class="ciudades" id="barCiudades" role="group" aria-label="Ciudad">
+    <span class="lbl">Ciudad:</span>
+    <span id="chipsCiudad" style="display:contents"></span>
+    <button type="button" id="btnOtraCiudad">＋ Otra ciudad</button>
+    <form id="fCiudad" hidden><label class="sr" for="inCiudad">Nueva ciudad</label><input id="inCiudad" placeholder="Ej.: Esquel, Chubut"><button type="submit">Agregar</button></form>
+  </div>
+
   <!-- BUSCAR -->
   <section class="view on" id="v-buscar" aria-label="Buscar locales">
     <div class="card">
       <div class="fields">
-        <div class="field"><label for="qCiudad">Ciudad</label><input id="qCiudad" placeholder="San Martín de los Andes, Neuquén"></div>
+        <input type="hidden" id="qCiudad">
         <div class="field"><label for="qRubro">Rubro</label><select id="qRubro"></select></div>
         <div class="field full"><label for="qExtra">Buscar algo puntual (opcional)</label><input id="qExtra" placeholder="Ej.: lubricentro, sanguchería, cabañas con pileta"><span class="hint">Si lo completás, se busca esto en vez de los términos del rubro.</span></div>
       </div>
@@ -209,7 +233,9 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
   <!-- SEGUIMIENTO -->
   <section class="view" id="v-seguimiento" aria-label="Seguimiento">
     <div class="kpis" id="kpis"></div>
+    <details class="card" id="avance" style="margin-bottom:14px"><summary>Avance por ciudad</summary><div style="overflow-x:auto;margin-top:10px"><table class="porciudad" id="tCiudades"></table></div><p class="note">Tocá una ciudad para ver solo sus locales.</p></details>
     <div class="filters">
+      <label>Ciudad <select id="sCiudad"></select></label>
       <label>Ver <select id="sFiltro">
         <option value="hoy">Hoy toca escribir</option><option value="todos">Todos</option>
         <option value="Por contactar">Por contactar</option><option value="Contactado">Contactado</option><option value="Respondió">Respondió</option>
@@ -232,6 +258,7 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
         <div class="field"><label for="aMail">Tu mail</label><input id="aMail" data-k="mail" type="email"></div>
         <div class="field full"><label for="aLink">Enlace para mostrar tus trabajos</label><input id="aLink" data-k="link" type="url"></div>
         <div class="field"><label for="aTrato">Trato en los mensajes</label><select id="aTrato" data-k="trato"><option value="usted">Usted (primer contacto)</option><option value="vos">Vos</option></select></div>
+        <div class="field full"><label for="aCiudades">Tus ciudades (una por renglón)</label><textarea id="aCiudades" rows="6"></textarea><span class="hint">Escribí "Ciudad, Provincia" para que el buscador la encuentre bien. Aparecen como botones arriba.</span></div>
         <div class="field"><label for="aDias">Días para volver a escribir</label><input id="aDias" data-k="dias" type="number" min="1" max="30"></div>
         <div class="field"><label for="aClave">Código de acceso</label><input id="aClave" data-k="clave" type="password" autocomplete="off"><span class="hint">Solo si activás la API paga de Google: el mismo que pusiste en Vercel como ACCESS_CODE.</span></div>
       </div>
@@ -333,7 +360,8 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-const AJ_DEF = {nombre:'Fausto Cordobes', marca:'F-C Web Studio', tel:'2944242906', mail:'', link:'https://f-cwebstudio.vercel.app/catalogo/', trato:'usted', dias:3, clave:'', ciudad:'San Martín de los Andes, Neuquén'};
+const AJ_DEF = {nombre:'Fausto Cordobes', marca:'F-C Web Studio', tel:'2944242906', mail:'', link:'https://f-cwebstudio.vercel.app/catalogo/', trato:'usted', dias:3, clave:'', ciudad:'San Martín de los Andes, Neuquén',
+  ciudades:['San Martín de los Andes, Neuquén','Junín de los Andes, Neuquén','Villa La Angostura, Neuquén','San Carlos de Bariloche, Río Negro','Aluminé, Neuquén','Zapala, Neuquén','Neuquén, Neuquén']};
 let AJ = Object.assign({}, AJ_DEF, load('cc-ajustes', {}));
 let LEADS = load('cc-leads', []);
 let RES = []; // resultados de la última búsqueda
@@ -359,6 +387,36 @@ function pintarCupo(){ const n=usoG(), on=$('#qFuente').value==='ambas'; $('#cup
 /* ---------- botones de Google Maps (gratis: solo abren Maps) ---------- */
 const terminosDe = (rubro, extra) => extra ? [extra] : (rubro==='todos' ? Object.values(RUBROS).map(r=>r.buscar[0]) : RUBROS[rubro].buscar);
 const mapsBusqueda = q => 'https://www.google.com/maps/search/'+encodeURIComponent(q);
+/* ---------- ciudades ---------- */
+const corta = c => String(c||AJ.ciudad).split(',')[0].trim();
+const claveC = c => norm(corta(c)).replace(/\s/g,'') || corta(c).toLowerCase();
+const ciudadDe = l => l.ciudad || AJ.ciudad;
+function listaCiudades(){
+  const out=[], vistos=new Set();
+  (AJ.ciudades||[]).concat([AJ.ciudad], LEADS.map(ciudadDe)).forEach(c=>{ c=String(c||'').trim(); const k=claveC(c); if(c && !vistos.has(k)){ vistos.add(k); out.push(c); } });
+  return out;
+}
+function pintarCiudades(){
+  const actual = claveC($('#qCiudad').value || AJ.ciudad);
+  $('#chipsCiudad').innerHTML = (AJ.ciudades||[]).concat(AJ.ciudades.some(c=>claveC(c)===actual)?[]:[AJ.ciudad]).map(c=>{
+    const n = LEADS.filter(l=>claveC(ciudadDe(l))===claveC(c)).length;
+    return `<button type="button" data-ciudad-set="${esc(c)}" aria-pressed="${claveC(c)===actual}">${esc(corta(c))}${n?`<small>${n}</small>`:''}</button>`;
+  }).join('');
+  const sel = $('#sCiudad'), prev = sel.value;
+  sel.innerHTML = '<option value="">Todas</option>' + listaCiudades().map(c=>`<option value="${esc(claveC(c))}">${esc(corta(c))}</option>`).join('');
+  sel.value = [...sel.options].some(o=>o.value===prev) ? prev : '';
+}
+function setCiudad(c){
+  c = String(c||'').trim(); if (!c) return;
+  if (claveC(c)===claveC($('#qCiudad').value)) return;
+  $('#qCiudad').value = c; AJ.ciudad = c; save('cc-ajustes', AJ);
+  RES = []; pintarRes(); st('');
+  pintarCiudades(); pintarMapsLinks();
+  if ($('#zMapa').src) zMostrar(Z_TERM);
+  const b=$('#chipsCiudad [aria-pressed="true"]'); if (b && b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'center'});
+  toast('Ciudad: '+corta(c));
+}
+
 /* ---------- pestaña Mapa: Google Maps incrustado (gratis, sin clave) ---------- */
 let Z_TERM = '';
 function zCiudad(){ return ($('#qCiudad').value.trim() || AJ.ciudad).split(',')[0].trim(); }
@@ -645,17 +703,21 @@ function registrar(id, canal){
 }
 function pintarLeads(){
   $('#cntLeads').textContent = LEADS.length; if ($('#v-mapa').classList.contains('on')) zHoy();
-  const f = $('#sFiltro').value, h = hoy().getTime()+DIA-1;
+  pintarCiudades();
+  const f = $('#sFiltro').value, h = hoy().getTime()+DIA-1, fc = $('#sCiudad').value;
+  const TODOS = LEADS;
+  const LEADS_ = fc ? TODOS.filter(l=>claveC(ciudadDe(l))===fc) : TODOS;
+  pintarAvance(h);
   const activos = l => !['Cliente','No interesado'].includes(l.estado);
-  const lista = LEADS.filter(l => f==='todos' ? true : f==='hoy' ? (activos(l) && l.proximo<=h) : l.estado===f)
+  const lista = LEADS_.filter(l => f==='todos' ? true : f==='hoy' ? (activos(l) && l.proximo<=h) : l.estado===f)
     .sort((a,b)=>(a.proximo||0)-(b.proximo||0));
-  const c = e => LEADS.filter(l=>l.estado===e).length;
-  const cont = LEADS.filter(l=>l.estado!=='Por contactar').length;
-  $('#kpis').innerHTML = `<div><span>Hoy toca</span><b>${LEADS.filter(l=>activos(l)&&l.proximo<=h).length}</b></div><div><span>Contactados</span><b>${cont}</b></div><div><span>Respondieron</span><b>${c('Respondió')+c('Demo enviada')+c('Cliente')}</b></div><div><span>Demos</span><b>${c('Demo enviada')}</b></div><div><span>Clientes</span><b>${c('Cliente')}</b></div><div><span>Tasa de cierre</span><b>${cont?Math.round(c('Cliente')/cont*100):0}%</b></div>`;
+  const c = e => LEADS_.filter(l=>l.estado===e).length;
+  const cont = LEADS_.filter(l=>l.estado!=='Por contactar').length;
+  $('#kpis').innerHTML = `<div><span>Hoy toca</span><b>${LEADS_.filter(l=>activos(l)&&l.proximo<=h).length}</b></div><div><span>Contactados</span><b>${cont}</b></div><div><span>Respondieron</span><b>${c('Respondió')+c('Demo enviada')+c('Cliente')}</b></div><div><span>Demos</span><b>${c('Demo enviada')}</b></div><div><span>Clientes</span><b>${c('Cliente')}</b></div><div><span>Tasa de cierre</span><b>${cont?Math.round(c('Cliente')/cont*100):0}%</b></div>`;
   $('#leads').innerHTML = lista.length ? lista.map(x=>{
     const l = datosDe(x); const vence = activos(l) && l.proximo<=h;
     return `<article class="lead ${vence?'vence':''}">
-      <div class="top"><h3>${esc(l.nombre)}</h3><span class="estado">${esc(l.estado)} · ${esc(infoRubro(l.rubro).nombre)} · ${l.puntaje} pts</span></div>
+      <div class="top"><h3>${esc(l.nombre)}</h3><span class="estado">${esc(l.estado)} · ${esc(corta(ciudadDe(l)))} · ${esc(infoRubro(l.rubro).nombre)} · ${l.puntaje} pts</span></div>
       <div class="grid">
         <div><label class="sr" for="e-${esc(l.id)}">Estado</label><select id="e-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="estado">${ESTADOS.map(e=>`<option ${e===l.estado?'selected':''}>${e}</option>`).join('')}</select></div>
         <div><label class="sr" for="p-${esc(l.id)}">Volver a escribir</label><input id="p-${esc(l.id)}" type="date" data-lead="${esc(l.id)}" data-f="proximo" value="${l.proximo?new Date(l.proximo).toISOString().slice(0,10):''}" title="Volver a escribir"></div>
@@ -670,6 +732,17 @@ function pintarLeads(){
     </article>`;
   }).join('') : `<p class="empty">${f==='hoy'?'No tenés a nadie para escribir hoy.':'No hay locales en esta lista.'}</p>`;
 }
+function pintarAvance(h){
+  const activos = l => !['Cliente','No interesado'].includes(l.estado);
+  const filas = listaCiudades().map(c=>{
+    const ls = LEADS.filter(l=>claveC(ciudadDe(l))===claveC(c));
+    return {c, k:claveC(c), n:ls.length, hoy:ls.filter(l=>activos(l)&&l.proximo<=h).length,
+      cont:ls.filter(l=>l.estado!=='Por contactar').length, resp:ls.filter(l=>['Respondió','Demo enviada','Cliente'].includes(l.estado)).length,
+      cli:ls.filter(l=>l.estado==='Cliente').length};
+  }).sort((a,b)=>b.n-a.n);
+  $('#tCiudades').innerHTML = `<tr><th>Ciudad</th><th>Cargados</th><th>Hoy toca</th><th>Contactados</th><th>Respondieron</th><th>Clientes</th></tr>` +
+    filas.map(r=>`<tr data-ciudad="${esc(r.k)}"><td>${esc(corta(r.c))}${r.n?'':' <span class="note" style="margin:0">· nueva</span>'}</td><td>${r.n}</td><td>${r.hoy}</td><td>${r.cont}</td><td>${r.resp}</td><td>${r.cli}</td></tr>`).join('');
+}
 function csv(){
   const cols=['nombre','rubro','ciudad','estado','puntaje','tel','email','web','proximo','notas','fuente'];
   const rows=[cols.join(';')].concat(LEADS.map(x=>{ const l=datosDe(x); return cols.map(c=>{
@@ -681,10 +754,12 @@ function csv(){
 
 /* ---------- eventos ---------- */
 document.addEventListener('click', e=>{
-  const t = e.target.closest('[data-term],[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal],[data-chequear]'); if (!t) return;
+  if (e.target.closest('tr[data-ciudad]')){ $('#sCiudad').value = e.target.closest('tr[data-ciudad]').dataset.ciudad; pintarLeads(); return; }
+  const t = e.target.closest('[data-ciudad-set],[data-term],[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal],[data-chequear]'); if (!t) return;
   if (t.dataset.chequear) abrirCarga(t.dataset.chequear);
-  if (t.dataset.tab){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b===t))); document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.tab)); if(t.dataset.tab==='seguimiento') pintarLeads(); if(t.dataset.tab==='mapa'){ if(!$('#zMapa').src) zChips(); zHoy(); } }
+  if (t.dataset.tab){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b===t))); document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.tab)); if(t.dataset.tab==='seguimiento') pintarLeads(); $('#barCiudades').hidden = !['buscar','mapa'].includes(t.dataset.tab); if(t.dataset.tab==='mapa'){ if(!$('#zMapa').src) zChips(); zHoy(); } }
   if (t.dataset.term) zMostrar(t.dataset.term);
+  if (t.dataset.ciudadSet) setCiudad(t.dataset.ciudadSet);
   if (t.dataset.msg) abrirMensajes(t.dataset.msg);
   if (t.dataset.guardar) guardar(t.dataset.guardar);
   if (t.dataset.canal) setCanal(t.dataset.canal);
@@ -703,12 +778,15 @@ document.addEventListener('change', e=>{
   if (t.id==='qCiudad' && $('#zMapa').src) zMostrar(Z_TERM);
   if (t.id==='qFuente') pintarCupo();
   if (t.id==='mEnMaps') verCamposMaps();
-  if (t.id==='sFiltro') pintarLeads();
+  if (t.id==='sFiltro' || t.id==='sCiudad') pintarLeads();
+  if (t.id==='aCiudades'){ AJ.ciudades = t.value.split('\n').map(x=>x.trim()).filter(Boolean); if(!AJ.ciudades.length) AJ.ciudades=[AJ.ciudad]; save('cc-ajustes',AJ); pintarCiudades(); }
   if (t.dataset.k){ AJ[t.dataset.k] = t.type==='number' ? (+t.value||AJ_DEF[t.dataset.k]) : t.value; save('cc-ajustes',AJ); }
 });
 document.addEventListener('input', e=>{ const t=e.target; if (t.id==='qExtra'||t.id==='qCiudad') pintarMapsLinks(); if (t.dataset.lead && t.dataset.f==='notas'){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(l){ l.notas=t.value; save('cc-leads',LEADS); } } });
 $('#btnBuscar').onclick = buscar;
-$('#qCiudad').addEventListener('keydown', e=>{ if(e.key==='Enter') buscar(); });
+$('#btnOtraCiudad').onclick = ()=>{ $('#fCiudad').hidden=false; $('#btnOtraCiudad').hidden=true; $('#inCiudad').focus(); };
+$('#fCiudad').onsubmit = e=>{ e.preventDefault(); const c=$('#inCiudad').value.trim(); $('#fCiudad').hidden=true; $('#btnOtraCiudad').hidden=false; $('#inCiudad').value='';
+  if (!c) return; if (!AJ.ciudades.some(x=>claveC(x)===claveC(c))){ AJ.ciudades.push(c); save('cc-ajustes',AJ); $('#aCiudades').value = AJ.ciudades.join('\n'); } setCiudad(c); pintarCiudades(); };
 $('#dClose').onclick = ()=>$('#dlg').close();
 $('#btnCsv').onclick = ()=> LEADS.length ? csv() : toast('Todavía no hay locales en seguimiento');
 $('#btnBackup').onclick = ()=>{ const blob=new Blob([JSON.stringify({version:1, leads:LEADS, ajustes:Object.assign({},AJ,{clave:''})},null,1)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cazaclientes-copia-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(a.href); };
@@ -784,7 +862,8 @@ const opts = ['<option value="todos">Todos los rubros</option>'].concat(Object.e
 $('#qRubro').innerHTML = opts; $('#qRubro').value='gastro';
 $('#zRubro').innerHTML = opts; $('#zRubro').value='gastro';
 $('#mRubro').innerHTML = Object.entries(RUBROS).map(([k,r])=>`<option value="${k}">${r.nombre}</option>`).join('') + '<option value="otros">Otros</option>';
-$('#qCiudad').value = AJ.ciudad;
+if (!Array.isArray(AJ.ciudades) || !AJ.ciudades.length) AJ.ciudades = AJ_DEF.ciudades.slice();
+$('#qCiudad').value = AJ.ciudad; $('#aCiudades').value = AJ.ciudades.join('\n'); pintarCiudades();
 document.querySelectorAll('[data-k]').forEach(i=>{ i.value = AJ[i.dataset.k] ?? ''; });
 pintarCupo(); pintarMapsLinks(); pintarLeads();
 </script>
