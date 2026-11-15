@@ -4,7 +4,10 @@ Herramienta interna para encontrar locales sin presencia online, armar el mensaj
 
 ## Qué hace
 
-1. **Busca locales** de una ciudad y un rubro en Google Places y en OpenStreetMap, y une los resultados.
+1. **Busca locales gratis, sin clave ni tarjeta:**
+   - Botones que abren Google Maps con cada rubro de la ciudad. Lo que ves ahí (si aparece, si tiene web o solo redes, reseñas, fotos, horarios) lo cargás con "Cargar un local que vi en Maps" y la app le pone puntaje.
+   - Búsqueda automática en OpenStreetMap. En cada resultado, "Anotar lo que vi" ajusta el puntaje con lo que viste en Maps.
+   - Opcional y pago: la API de Google Places (elegí "OpenStreetMap + API de Google" en Fuente). Necesita la clave en Vercel; ver más abajo.
 2. **Les pone un puntaje de oportunidad** (0 a 100) según qué les falta:
    - no aparecen en Google Maps;
    - no tienen web, o solo usan Instagram, Facebook, PedidosYa o Booking;

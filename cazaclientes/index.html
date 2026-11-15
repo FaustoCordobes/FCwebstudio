@@ -69,6 +69,14 @@ header.top p{margin:2px 0 0;color:var(--dim);font-size:13.5px}
 .res .acts{grid-column:2;display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .empty{color:var(--faint);font-size:14px;padding:18px 0}
 .note{font-size:12px;color:var(--faint);margin:14px 0 0}
+.paso{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+.paso h2{margin:0 0 4px;font-size:17px}
+.paso h2 span{font:600 11px/1 'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(127,194,166,.5);border-radius:20px;padding:3px 8px;margin-left:6px;vertical-align:middle}
+.paso p{margin:0 0 10px;color:var(--dim);font-size:13.5px}
+.btn.maps{border-color:rgba(127,194,166,.5)}
+.checks{display:flex;gap:16px;flex-wrap:wrap;font-size:14px}
+.checks label{display:flex;gap:7px;align-items:center;min-height:40px;cursor:pointer}
+.checks input{width:18px;height:18px;accent-color:var(--accent)}
 /* seguimiento */
 .lead{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:8px}
 .lead .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
@@ -123,16 +131,27 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
       <div class="fields">
         <div class="field"><label for="qCiudad">Ciudad</label><input id="qCiudad" placeholder="San Martín de los Andes, Neuquén"></div>
         <div class="field"><label for="qRubro">Rubro</label><select id="qRubro"></select></div>
-        <div class="field"><label for="qRadio">Radio</label>
-          <select id="qRadio"><option value="2000">2 km</option><option value="5000" selected>5 km</option><option value="10000">10 km</option><option value="20000">20 km</option></select></div>
-        <div class="field"><label for="qFuente">Fuente</label>
-          <select id="qFuente"><option value="ambas">Google + OpenStreetMap</option><option value="osm">Solo OpenStreetMap (gratis)</option><option value="google">Solo Google</option></select>
-          <span class="hint" id="cupo"></span></div>
-        <div class="field full"><label for="qExtra">Buscar algo puntual (opcional)</label><input id="qExtra" placeholder="Ej.: lubricentro, sanguchería, cabañas con pileta"><span class="hint">Si lo completás, en Google se busca esto en vez de los términos del rubro.</span></div>
+        <div class="field full"><label for="qExtra">Buscar algo puntual (opcional)</label><input id="qExtra" placeholder="Ej.: lubricentro, sanguchería, cabañas con pileta"><span class="hint">Si lo completás, se busca esto en vez de los términos del rubro.</span></div>
       </div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn pri" id="btnBuscar" type="button">Buscar locales</button>
-        <button class="btn" id="btnManual" type="button">Agregar un local a mano</button>
+
+      <div class="paso">
+        <h2>1. Buscá en Google Maps <span>Gratis</span></h2>
+        <p>Tocá un botón y se abre Google Maps con los locales de la zona. Fijate cuáles no aparecen, no tienen web, tienen solo Instagram o pocas reseñas, y cargalos acá abajo: la app les pone puntaje y te arma el mensaje.</p>
+        <div class="row" id="mapsLinks"></div>
+        <div class="row" style="margin-top:10px"><button class="btn pri" id="btnManual" type="button">Cargar un local que vi en Maps</button></div>
+      </div>
+
+      <div class="paso">
+        <h2>2. O buscá automático en OpenStreetMap <span>Gratis</span></h2>
+        <p>Trae una lista de locales con teléfono y web cuando los tiene. En cada uno tocá "Ver en Maps" y después "Anotar lo que vi" para ajustar el puntaje.</p>
+        <div class="fields">
+          <div class="field"><label for="qRadio">Radio</label>
+            <select id="qRadio"><option value="2000">2 km</option><option value="5000" selected>5 km</option><option value="10000">10 km</option><option value="20000">20 km</option></select></div>
+          <div class="field"><label for="qFuente">Fuente</label>
+            <select id="qFuente"><option value="osm" selected>OpenStreetMap (gratis)</option><option value="ambas">OpenStreetMap + API de Google (paga, necesita clave)</option></select>
+            <span class="hint" id="cupo"></span></div>
+        </div>
+        <div class="row" style="margin-top:12px"><button class="btn" id="btnBuscar" type="button">Buscar locales</button></div>
       </div>
       <p class="status" id="st" role="status" aria-live="polite"></p>
     </div>
@@ -145,7 +164,7 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
       <span id="resCount"></span>
     </div>
     <div class="results" id="results"></div>
-    <p class="note" id="attrib" hidden>Datos de Google Maps y © colaboradores de OpenStreetMap (ODbL). Los datos de Google se guardan como máximo 30 días.</p>
+    <p class="note" id="attrib" hidden>Datos © colaboradores de OpenStreetMap (ODbL). Si usás la API de Google, sus datos se guardan como máximo 30 días.</p>
   </section>
 
   <!-- SEGUIMIENTO -->
@@ -175,7 +194,7 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
         <div class="field full"><label for="aLink">Enlace para mostrar tus trabajos</label><input id="aLink" data-k="link" type="url"></div>
         <div class="field"><label for="aTrato">Trato en los mensajes</label><select id="aTrato" data-k="trato"><option value="usted">Usted (primer contacto)</option><option value="vos">Vos</option></select></div>
         <div class="field"><label for="aDias">Días para volver a escribir</label><input id="aDias" data-k="dias" type="number" min="1" max="30"></div>
-        <div class="field"><label for="aClave">Código de acceso</label><input id="aClave" data-k="clave" type="password" autocomplete="off"><span class="hint">El mismo que pusiste en Vercel como ACCESS_CODE.</span></div>
+        <div class="field"><label for="aClave">Código de acceso</label><input id="aClave" data-k="clave" type="password" autocomplete="off"><span class="hint">Solo si activás la API paga de Google: el mismo que pusiste en Vercel como ACCESS_CODE.</span></div>
       </div>
       <p class="note">Todo se guarda solo en este navegador. Hacé una copia de seguridad desde Seguimiento de vez en cuando.</p>
     </div>
@@ -203,15 +222,21 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
 
 <dialog id="dlgManual" aria-labelledby="mTitulo">
   <form class="dlg" method="dialog" id="fManual" style="position:relative">
-    <h2 id="mTitulo">Agregar un local</h2>
+    <h2 id="mTitulo">Cargar un local que vi en Maps</h2>
     <div class="fields">
       <div class="field"><label for="mNombre">Nombre</label><input id="mNombre" required></div>
       <div class="field"><label for="mRubro">Rubro</label><select id="mRubro"></select></div>
       <div class="field"><label for="mTel">Teléfono</label><input id="mTel" inputmode="tel"></div>
       <div class="field"><label for="mMail">Mail</label><input id="mMail" type="email"></div>
-      <div class="field full"><label for="mNotas">Qué viste</label><input id="mNotas" placeholder="Ej.: carta en PDF, solo Instagram, sin cartel en Google"></div>
+      <div class="field"><label for="mEnMaps">¿Aparece en Google Maps?</label><select id="mEnMaps"><option value="si">Sí, tiene ficha</option><option value="no">No aparece</option></select></div>
+      <div class="field"><label for="mInternet">¿Qué tiene en internet?</label><select id="mInternet"><option value="nada">Nada</option><option value="redes">Solo Instagram o Facebook</option><option value="market">PedidosYa, Booking u otra plataforma</option><option value="web">Página web propia</option></select></div>
+      <div class="field" data-gm><label for="mResenas">Cantidad de reseñas</label><input id="mResenas" type="number" min="0" inputmode="numeric" placeholder="0"></div>
+      <div class="field" data-gm><label for="mRating">Estrellas</label><input id="mRating" type="number" min="1" max="5" step="0.1" inputmode="decimal" placeholder="Ej.: 4.5"></div>
+      <div class="field full checks" data-gm><label><input type="checkbox" id="mFotos"> Tiene fotos</label><label><input type="checkbox" id="mHorarios"> Tiene horarios</label></div>
+      <div class="field full"><label for="mLink">Enlace de su web, red o ficha de Maps (opcional)</label><input id="mLink" type="url" placeholder="https://…"></div>
+      <div class="field full"><label for="mNotas">Qué más viste</label><input id="mNotas" placeholder="Ej.: carta en PDF, fotos viejas, no atienden el teléfono"></div>
     </div>
-    <div class="row"><button class="btn pri" value="ok">Guardar en seguimiento</button><button class="btn" value="cancel" formnovalidate>Cancelar</button></div>
+    <div class="row"><button class="btn pri" value="ok" id="mOk">Guardar y ver el mensaje</button><button class="btn" value="cancel" formnovalidate>Cancelar</button></div>
   </form>
 </dialog>
 
@@ -290,7 +315,16 @@ purgarGoogle();
 const mesKey = () => { const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1); };
 const usoG = () => { const u=load('cc-uso',{}); return u[mesKey()]||0; };
 function sumarUsoG(){ const u=load('cc-uso',{}); u[mesKey()]=(u[mesKey()]||0)+1; save('cc-uso',u); pintarCupo(); }
-function pintarCupo(){ const n=usoG(); $('#cupo').textContent = `Google este mes: ${n} de 1.000 consultas gratis`; $('#cupo').style.color = n>900 ? 'var(--danger)' : ''; }
+function pintarCupo(){ const n=usoG(), on=$('#qFuente').value==='ambas'; $('#cupo').textContent = on ? `API de Google este mes: ${n} de 1.000 consultas` : ''; $('#cupo').style.color = n>900 ? 'var(--danger)' : ''; }
+
+/* ---------- botones de Google Maps (gratis: solo abren Maps) ---------- */
+const terminosDe = (rubro, extra) => extra ? [extra] : (rubro==='todos' ? Object.values(RUBROS).map(r=>r.buscar[0]) : RUBROS[rubro].buscar);
+const mapsBusqueda = q => 'https://www.google.com/maps/search/'+encodeURIComponent(q);
+function pintarMapsLinks(){
+  const corto = ($('#qCiudad').value.trim() || AJ.ciudad).split(',')[0].trim();
+  const ts = terminosDe($('#qRubro').value, $('#qExtra').value.trim());
+  $('#mapsLinks').innerHTML = ts.map(t=>`<a class="btn sm maps" href="${esc(mapsBusqueda(t+' en '+corto))}" target="_blank" rel="noopener">${esc(t.charAt(0).toUpperCase()+t.slice(1))} ↗</a>`).join('');
+}
 
 /* ---------- utilidades ---------- */
 function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\b(el|la|los|las|de|del|y|restaurante|resto|bar|cafe|hotel|hosteria|cabanas?|s\.?a|srl)\b/g,' ').replace(/\s+/g,' ').trim(); }
@@ -328,21 +362,22 @@ const infoRubro = k => RUBROS[k] || OTROS;
 function evaluar(p){
   const faltas=[]; let s=0;
   const web = p.web || '';
-  const market = MARKET.find(([re])=>re.test(web));
+  const market = p.market ? [null,p.market] : MARKET.find(([re])=>re.test(web));
   const realWeb = web && !SOCIAL.test(web) && !market;
-  if (p.fuente==='osm' && p.buscoGoogle){ s+=35; faltas.push({t:'No apareció en Google Maps', hot:1, k:'nogoogle'}); }
-  if (!web && !p.social){ s+=40; faltas.push({t:'Sin página web', hot:1, k:'noweb'}); }
+  if ((p.fuente==='osm' && p.buscoGoogle && !p.chequeado) || p.enMaps===false){ s+=35; faltas.push({t:'No aparece en Google Maps', hot:1, k:'nogoogle'}); }
+  if (market){ s+=25; faltas.push({t:'Depende de '+market[1], hot:1, k:'market', m:market[1]}); }
+  else if (!web && !p.social){ s+=40; faltas.push({t:'Sin página web', hot:1, k:'noweb'}); }
   else if (!web || SOCIAL.test(web)){ s+=34; faltas.push({t:'Solo redes, sin web propia', hot:1, k:'social'}); }
-  else if (market){ s+=25; faltas.push({t:'Depende de '+market[1], hot:1, k:'market', m:market[1]}); }
   if (!realWeb && p.resenas>=30){ s+=12; faltas.push({t:'Muchos clientes y sin web', hot:1, k:'demanda'}); }
-  if (p.fuente!=='osm'){
+  if (p.fuente==='google' || (p.chequeado && p.enMaps)){
     if (!p.resenas){ s+=10; faltas.push({t:'Sin reseñas', k:'resenas'}); }
     else if (p.resenas<15){ s+=6; faltas.push({t:'Pocas reseñas ('+p.resenas+')', k:'resenas'}); }
     if (!p.fotos){ s+=8; faltas.push({t:'Sin fotos en Google', k:'fotos'}); }
     if (!p.horarios){ s+=5; faltas.push({t:'Sin horarios', k:'horarios'}); }
     if (p.rating && p.rating<4 && p.resenas>5){ s+=4; faltas.push({t:'Calificación '+p.rating.toFixed(1), k:'rating'}); }
   }
-  if (web && !SOCIAL.test(web) && !market) faltas.push({t:'Tiene web', ok:1, k:'web'});
+  if (realWeb) faltas.push({t:'Tiene web', ok:1, k:'web'});
+  if (p.chequeado) faltas.push({t:'Revisado en Maps', ok:1, k:'chk'});
   if (p.resenas>=15) faltas.push({t:p.resenas+' reseñas · '+(p.rating||0).toFixed(1)+'★', ok:1, k:'buenas'});
   s=Math.min(100,s);
   return {puntaje:s, nivel: s>=45?'alta':s>=25?'media':'baja', faltas};
@@ -378,7 +413,7 @@ async function buscarOSM(geo, rubro, radio){
 }
 async function buscarGoogle(geo, rubro, radio, ciudad, extra){
   const corto = ciudad.split(',')[0].trim();
-  const terminos = extra ? [extra] : (rubro==='todos' ? Object.values(RUBROS).map(r=>r.buscar[0]) : RUBROS[rubro].buscar);
+  const terminos = terminosDe(rubro, extra);
   const out=[]; const vistos=new Set();
   for (const term of terminos){
     if (usoG()>=1000){ throw new Error('Llegaste a las 1.000 consultas gratis de Google este mes. Seguí con OpenStreetMap.'); }
@@ -451,8 +486,9 @@ function pintarRes(){
       <div class="acts">
         <button class="btn pri sm" data-msg="${esc(p.id)}">Mensajes</button>
         <button class="btn sm" data-guardar="${esc(p.id)}">Guardar en seguimiento</button>
-        <a class="btn sm" href="${esc(p.maps||mapsQ)}" target="_blank" rel="noopener">Ver en Maps</a>
-        ${p.web?`<a class="btn sm" href="${esc(p.web)}" target="_blank" rel="noopener">Ver su web</a>`:''}
+        <a class="btn sm maps" href="${esc(p.maps||mapsQ)}" target="_blank" rel="noopener">Ver en Maps ↗</a>
+        <button class="btn sm" data-chequear="${esc(p.id)}">${p.chequeado?'Corregir lo que vi':'Anotar lo que vi'}</button>
+        ${/^https?:/i.test(p.web||'')?`<a class="btn sm" href="${esc(p.web)}" target="_blank" rel="noopener">Ver su web</a>`:''}
         <a class="btn sm" href="${esc(redesQ)}" target="_blank" rel="noopener">Buscar sus redes</a>
       </div>
     </article>`;
@@ -490,7 +526,7 @@ function datosDe(x){ // une datos guardados del seguimiento con los de Google vi
   if (!x) return null;
   if (x.estado===undefined) return x;
   const g = x.g || {};
-  return Object.assign({}, x, {tel:x.tel||g.tel||'', web:g.web||x.web||'', resenas:g.resenas||0, rating:g.rating||0, maps:g.maps||''});
+  return Object.assign({}, x, {tel:x.tel||g.tel||'', web:g.web||x.web||'', resenas:g.resenas||x.resenas||0, rating:g.rating||x.rating||0, maps:g.maps||x.maps||''});
 }
 function abrirMensajes(id){
   const x = datosDe(buscarItem(id)); if (!x) return;
@@ -526,7 +562,8 @@ function aLead(p){
   const l = {id:p.id, nombre:p.nombre, rubro:p.rubro, ciudad:p.ciudad, fuente:p.fuente, puntaje:p.puntaje, nivel:p.nivel,
     faltas:p.faltas, email:p.email||'', social:p.social||'', estado:'Por contactar', proximo:Date.now(), notas:'', hist:[], creado:Date.now()};
   if (p.fuente==='google'){ l.placeId=p.placeId; l.g={tel:p.tel, web:p.web, resenas:p.resenas, rating:p.rating, maps:p.maps}; l.gExp=Date.now()+30*DIA; }
-  else { l.tel=p.tel||''; l.web=p.web||''; l.osmUrl=p.osmUrl; }
+  else { l.tel=p.tel||''; l.web=p.web||''; l.osmUrl=p.osmUrl;
+    ['resenas','rating','fotos','horarios','market','maps','enMaps','chequeado','chk','notas'].forEach(k=>{ if (p[k]!==undefined) l[k]=p[k]; }); }
   return l;
 }
 function guardar(id, silencioso){
@@ -566,7 +603,7 @@ function pintarLeads(){
       <label class="sr" for="n-${esc(l.id)}">Notas</label><textarea id="n-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="notas" placeholder="Notas: qué respondió, qué le interesa…">${esc(l.notas||'')}</textarea>
       ${!x.tel && x.g && x.g.tel ? `<p class="note" style="margin:0">Teléfono de Google: ${esc(x.g.tel)} (se borra el ${fmtFecha(x.gExp)}). Si lo vas a usar, copialo arriba.</p>`:''}
       ${x.fuente==='google' && !x.g ? `<p class="note" style="margin:0">Los datos de Google ya se borraron (pasaron 30 días). Volvé a buscarlo para actualizarlos.</p>`:''}
-      <div class="row"><button class="btn pri sm" data-msg="${esc(l.id)}">Mensajes</button><button class="btn sm" data-borrar="${esc(l.id)}">Quitar</button></div>
+      <div class="row"><button class="btn pri sm" data-msg="${esc(l.id)}">Mensajes</button><a class="btn sm maps" href="${esc(l.maps||mapsBusqueda(l.nombre+' '+(l.ciudad||AJ.ciudad).split(',')[0]))}" target="_blank" rel="noopener">Ver en Maps ↗</a><button class="btn sm" data-chequear="${esc(l.id)}">${l.chequeado?'Corregir lo que vi':'Anotar lo que vi'}</button><button class="btn sm" data-borrar="${esc(l.id)}">Quitar</button></div>
       ${l.hist&&l.hist.length?`<ul class="hist">${l.hist.slice(0,4).map(h=>`<li>${fmtFecha(h.f)} — ${esc(h.t)}</li>`).join('')}</ul>`:''}
     </article>`;
   }).join('') : `<p class="empty">${f==='hoy'?'No tenés a nadie para escribir hoy.':'No hay locales en esta lista.'}</p>`;
@@ -582,7 +619,8 @@ function csv(){
 
 /* ---------- eventos ---------- */
 document.addEventListener('click', e=>{
-  const t = e.target.closest('[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal]'); if (!t) return;
+  const t = e.target.closest('[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal],[data-chequear]'); if (!t) return;
+  if (t.dataset.chequear) abrirCarga(t.dataset.chequear);
   if (t.dataset.tab){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b===t))); document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.tab)); if(t.dataset.tab==='seguimiento') pintarLeads(); }
   if (t.dataset.msg) abrirMensajes(t.dataset.msg);
   if (t.dataset.guardar) guardar(t.dataset.guardar);
@@ -597,10 +635,13 @@ document.addEventListener('change', e=>{
     if (f==='estado' && old!==t.value){ l.hist.unshift({f:Date.now(), t:'Estado: '+t.value}); if (t.value==='Respondió'||t.value==='Demo enviada') l.proximo = hoy().getTime()+2*DIA; }
     save('cc-leads',LEADS); if (f==='estado') pintarLeads(); }
   if (['fSinWeb','fTel','fNuevo','fMin'].includes(t.id)) pintarRes();
+  if (['qRubro','qCiudad'].includes(t.id)) pintarMapsLinks();
+  if (t.id==='qFuente') pintarCupo();
+  if (t.id==='mEnMaps') verCamposMaps();
   if (t.id==='sFiltro') pintarLeads();
   if (t.dataset.k){ AJ[t.dataset.k] = t.type==='number' ? (+t.value||AJ_DEF[t.dataset.k]) : t.value; save('cc-ajustes',AJ); }
 });
-document.addEventListener('input', e=>{ const t=e.target; if (t.dataset.lead && t.dataset.f==='notas'){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(l){ l.notas=t.value; save('cc-leads',LEADS); } } });
+document.addEventListener('input', e=>{ const t=e.target; if (t.id==='qExtra'||t.id==='qCiudad') pintarMapsLinks(); if (t.dataset.lead && t.dataset.f==='notas'){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(l){ l.notas=t.value; save('cc-leads',LEADS); } } });
 $('#btnBuscar').onclick = buscar;
 $('#qCiudad').addEventListener('keydown', e=>{ if(e.key==='Enter') buscar(); });
 $('#dClose').onclick = ()=>$('#dlg').close();
@@ -608,13 +649,66 @@ $('#btnCsv').onclick = ()=> LEADS.length ? csv() : toast('Todavía no hay locale
 $('#btnBackup').onclick = ()=>{ const blob=new Blob([JSON.stringify({version:1, leads:LEADS, ajustes:Object.assign({},AJ,{clave:''})},null,1)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cazaclientes-copia-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(a.href); };
 $('#inBackup').onchange = async e=>{ const f=e.target.files[0]; if(!f) return; try{ const j=JSON.parse(await f.text()); if(!Array.isArray(j.leads)) throw 0;
   const ids=new Set(LEADS.map(l=>l.id)); let n=0; j.leads.forEach(l=>{ if(l&&l.id&&!ids.has(l.id)){ LEADS.push(l); n++; } }); purgarGoogle(); save('cc-leads',LEADS); pintarLeads(); toast(n+' locales restaurados'); }catch(_){ toast('Ese archivo no es una copia válida'); } e.target.value=''; };
-$('#btnManual').onclick = ()=>{ $('#fManual').reset(); $('#dlgManual').showModal(); };
+/* ---------- cargar lo que se vio en Google Maps ---------- */
+let EDIT = null;
+const PLATAFORMA = {gastro:'PedidosYa', turismo:'Booking o Airbnb', comercio:'Mercado Libre'};
+function verCamposMaps(){ const si=$('#mEnMaps').value==='si'; document.querySelectorAll('#fManual [data-gm]').forEach(e=>e.hidden=!si); }
+function abrirCarga(id){
+  $('#fManual').reset(); EDIT = id || null;
+  const x = id ? datosDe(buscarItem(id)) : null;
+  $('#mTitulo').textContent = x ? 'Lo que viste en Maps' : 'Cargar un local que vi en Maps';
+  $('#mOk').textContent = x ? 'Guardar' : 'Guardar y ver el mensaje';
+  if (x){
+    $('#mNombre').value = x.nombre; $('#mRubro').value = RUBROS[x.rubro] ? x.rubro : 'otros';
+    $('#mTel').value = x.tel||''; $('#mMail').value = x.email||''; $('#mNotas').value = x.notas||'';
+    const c = x.chk || {};
+    const web = x.web||'';
+    $('#mEnMaps').value = c.enMaps===false ? 'no' : 'si';
+    $('#mInternet').value = c.inet || (x.market||MARKET.some(([re])=>re.test(web)) ? 'market' : web && !SOCIAL.test(web) ? 'web' : (web||x.social) ? 'redes' : 'nada');
+    $('#mResenas').value = x.resenas || ''; $('#mRating').value = x.rating || '';
+    $('#mFotos').checked = !!x.fotos; $('#mHorarios').checked = !!x.horarios;
+    $('#mLink').value = c.link || (/^https?:/i.test(web) ? web : '');
+  } else {
+    const r = $('#qRubro').value; $('#mRubro').value = RUBROS[r] ? r : 'gastro';
+  }
+  verCamposMaps();
+  $('#dlgManual').returnValue='';
+  $('#dlgManual').showModal();
+}
+function leerCarga(){
+  const enMaps = $('#mEnMaps').value==='si', inet = $('#mInternet').value, link = $('#mLink').value.trim();
+  const rubro = $('#mRubro').value;
+  const esMaps = /google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps/i.test(link);
+  const linkWeb = esMaps ? '' : link;
+  const mk = MARKET.find(([re])=>re.test(linkWeb));
+  return {
+    nombre: $('#mNombre').value.trim(), rubro, tel: $('#mTel').value.trim(), email: $('#mMail').value.trim(), notas: $('#mNotas').value.trim(),
+    enMaps, chequeado: true,
+    resenas: enMaps ? Math.max(0, parseInt($('#mResenas').value)||0) : 0,
+    rating: enMaps ? Math.min(5, Math.max(0, parseFloat($('#mRating').value)||0)) : 0,
+    fotos: enMaps && $('#mFotos').checked ? 1 : 0, horarios: enMaps && $('#mHorarios').checked,
+    web: inet==='web' ? (linkWeb||'web propia') : inet==='market' ? linkWeb : inet==='redes' && SOCIAL.test(linkWeb) ? linkWeb : '',
+    social: inet==='redes' ? (linkWeb||'redes') : '',
+    market: inet==='market' ? (mk ? mk[1] : (PLATAFORMA[rubro] || 'una plataforma de terceros')) : '',
+    maps: esMaps ? link : '',
+    chk: {enMaps, inet, link}
+  };
+}
+$('#btnManual').onclick = ()=> abrirCarga(null);
 $('#dlgManual').addEventListener('close', ()=>{
   if ($('#dlgManual').returnValue!=='ok') return;
-  const nombre=$('#mNombre').value.trim(); if(!nombre) return;
-  const l={id:'m:'+Date.now(), nombre, rubro:$('#mRubro').value, ciudad:AJ.ciudad, fuente:'manual', puntaje:0, nivel:'baja', faltas:[], tel:$('#mTel').value.trim(), email:$('#mMail').value.trim(), web:'', estado:'Por contactar', proximo:Date.now(), notas:$('#mNotas').value.trim(), hist:[], creado:Date.now()};
-  if (/pdf|instagram|sin web|no tiene/i.test(l.notas)){ l.faltas=[{t:'Sin página web', hot:1, k:'noweb'}]; l.puntaje=30; l.nivel='media'; }
-  LEADS.unshift(l); save('cc-leads',LEADS); pintarLeads(); toast('Guardado en seguimiento');
+  const d = leerCarga(); if (!d.nombre) return;
+  if (EDIT){
+    const r = RES.find(p=>p.id===EDIT); if (r){ if (!d.maps) delete d.maps; Object.assign(r, d); Object.assign(r, evaluar(r)); }
+    const l = LEADS.find(x=>x.id===EDIT);
+    if (l){ const dd = Object.assign({}, d); if (!dd.maps) delete dd.maps; Object.assign(l, dd); const ev = evaluar(datosDe(l)); l.puntaje=ev.puntaje; l.nivel=ev.nivel; l.faltas=ev.faltas; save('cc-leads', LEADS); }
+    if (r) RES.sort((a,b)=>b.puntaje-a.puntaje);
+    pintarRes(); pintarLeads(); toast('Listo, puntaje actualizado'); return;
+  }
+  const p = Object.assign({id:'m:'+Date.now(), fuente:'manual', ciudad: ($('#qCiudad').value.trim()||AJ.ciudad)}, d);
+  Object.assign(p, evaluar(p));
+  const l = aLead(p); LEADS.unshift(l); save('cc-leads', LEADS); pintarLeads();
+  toast('Guardado en seguimiento'); abrirMensajes(l.id);
 });
 
 /* ---------- inicio ---------- */
@@ -623,7 +717,7 @@ $('#qRubro').innerHTML = opts; $('#qRubro').value='gastro';
 $('#mRubro').innerHTML = Object.entries(RUBROS).map(([k,r])=>`<option value="${k}">${r.nombre}</option>`).join('') + '<option value="otros">Otros</option>';
 $('#qCiudad').value = AJ.ciudad;
 document.querySelectorAll('[data-k]').forEach(i=>{ i.value = AJ[i.dataset.k] ?? ''; });
-pintarCupo(); pintarLeads();
+pintarCupo(); pintarMapsLinks(); pintarLeads();
 </script>
 </body>
 </html>
