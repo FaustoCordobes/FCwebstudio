@@ -74,6 +74,14 @@ header.top p{margin:2px 0 0;color:var(--dim);font-size:13.5px}
 .paso h2 span{font:600 11px/1 'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(127,194,166,.5);border-radius:20px;padding:3px 8px;margin-left:6px;vertical-align:middle}
 .paso p{margin:0 0 10px;color:var(--dim);font-size:13.5px}
 .btn.maps{border-color:rgba(127,194,166,.5)}
+/* nube */
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.nube{flex:none;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--dim);border:1px solid var(--line2);border-radius:20px;padding:6px 11px;background:none;cursor:pointer;min-height:34px}
+.nube i{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.nube.ok i{background:var(--teal)} .nube.err i{background:var(--danger)} .nube.sync i{background:var(--accent);animation:lat 1s infinite alternate}
+@keyframes lat{to{opacity:.3}}
+.aviso{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid rgba(214,162,76,.45);background:rgba(214,162,76,.08);border-radius:var(--r);padding:12px 14px;margin:0 0 14px;font-size:14px}
+.aviso[hidden]{display:none}
 /* ventas */
 .chk{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:13px}
 .chk li{display:flex;gap:7px;align-items:flex-start;color:var(--dim)}
@@ -165,7 +173,9 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
       <h1>Caza<em>clientes</em></h1>
       <p>Locales sin presencia online, el mensaje justo para cada rubro y el seguimiento de cada contacto.</p>
     </div>
+    <button type="button" class="nube" id="nube" title="Guardado en la nube"><i></i><span>Solo en este equipo</span></button>
   </header>
+  <div class="aviso" id="avisoNube" hidden><span>Para ver tus locales en el celular, la PC y donde entres, poné tu clave de la nube.</span><button class="btn sm pri" type="button" id="irNube">Poner mi clave</button></div>
 
   <nav class="tabs" role="tablist" aria-label="Secciones">
     <button type="button" role="tab" data-tab="buscar" aria-selected="true">Buscar locales</button>
@@ -323,6 +333,12 @@ sellbird dashboard</code><button class="btn sm" type="button" data-copiar-cmd>Co
         <div class="field"><label for="aDias">Días hasta el recordatorio</label><input id="aDias" data-k="dias" type="number" min="1" max="30"></div>
         <div class="field"><label for="aDias2">Días hasta el último aviso</label><input id="aDias2" data-k="dias2" type="number" min="1" max="30"></div>
         <div class="field"><label for="aLimite">Mensajes por día (máximo)</label><input id="aLimite" data-k="limite" type="number" min="1" max="100"><span class="hint">De a pocos por día parece más natural y WhatsApp no te bloquea.</span></div>
+        <div class="field full" id="boxNube" style="border:1px solid var(--line2);border-radius:var(--r);padding:14px">
+          <label for="aSync">Clave de la nube</label>
+          <div class="row"><input id="aSync" type="password" autocomplete="current-password" style="flex:1;min-width:180px"><button class="btn pri" type="button" id="btnNube">Conectar</button><button class="btn" type="button" id="btnSalir" hidden>Desconectar este equipo</button></div>
+          <span class="hint">La misma clave en el celular, la PC y donde entres: todo queda guardado en la nube y se actualiza solo. Es la que pusiste en Vercel como CC_CLAVE.</span>
+          <p class="status" id="nubeSt" role="status" aria-live="polite" style="margin:6px 0 0"></p>
+        </div>
         <div class="field"><label for="aClave">Código de acceso</label><input id="aClave" data-k="clave" type="password" autocomplete="off"><span class="hint">Solo si activás la API paga de Google: el mismo que pusiste en Vercel como ACCESS_CODE.</span></div>
       </div>
       <p class="note">Todo se guarda solo en este navegador. Hacé una copia de seguridad desde Seguimiento de vez en cuando.</p>
@@ -455,7 +471,7 @@ const ESTADOS = ['Por contactar','Contactado','Respondió','Demo enviada','Clien
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
-const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} if (k==='cc-leads'||k==='cc-ajustes'||k==='cc-bajas') typeof programarNube==='function' && programarNube(); };
 const AJ_DEF = {nombre:'Fausto Cordobes', marca:'F-C Web Studio', tel:'2944242906', mail:'', link:'https://f-cwebstudio.vercel.app/catalogo/', trato:'usted', dias:3, clave:'', dias2:4, limite:20, ciudad:'San Martín de los Andes, Neuquén',
   ciudades:['San Martín de los Andes, Neuquén','Junín de los Andes, Neuquén','Villa La Angostura, Neuquén','San Carlos de Bariloche, Río Negro','Aluminé, Neuquén','Zapala, Neuquén','Neuquén, Neuquén']};
 let AJ = Object.assign({}, AJ_DEF, load('cc-ajustes', {}));
@@ -1320,6 +1336,105 @@ $('#inSb').onchange = async e=>{
   toast(`Sellbird: ${act} actualizados, ${nue} nuevos${baj?', '+baj+' bajas':''}`);
 };
 
+/* =========================================================
+   NUBE — mismos datos en el celular, la PC y cualquier equipo
+   ========================================================= */
+let NUBE = {clave: localStorage.getItem('cc-sync')||'', snap: load('cc-snap', {}), aj: localStorage.getItem('cc-snap-aj')||'', bj: localStorage.getItem('cc-snap-bj')||'', t:null, ocupado:false, ultimo:0};
+const ajNube = () => { const a=Object.assign({}, AJ); delete a.clave; return a; };
+function estadoNube(tipo, txt){
+  const b=$('#nube'); b.className='nube '+(tipo||''); b.querySelector('span').textContent=txt;
+  $('#avisoNube').hidden = !!NUBE.clave; $('#btnSalir').hidden = !NUBE.clave;
+}
+function programarNube(){ if (!NUBE.clave) return; clearTimeout(NUBE.t); NUBE.t=setTimeout(subirNube, 1200); estadoNube('sync','Guardando…'); }
+async function pedirNube(metodo, cuerpo){
+  const r = await fetch('/api/datos', {method:metodo, headers:Object.assign({'x-sync':NUBE.clave}, cuerpo?{'Content-Type':'application/json'}:{}), body: cuerpo?JSON.stringify(cuerpo):undefined});
+  const j = await r.json().catch(()=>({ok:false, error:'Respuesta inválida'}));
+  if (!r.ok || !j.ok){ const e=new Error(j.error||('Error '+r.status)); e.status=r.status; throw e; }
+  return j;
+}
+function guardarSnap(){ save('cc-snap', NUBE.snap); localStorage.setItem('cc-snap-aj', NUBE.aj); localStorage.setItem('cc-snap-bj', NUBE.bj); }
+async function subirNube(){
+  if (!NUBE.clave) return; if (NUBE.ocupado){ programarNube(); return; }
+  NUBE.ocupado = true;
+  try{
+    const vivos = new Set(), cambiados = [];
+    LEADS.forEach(l=>{ vivos.add(l.id); const h=JSON.stringify(Object.assign({}, l, {u:0})); if (NUBE.snap[l.id]!==h){ l.u=Date.now(); cambiados.push([l,h]); } });
+    const borrados = Object.keys(NUBE.snap).filter(id=>!vivos.has(id));
+    const a = ajNube(); const ah = JSON.stringify(Object.assign({}, a, {u:0}));
+    const bjs = bajas(); const bh = JSON.stringify(bjs.slice().sort());
+    const cuerpo = {};
+    if (cambiados.length) cuerpo.leads = cambiados.map(([l])=>l);
+    if (borrados.length) cuerpo.borrados = borrados;
+    if (ah!==NUBE.aj){ AJ.u = Date.now(); a.u = AJ.u; cuerpo.ajustes = a; try{ localStorage.setItem('cc-ajustes', JSON.stringify(AJ)); }catch(e){} }
+    if (bh!==NUBE.bj && bjs.length) cuerpo.bajas = bjs;
+    if (Object.keys(cuerpo).length){
+      try{ localStorage.setItem('cc-leads', JSON.stringify(LEADS)); }catch(e){}
+      await pedirNube('POST', cuerpo);
+      cambiados.forEach(([l,h])=>NUBE.snap[l.id]=h); borrados.forEach(id=>delete NUBE.snap[id]);
+      if (cuerpo.ajustes) NUBE.aj = ah; NUBE.bj = bh; guardarSnap();
+    }
+    estadoNube('ok','Guardado en la nube');
+  }catch(e){ estadoNube('err', e.status===401?'Clave incorrecta':e.status===501?'Falta configurar la nube':'Sin conexión: se guarda al volver'); if (e.status===401) NUBE.clave=''; }
+  finally{ NUBE.ocupado = false; }
+}
+async function traerNube(avisar){
+  if (!NUBE.clave || NUBE.ocupado) return; NUBE.ocupado = true; estadoNube('sync','Actualizando…');
+  try{
+    const j = await pedirNube('GET');
+    const sucio = l => NUBE.snap[l.id]!==JSON.stringify(Object.assign({}, l, {u:0}));
+    const porId = new Map(LEADS.map(l=>[l.id,l])); let cambios=0;
+    (j.leads||[]).forEach(r=>{
+      const loc = porId.get(r.id), h = JSON.stringify(Object.assign({}, r, {u:0}));
+      if (!loc){ if (!(r.id in NUBE.snap) || NUBE.snap[r.id]!==h){ porId.set(r.id, r); cambios++; } NUBE.snap[r.id]=h; return; }
+      if (sucio(loc) && (loc.u||0) >= (r.u||0)) return; // lo local es más nuevo: se sube después
+      if (JSON.stringify(Object.assign({}, loc, {u:0}))!==h){ porId.set(r.id, r); cambios++; }
+      NUBE.snap[r.id]=h;
+    });
+    const remotos = new Set((j.leads||[]).map(r=>r.id));
+    for (const [id,l] of porId){ if (remotos.has(id)) continue;
+      const tb = (j.borrados||{})[id];
+      if (tb && !(sucio(l) && (l.u||0) > tb)){ porId.delete(id); delete NUBE.snap[id]; cambios++; }
+      else if (id in NUBE.snap && !tb) delete NUBE.snap[id]; // estaba en la nube y no está: se vuelve a subir
+    }
+    LEADS = [...porId.values()].sort((a,b)=>(b.creado||0)-(a.creado||0));
+    try{ localStorage.setItem('cc-leads', JSON.stringify(LEADS)); }catch(e){}
+    if (j.ajustes && (j.ajustes.u||0) > (AJ.u||0)){
+      const clave = AJ.clave; AJ = Object.assign({}, AJ_DEF, j.ajustes, {clave});
+      try{ localStorage.setItem('cc-ajustes', JSON.stringify(AJ)); }catch(e){}
+      NUBE.aj = JSON.stringify(Object.assign(ajNube(), {u:0}));
+      document.querySelectorAll('[data-k]').forEach(i=>{ i.value = AJ[i.dataset.k] ?? ''; });
+      $('#aCiudades').value = (AJ.ciudades||[]).join('\n'); $('#vDias1').textContent = +AJ.dias||3;
+      if (AJ.ciudad && $('#qCiudad').value!==AJ.ciudad){ $('#qCiudad').value = AJ.ciudad; pintarMapsLinks(); }
+    }
+    const union = [...new Set(bajas().concat(j.bajas||[]))]; try{ localStorage.setItem('cc-bajas', JSON.stringify(union)); }catch(e){}
+    NUBE.bj = JSON.stringify((j.bajas||[]).slice().sort());
+    guardarSnap(); NUBE.ultimo = Date.now();
+    pintarCiudades(); pintarLeads(); pintarBandeja(); pintarRes(); if ($('#v-mapa').classList.contains('on')) zHoy();
+    estadoNube('ok','Guardado en la nube');
+    if (avisar) toast(cambios ? `Listo: ${LEADS.length} locales en este equipo` : 'Conectado a la nube');
+  }catch(e){
+    estadoNube('err', e.status===401?'Clave incorrecta':e.status===501?'Falta configurar la nube':'Sin conexión');
+    if (avisar){ $('#nubeSt').textContent = e.message; $('#nubeSt').className='status err'; }
+    if (e.status===401){ NUBE.clave=''; localStorage.removeItem('cc-sync'); }
+    NUBE.ocupado = false; return false;
+  }
+  NUBE.ocupado = false;
+  await subirNube(); // sube lo que este equipo tenía y la nube no
+  return true;
+}
+$('#btnNube').onclick = async ()=>{
+  const c = $('#aSync').value.trim(); if (!c) return toast('Escribí tu clave');
+  NUBE.clave = c; localStorage.setItem('cc-sync', c); $('#nubeSt').textContent='Conectando…'; $('#nubeSt').className='status';
+  if (await traerNube(true)){ $('#nubeSt').textContent='Conectado. Todo lo que hagas en este equipo se guarda en la nube.'; $('#nubeSt').className='status ok'; }
+};
+$('#btnSalir').onclick = ()=>{ NUBE.clave=''; localStorage.removeItem('cc-sync'); $('#aSync').value=''; NUBE.snap={}; NUBE.aj=''; NUBE.bj=''; guardarSnap(); estadoNube('','Solo en este equipo'); $('#nubeSt').textContent='Este equipo ya no se sincroniza. Tus datos siguen en la nube.'; $('#nubeSt').className='status'; };
+const irAjustes = ()=>{ document.querySelector('[data-tab=ajustes]').click(); setTimeout(()=>{ $('#boxNube').scrollIntoView({block:'center'}); $('#aSync').focus(); }, 50); };
+$('#irNube').onclick = irAjustes;
+$('#nube').onclick = ()=>{ if (NUBE.clave) traerNube(true); else irAjustes(); };
+document.addEventListener('visibilitychange', ()=>{ if (document.visibilityState==='visible' && NUBE.clave && Date.now()-NUBE.ultimo>15000) traerNube(false); });
+setInterval(()=>{ if (document.visibilityState==='visible' && NUBE.clave && Date.now()-NUBE.ultimo>60000) traerNube(false); }, 20000);
+window.addEventListener('online', ()=>{ if (NUBE.clave) traerNube(false); });
+
 /* ---------- inicio ---------- */
 const opts = ['<option value="todos">Todos los rubros</option>'].concat(Object.entries(RUBROS).map(([k,r])=>`<option value="${k}">${r.nombre}</option>`)).join('');
 $('#qRubro').innerHTML = opts; $('#qRubro').value='gastro';
@@ -1330,6 +1445,7 @@ $('#qCiudad').value = AJ.ciudad; $('#aCiudades').value = AJ.ciudades.join('\n');
 document.querySelectorAll('[data-k]').forEach(i=>{ i.value = AJ[i.dataset.k] ?? ''; });
 $('#vDias1').textContent = +AJ.dias||3;
 pintarCupo(); pintarMapsLinks(); pintarLeads(); pintarBandeja();
+if (NUBE.clave){ $('#aSync').value = NUBE.clave; traerNube(false); } else estadoNube('','Solo en este equipo');
 </script>
 </body>
 </html>

@@ -8,6 +8,9 @@
     },
     "api/maps-link.js": {
       "maxDuration": 10
+    },
+    "api/datos.js": {
+      "maxDuration": 10
     }
   }
 }

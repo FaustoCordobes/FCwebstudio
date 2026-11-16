@@ -23,6 +23,14 @@ Herramienta interna para encontrar locales sin presencia online, armar el mensaj
    - Revisar la web del local (`api/revisar.js`): si no se adapta al celular, carta en PDF, sin reservas, web vieja, sin WhatsApp, quién la hizo, y mails de contacto con verificación del dominio. El mensaje usa lo que encontró.
    - Respuestas sugeridas: pegás lo que contestó y detecta si pidió la baja, pregunta el precio, le interesa, más adelante, ya tiene quien se lo haga o es automática.
    - Puente con Sellbird para campañas de mail desde la PC: exporta los locales, `sellbird_puente.py` los carga en Sellbird y después se importa su `prospects.csv`.
+7. **Nube**: con una clave, los mismos datos en el celular, la PC y cualquier equipo (`api/datos.js`, Upstash Redis de Vercel). Funciona sin conexión y sube los cambios al volver.
+
+## Activar la nube (una sola vez)
+
+1. En vercel.com, entrá al proyecto → pestaña **Storage** → **Create Database** → **Upstash for Redis** (plan gratis) → conectalo a este proyecto sin cambiar el prefijo de las variables.
+2. En **Settings → Environment Variables** agregá `CC_CLAVE` con una clave larga que elijas vos.
+3. **Deployments → Redeploy**.
+4. En Cazaclientes → **Ajustes → Clave de la nube**, poné la misma clave en cada equipo.
 
 ## Publicarlo en Vercel
 
