@@ -1,5 +1,13 @@
 {
   "functions": {
-    "api/buscar.js": { "maxDuration": 15 }
+    "api/buscar.js": {
+      "maxDuration": 15
+    },
+    "api/revisar.js": {
+      "maxDuration": 20
+    },
+    "api/maps-link.js": {
+      "maxDuration": 10
+    }
   }
 }

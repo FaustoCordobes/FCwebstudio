@@ -74,6 +74,23 @@ header.top p{margin:2px 0 0;color:var(--dim);font-size:13.5px}
 .paso h2 span{font:600 11px/1 'Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);border:1px solid rgba(127,194,166,.5);border-radius:20px;padding:3px 8px;margin-left:6px;vertical-align:middle}
 .paso p{margin:0 0 10px;color:var(--dim);font-size:13.5px}
 .btn.maps{border-color:rgba(127,194,166,.5)}
+/* ventas */
+.chk{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:13px}
+.chk li{display:flex;gap:7px;align-items:flex-start;color:var(--dim)}
+.chk li::before{content:'✓';color:var(--teal);font-weight:700;width:14px;flex:none}
+.chk li.warn::before{content:'!';color:var(--accent)}
+.chk li.bad::before{content:'✕';color:var(--danger)}
+.chk li.bad{color:var(--ink)}
+.paso-tag{display:inline-block;font-size:12px;font-weight:700;color:var(--accent-ink);background:var(--accent);border-radius:20px;padding:3px 9px}
+.bt-asunto{width:100%;margin-bottom:6px}
+.cmd{display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto}
+.cmd code{flex:1;min-width:0;white-space:pre;overflow-x:auto}
+.pasos-sb{margin:8px 0 0;padding-left:20px;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;font-size:14px;color:var(--dim)}
+.pasos-sb li{min-width:0}
+.bmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--dim)}
+.pasos-sb b{color:var(--ink)}
+.tipo{display:inline-block;font-weight:700;font-size:13px;border-radius:20px;padding:4px 10px;background:rgba(127,194,166,.15);color:var(--teal)}
+.tipo.baja{background:rgba(220,110,90,.15);color:var(--danger)}
 /* ciudades */
 .ciudades{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:2px 0 6px;margin:-6px 0 14px}
 .ciudades .lbl{flex:none;font-size:12.5px;color:var(--faint);font-weight:600;margin-right:2px}
@@ -153,6 +170,7 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
   <nav class="tabs" role="tablist" aria-label="Secciones">
     <button type="button" role="tab" data-tab="buscar" aria-selected="true">Buscar locales</button>
     <button type="button" role="tab" data-tab="mapa" aria-selected="false">Mapa</button>
+    <button type="button" role="tab" data-tab="ventas" aria-selected="false">Ventas <span class="count" id="cntBandeja" hidden></span></button>
     <button type="button" role="tab" data-tab="seguimiento" aria-selected="false">Seguimiento <span class="count" id="cntLeads">0</span></button>
     <button type="button" role="tab" data-tab="ajustes" aria-selected="false">Ajustes</button>
   </nav>
@@ -177,7 +195,8 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
         <h2>1. Buscá en Google Maps <span>Gratis</span></h2>
         <p>Tocá un botón y se abre Google Maps con los locales de la zona. Fijate cuáles no aparecen, no tienen web, tienen solo Instagram o pocas reseñas, y cargalos acá abajo: la app les pone puntaje y te arma el mensaje.</p>
         <div class="row" id="mapsLinks"></div>
-        <div class="row" style="margin-top:10px"><button class="btn pri" id="btnManual" type="button">Cargar un local que vi en Maps</button></div>
+        <div class="row" style="margin-top:10px"><button class="btn pri" id="btnPegar" type="button">Pegar local de Maps</button><button class="btn" id="btnManual" type="button">Cargar a mano</button></div>
+        <p class="note" style="margin-top:8px">En Google Maps tocá el local → <b>Compartir</b> → <b>Copiar</b>, y después "Pegar local de Maps". Se completa solo.</p>
       </div>
 
       <div class="paso">
@@ -219,7 +238,9 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
         <div class="card" style="display:grid;gap:10px">
           <h3>Trabajá sobre el mapa</h3>
           <p class="note" style="margin:0">Tocá un local en el mapa para ver sus reseñas y si tiene web. Si le falta algo, cargalo y te armo el mensaje.</p>
-          <button class="btn pri" type="button" id="zCargar">Cargar un local de este mapa</button>
+          <button class="btn pri" type="button" id="zPegar">Pegar local de Maps</button>
+          <p class="note" style="margin:0">Tocá el local → "Abrir en Maps" → Compartir → Copiar, y pegalo acá.</p>
+          <button class="btn" type="button" id="zCargar">Cargar a mano</button>
           <a class="btn sm maps" id="zAbrir" target="_blank" rel="noopener">Abrir en Google Maps ↗</a>
         </div>
         <div class="card" style="display:grid;gap:8px">
@@ -228,6 +249,46 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
         </div>
       </aside>
     </div>
+  </section>
+
+  <!-- VENTAS -->
+  <section class="view" id="v-ventas" aria-label="Ventas">
+    <div class="kpis" id="vKpis"></div>
+    <div class="card" style="margin-bottom:14px">
+      <h2 style="margin:0 0 4px;font-size:18px">Bandeja de hoy</h2>
+      <p class="note" style="margin:0 0 10px">Los mensajes que te toca mandar, listos y revisados. Cada local recibe hasta 3: el primero, un recordatorio a los <span id="vDias1">3</span> días y un último aviso. Si responde, la secuencia se corta sola.</p>
+      <div class="filters" style="margin:0">
+        <label>Ciudad <select id="vCiudad"></select></label>
+        <label>Mostrar <select id="vVer"><option value="hoy">Hoy</option><option value="semana">Próximos 7 días</option></select></label>
+        <button class="btn sm" type="button" id="btnRevisarTodas">Revisar webs pendientes</button>
+      </div>
+    </div>
+    <div class="results" id="bandeja"></div>
+
+    <details class="card" id="sbBox" style="margin-top:18px">
+      <summary>Sellbird en tu PC: campañas de mail en cantidad</summary>
+      <p class="note">Sellbird es un programa gratuito que corre en tu computadora con tu plan de Claude. Lee las webs de los locales, encuentra al dueño, verifica su mail y le escribe desde una casilla tuya. Sirve para los locales que tienen web y mail; para los demás seguí con WhatsApp desde la bandeja.</p>
+      <p class="note"><b>Necesitás:</b> Python 3.11 o más nuevo, Claude Pro o Max con Claude Code instalado, y una casilla de Gmail o Google Workspace aparte (no la tuya personal) para que no te marquen como spam.</p>
+      <ol class="pasos-sb">
+        <li><b>Instalalo una sola vez.</b> En la terminal:
+          <div class="cmd"><code>git clone https://github.com/ethanplusai/sellbird.git
+cd sellbird
+claude</code><button class="btn sm" type="button" data-copiar-cmd>Copiar</button></div>
+          y decile a Claude: <i>"set up Sellbird for me"</i>. Te guía con la casilla y la configuración.</li>
+        <li><b>Contale qué vendés:</b>
+          <div class="cmd"><code>sellbird train https://f-cwebstudio.vercel.app</code><button class="btn sm" type="button" data-copiar-cmd>Copiar</button></div></li>
+        <li><b>Pasale tus locales.</b> Bajá estos dos archivos y guardalos en la carpeta de Sellbird:
+          <div class="row" style="margin:6px 0"><button class="btn sm pri" type="button" id="btnSbExport">Exportar para Sellbird</button><a class="btn sm" href="sellbird_puente.py" download>Descargar el puente</a></div>
+          Después corré:
+          <div class="cmd"><code>python sellbird_puente.py cazaclientes-para-sellbird.json
+sellbird profile
+sellbird dashboard</code><button class="btn sm" type="button" data-copiar-cmd>Copiar</button></div>
+          En el panel revisás y aprobás cada mail antes de que salga.</li>
+        <li><b>Traé lo que encontró.</b> Corré <code>sellbird export</code> y subí acá el archivo <code>prospects.csv</code>. Le sumo a cada local el mail verificado, el nombre del dueño y si respondió o pidió la baja.
+          <div class="row" style="margin-top:6px"><label class="btn sm" for="inSb">Importar de Sellbird</label><input id="inSb" class="sr" type="file" accept=".csv,text/csv"></div></li>
+      </ol>
+      <p class="note">Si los mails te salen en inglés, pedile a Claude dentro de la carpeta de Sellbird que los escriba en español, con trato de usted (sus instrucciones están en la carpeta <code>prompts</code>). Sellbird es de ethanplusai, licencia AGPL-3.0.</p>
+    </details>
   </section>
 
   <!-- SEGUIMIENTO -->
@@ -259,7 +320,9 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
         <div class="field full"><label for="aLink">Enlace para mostrar tus trabajos</label><input id="aLink" data-k="link" type="url"></div>
         <div class="field"><label for="aTrato">Trato en los mensajes</label><select id="aTrato" data-k="trato"><option value="usted">Usted (primer contacto)</option><option value="vos">Vos</option></select></div>
         <div class="field full"><label for="aCiudades">Tus ciudades (una por renglón)</label><textarea id="aCiudades" rows="6"></textarea><span class="hint">Escribí "Ciudad, Provincia" para que el buscador la encuentre bien. Aparecen como botones arriba.</span></div>
-        <div class="field"><label for="aDias">Días para volver a escribir</label><input id="aDias" data-k="dias" type="number" min="1" max="30"></div>
+        <div class="field"><label for="aDias">Días hasta el recordatorio</label><input id="aDias" data-k="dias" type="number" min="1" max="30"></div>
+        <div class="field"><label for="aDias2">Días hasta el último aviso</label><input id="aDias2" data-k="dias2" type="number" min="1" max="30"></div>
+        <div class="field"><label for="aLimite">Mensajes por día (máximo)</label><input id="aLimite" data-k="limite" type="number" min="1" max="100"><span class="hint">De a pocos por día parece más natural y WhatsApp no te bloquea.</span></div>
         <div class="field"><label for="aClave">Código de acceso</label><input id="aClave" data-k="clave" type="password" autocomplete="off"><span class="hint">Solo si activás la API paga de Google: el mismo que pusiste en Vercel como ACCESS_CODE.</span></div>
       </div>
       <p class="note">Todo se guarda solo en este navegador. Hacé una copia de seguridad desde Seguimiento de vez en cuando.</p>
@@ -304,6 +367,39 @@ footer{margin-top:28px;font-size:12px;color:var(--faint)}
     </div>
     <div class="row"><button class="btn pri" value="ok" id="mOk">Guardar y ver el mensaje</button><button class="btn" value="cancel" formnovalidate>Cancelar</button></div>
   </form>
+</dialog>
+
+<dialog id="dlgPegar" aria-labelledby="pTitulo">
+  <div class="dlg" style="position:relative">
+    <button class="close" type="button" id="pClose" aria-label="Cerrar">✕</button>
+    <h2 id="pTitulo">Pegar local de Google Maps</h2>
+    <p class="sub">En Maps tocá el local → <b>Compartir</b> → <b>Copiar</b>. Pegalo acá abajo. También sirve el enlace solo, o copiar el nombre y la dirección.</p>
+    <label class="sr" for="pTexto">Lo que copiaste de Maps</label>
+    <textarea id="pTexto" placeholder="Chué Helado &amp; Café&#10;Gines Ponte 331, Junín de los Andes, Neuquén&#10;https://maps.app.goo.gl/…"></textarea>
+    <div class="fields" style="margin-top:8px">
+      <div class="field"><label for="pResenas">Reseñas (lo ves en el mapa)</label><input id="pResenas" type="number" min="0" inputmode="numeric" placeholder="Ej.: 52"></div>
+      <div class="field"><label for="pRating">Estrellas</label><input id="pRating" type="number" min="1" max="5" step="0.1" inputmode="decimal" placeholder="Ej.: 5.0"></div>
+    </div>
+    <p class="status" id="pSt" role="status" aria-live="polite"></p>
+    <div class="row"><button class="btn pri" type="button" id="pOk">Completar los datos</button><button class="btn" type="button" id="pLeer">Pegar del portapapeles</button></div>
+  </div>
+</dialog>
+
+<dialog id="dlgResp" aria-labelledby="rTitulo">
+  <div class="dlg" style="position:relative">
+    <button class="close" type="button" id="rClose" aria-label="Cerrar">✕</button>
+    <h2 id="rTitulo">¿Qué te respondió?</h2>
+    <p class="sub" id="rSub"></p>
+    <label class="sr" for="rTexto">Su respuesta</label>
+    <textarea id="rTexto" style="min-height:110px" placeholder="Pegá acá lo que te contestó"></textarea>
+    <div class="row" style="margin:8px 0"><button class="btn pri" type="button" id="rAnalizar">Sugerir respuesta</button></div>
+    <div id="rOut" hidden>
+      <p style="margin:4px 0 6px"><span class="tipo" id="rTipo"></span> <span class="note" id="rQue" style="margin:0"></span></p>
+      <label for="rSug" class="sub" style="display:block;margin:0 0 4px">Respuesta sugerida (la podés cambiar)</label>
+      <textarea id="rSug" style="min-height:130px"></textarea>
+      <div class="row" id="rActs" style="margin-top:8px"></div>
+    </div>
+  </div>
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -360,7 +456,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-const AJ_DEF = {nombre:'Fausto Cordobes', marca:'F-C Web Studio', tel:'2944242906', mail:'', link:'https://f-cwebstudio.vercel.app/catalogo/', trato:'usted', dias:3, clave:'', ciudad:'San Martín de los Andes, Neuquén',
+const AJ_DEF = {nombre:'Fausto Cordobes', marca:'F-C Web Studio', tel:'2944242906', mail:'', link:'https://f-cwebstudio.vercel.app/catalogo/', trato:'usted', dias:3, clave:'', dias2:4, limite:20, ciudad:'San Martín de los Andes, Neuquén',
   ciudades:['San Martín de los Andes, Neuquén','Junín de los Andes, Neuquén','Villa La Angostura, Neuquén','San Carlos de Bariloche, Río Negro','Aluminé, Neuquén','Zapala, Neuquén','Neuquén, Neuquén']};
 let AJ = Object.assign({}, AJ_DEF, load('cc-ajustes', {}));
 let LEADS = load('cc-leads', []);
@@ -479,6 +575,7 @@ function rubroDe(tipo, osmTags, porDefecto){
 const infoRubro = k => RUBROS[k] || OTROS;
 
 /* ---------- puntaje de oportunidad ---------- */
+const REVPTS = {caida:30, sin_movil:15, desactualizada:10, carta_pdf:8, sin_reservas:6, sin_whatsapp:6, sin_https:6, lenta:5, sin_seo:3, anuncios:5};
 function evaluar(p){
   const faltas=[]; let s=0;
   const web = p.web || '';
@@ -496,6 +593,7 @@ function evaluar(p){
     if (!p.horarios){ s+=5; faltas.push({t:'Sin horarios', k:'horarios'}); }
     if (p.rating && p.rating<4 && p.resenas>5){ s+=4; faltas.push({t:'Calificación '+p.rating.toFixed(1), k:'rating'}); }
   }
+  if (p.rev && Array.isArray(p.rev.senales)) p.rev.senales.forEach(x=>{ s += REVPTS[x.k]||0; faltas.push({t:x.t, hot:x.hot?1:0, ok:x.ok?1:0, k:'w_'+x.k, anio:x.anio}); });
   if (realWeb) faltas.push({t:'Tiene web', ok:1, k:'web'});
   if (p.chequeado) faltas.push({t:'Revisado en Maps', ok:1, k:'chk'});
   if (p.resenas>=15) faltas.push({t:p.resenas+' reseñas · '+(p.rating||0).toFixed(1)+'★', ok:1, k:'buenas'});
@@ -626,6 +724,12 @@ function hallazgo(p){
   if (k.has('social')) return `Vi que ${T('tenés','tienen')} redes, pero no una página propia que aparezca cuando alguien busca ${R.busqueda} en ${ciudad}.`;
   if (k.has('demanda') || (k.has('noweb') && p.resenas>=15)) return `Vi que ${p.nombre} tiene ${p.resenas} reseñas en Google${p.rating?' con '+p.rating.toFixed(1)+' estrellas':''}, pero no tiene una página propia donde mostrar todo eso.`;
   if (k.has('noweb')) return `Vi que ${p.nombre} no tiene página web, y hoy la mayoría busca ${R.busqueda} desde el celular.`;
+  if (k.has('w_caida')) return `Quise entrar a la página de ${p.nombre} y no carga, así que quien ${T('te','lo')} busca en internet se queda sin ver nada.`;
+  if (k.has('w_sin_movil')) return `Entré a la página de ${p.nombre} desde el celular y no se adapta a la pantalla, y hoy casi todos buscan ${R.busqueda} desde el teléfono.`;
+  if (k.has('w_carta_pdf')) return `Vi que la carta de ${p.nombre} está en PDF: desde el celular cuesta leerla y no se puede pedir directo desde ahí.`;
+  if (k.has('w_desactualizada')){ const a=(p.faltas.find(f=>f.k==='w_desactualizada')||{}).anio; return `Vi que la página de ${p.nombre} no se actualiza desde ${a||'hace tiempo'}, y eso a veces hace pensar que el local cerró.`; }
+  if (k.has('w_sin_reservas')) return `Vi ${T('tu','su')} página y no se puede reservar, pedir ni sacar turno desde ahí: todo pasa por el teléfono.`;
+  if (k.has('w_sin_whatsapp')) return `Vi ${T('tu','su')} página y no tiene un botón para escribir${T('te','le')} por WhatsApp, que es como más consulta la gente de la zona.`;
   return `Vi ${T('tu','su')} página y se me ocurrió algo que ${T('te','le')} puede servir.`;
 }
 function mensajes(p){
@@ -683,7 +787,7 @@ function aLead(p){
     faltas:p.faltas, email:p.email||'', social:p.social||'', estado:'Por contactar', proximo:Date.now(), notas:'', hist:[], creado:Date.now()};
   if (p.fuente==='google'){ l.placeId=p.placeId; l.g={tel:p.tel, web:p.web, resenas:p.resenas, rating:p.rating, maps:p.maps}; l.gExp=Date.now()+30*DIA; }
   else { l.tel=p.tel||''; l.web=p.web||''; l.osmUrl=p.osmUrl;
-    ['resenas','rating','fotos','horarios','market','maps','enMaps','chequeado','chk','notas'].forEach(k=>{ if (p[k]!==undefined) l[k]=p[k]; }); }
+    ['resenas','rating','fotos','horarios','market','maps','enMaps','chequeado','chk','notas','direccion','lat','lng','rev'].forEach(k=>{ if (p[k]!==undefined) l[k]=p[k]; }); }
   return l;
 }
 function guardar(id, silencioso){
@@ -696,10 +800,13 @@ function registrar(id, canal){
   const l = guardar(id, true) || LEADS.find(x=>x.id===id); if (!l) return;
   const nombres = {whatsapp:'WhatsApp', mail:'mail', persona:'visita'};
   if (l.estado==='Por contactar') l.estado='Contactado';
-  l.hist.unshift({f:Date.now(), t:'Contacto por '+nombres[canal]});
-  l.proximo = hoy().getTime() + (+AJ.dias||3)*DIA;
-  save('cc-leads', LEADS); pintarLeads(); pintarRes();
-  toast(`Listo. Te recuerdo volver a escribir el ${fmtFecha(l.proximo)}`);
+  const paso = Math.min(3, (l.paso||0) + 1); l.paso = paso;
+  l.hist.unshift({f:Date.now(), t:PASOS[paso-1]+' por '+nombres[canal], env:1});
+  const espera = paso===1 ? (+AJ.dias||3) : paso===2 ? (+AJ.dias2||4) : 30;
+  l.proximo = hoy().getTime() + espera*DIA;
+  if (paso===3) l.hist.unshift({f:Date.now(), t:'Secuencia terminada sin respuesta. Te lo recuerdo en un mes.'});
+  save('cc-leads', LEADS); pintarLeads(); pintarRes(); pintarBandeja();
+  toast(paso<3 ? `Listo. El próximo mensaje toca el ${fmtFecha(l.proximo)}` : `Listo, era el último. Te lo recuerdo el ${fmtFecha(l.proximo)}`);
 }
 function pintarLeads(){
   $('#cntLeads').textContent = LEADS.length; if ($('#v-mapa').classList.contains('on')) zHoy();
@@ -727,7 +834,8 @@ function pintarLeads(){
       <label class="sr" for="n-${esc(l.id)}">Notas</label><textarea id="n-${esc(l.id)}" data-lead="${esc(l.id)}" data-f="notas" placeholder="Notas: qué respondió, qué le interesa…">${esc(l.notas||'')}</textarea>
       ${!x.tel && x.g && x.g.tel ? `<p class="note" style="margin:0">Teléfono de Google: ${esc(x.g.tel)} (se borra el ${fmtFecha(x.gExp)}). Si lo vas a usar, copialo arriba.</p>`:''}
       ${x.fuente==='google' && !x.g ? `<p class="note" style="margin:0">Los datos de Google ya se borraron (pasaron 30 días). Volvé a buscarlo para actualizarlos.</p>`:''}
-      <div class="row"><button class="btn pri sm" data-msg="${esc(l.id)}">Mensajes</button><a class="btn sm maps" href="${esc(l.maps||mapsBusqueda(l.nombre+' '+(l.ciudad||AJ.ciudad).split(',')[0]))}" target="_blank" rel="noopener">Ver en Maps ↗</a><button class="btn sm" data-chequear="${esc(l.id)}">${l.chequeado?'Corregir lo que vi':'Anotar lo que vi'}</button><button class="btn sm" data-borrar="${esc(l.id)}">Quitar</button></div>
+      <div class="row"><button class="btn pri sm" data-msg="${esc(l.id)}">Mensajes</button><a class="btn sm maps" href="${esc(l.maps||mapsBusqueda(l.nombre+' '+(l.ciudad||AJ.ciudad).split(',')[0]))}" target="_blank" rel="noopener">Ver en Maps ↗</a><button class="btn sm" data-chequear="${esc(l.id)}">${l.chequeado?'Corregir lo que vi':'Anotar lo que vi'}</button><button class="btn sm" data-resp="${esc(l.id)}">Pegar su respuesta</button>${webReal(l.web)?`<button class="btn sm" data-revisar="${esc(l.id)}">${l.rev?'Volver a revisar su web':'Revisar su web'}</button>`:''}<button class="btn sm" data-borrar="${esc(l.id)}">Quitar</button></div>
+      ${l.rev?`<div class="badges">${(l.rev.senales||[]).map(x=>`<span class="badge ${x.hot?'hot':x.ok?'ok':''}">${esc(x.t)}</span>`).join('')}${l.rev.plataforma?`<span class="badge">Hecha en ${esc(l.rev.plataforma)}</span>`:''}</div>`:''}
       ${l.hist&&l.hist.length?`<ul class="hist">${l.hist.slice(0,4).map(h=>`<li>${fmtFecha(h.f)} — ${esc(h.t)}</li>`).join('')}</ul>`:''}
     </article>`;
   }).join('') : `<p class="empty">${f==='hoy'?'No tenés a nadie para escribir hoy.':'No hay locales en esta lista.'}</p>`;
@@ -755,9 +863,16 @@ function csv(){
 /* ---------- eventos ---------- */
 document.addEventListener('click', e=>{
   if (e.target.closest('tr[data-ciudad]')){ $('#sCiudad').value = e.target.closest('tr[data-ciudad]').dataset.ciudad; pintarLeads(); return; }
-  const t = e.target.closest('[data-ciudad-set],[data-term],[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal],[data-chequear]'); if (!t) return;
+  if (e.target.closest('[data-copiar-cmd]')){ const c=e.target.closest('.cmd').querySelector('code').textContent; navigator.clipboard.writeText(c).then(()=>toast('Copiado'),()=>toast('No se pudo copiar')); return; }
+  const t = e.target.closest('[data-resp],[data-revisar],[data-benviar],[data-bcopiar],[data-bmanana],[data-bhecho],[data-ciudad-set],[data-term],[data-tab],[data-msg],[data-guardar],[data-borrar],[data-canal],[data-chequear]'); if (!t) return;
   if (t.dataset.chequear) abrirCarga(t.dataset.chequear);
-  if (t.dataset.tab){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b===t))); document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.tab)); if(t.dataset.tab==='seguimiento') pintarLeads(); $('#barCiudades').hidden = !['buscar','mapa'].includes(t.dataset.tab); if(t.dataset.tab==='mapa'){ if(!$('#zMapa').src) zChips(); zHoy(); } }
+  if (t.dataset.resp) abrirResp(t.dataset.resp);
+  if (t.dataset.revisar) revisarWeb(t.dataset.revisar);
+  if (t.dataset.benviar){ const id=t.dataset.benviar, b=leerB(id); if (!b) return; if (b.canal==='whatsapp') t.href=`https://wa.me/${telWa(b.l.tel)}?text=${encodeURIComponent(b.texto)}`; else t.href=`mailto:${encodeURIComponent(b.l.email||'')}?subject=${encodeURIComponent(b.asunto)}&body=${encodeURIComponent(b.texto)}`; delete BT[id]; setTimeout(()=>registrar(id, b.canal), 300); }
+  if (t.dataset.bcopiar){ const b=leerB(t.dataset.bcopiar); if (b) navigator.clipboard.writeText((b.canal==='mail'?'Asunto: '+b.asunto+'\n\n':'')+b.texto).then(()=>toast('Copiado'),()=>toast('No se pudo copiar')); }
+  if (t.dataset.bhecho){ const b=leerB(t.dataset.bhecho); delete BT[t.dataset.bhecho]; registrar(t.dataset.bhecho, b?b.canal:'persona'); }
+  if (t.dataset.bmanana){ const l=LEADS.find(x=>x.id===t.dataset.bmanana); if (l){ l.proximo=hoy().getTime()+DIA; save('cc-leads',LEADS); pintarBandeja(); toast('Pasado para mañana'); } }
+  if (t.dataset.tab){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b===t))); document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on', v.id==='v-'+t.dataset.tab)); if(t.dataset.tab==='seguimiento') pintarLeads(); if(t.dataset.tab==='ventas') pintarBandeja(); $('#barCiudades').hidden = !['buscar','mapa'].includes(t.dataset.tab); if(t.dataset.tab==='mapa'){ if(!$('#zMapa').src) zChips(); zHoy(); } }
   if (t.dataset.term) zMostrar(t.dataset.term);
   if (t.dataset.ciudadSet) setCiudad(t.dataset.ciudadSet);
   if (t.dataset.msg) abrirMensajes(t.dataset.msg);
@@ -779,10 +894,13 @@ document.addEventListener('change', e=>{
   if (t.id==='qFuente') pintarCupo();
   if (t.id==='mEnMaps') verCamposMaps();
   if (t.id==='sFiltro' || t.id==='sCiudad') pintarLeads();
+  if (t.id==='vCiudad' || t.id==='vVer') pintarBandeja();
+  if (t.dataset.bcanal){ const id=t.dataset.bcanal; BT[id]={canal:t.value}; pintarBandeja(); }
+  if (t.dataset.k==='dias') $('#vDias1').textContent = t.value;
   if (t.id==='aCiudades'){ AJ.ciudades = t.value.split('\n').map(x=>x.trim()).filter(Boolean); if(!AJ.ciudades.length) AJ.ciudades=[AJ.ciudad]; save('cc-ajustes',AJ); pintarCiudades(); }
   if (t.dataset.k){ AJ[t.dataset.k] = t.type==='number' ? (+t.value||AJ_DEF[t.dataset.k]) : t.value; save('cc-ajustes',AJ); }
 });
-document.addEventListener('input', e=>{ const t=e.target; if (t.id==='qExtra'||t.id==='qCiudad') pintarMapsLinks(); if (t.dataset.lead && t.dataset.f==='notas'){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(l){ l.notas=t.value; save('cc-leads',LEADS); } } });
+document.addEventListener('input', e=>{ const t=e.target; if (t.dataset.btexto||t.dataset.basunto){ const id=t.dataset.btexto||t.dataset.basunto; BT[id]=Object.assign(BT[id]||{}, t.dataset.btexto?{texto:t.value}:{asunto:t.value}); pintarChequeo(id); } if (t.id==='qExtra'||t.id==='qCiudad') pintarMapsLinks(); if (t.dataset.lead && t.dataset.f==='notas'){ const l=LEADS.find(x=>x.id===t.dataset.lead); if(l){ l.notas=t.value; save('cc-leads',LEADS); } } });
 $('#btnBuscar').onclick = buscar;
 $('#btnOtraCiudad').onclick = ()=>{ $('#fCiudad').hidden=false; $('#btnOtraCiudad').hidden=true; $('#inCiudad').focus(); };
 $('#fCiudad').onsubmit = e=>{ e.preventDefault(); const c=$('#inCiudad').value.trim(); $('#fCiudad').hidden=true; $('#btnOtraCiudad').hidden=false; $('#inCiudad').value='';
@@ -837,8 +955,8 @@ function leerCarga(){
     chk: {enMaps, inet, link}
   };
 }
-$('#btnManual').onclick = ()=> abrirCarga(null);
-$('#zCargar').onclick = ()=>{ abrirCarga(null); const r=$('#zRubro').value; $('#mRubro').value = RUBROS[r] ? r : 'otros'; };
+$('#btnManual').onclick = ()=>{ PEGADO=null; abrirCarga(null); };
+$('#zCargar').onclick = ()=>{ PEGADO=null; abrirCarga(null); const r=$('#zRubro').value; $('#mRubro').value = RUBROS[r] ? r : 'otros'; };
 let zT; $('#zQ').addEventListener('input', ()=>{ clearTimeout(zT); zT=setTimeout(zChips, 600); });
 $('#zQ').addEventListener('keydown', e=>{ if(e.key==='Enter'){ clearTimeout(zT); zChips(); } });
 $('#dlgManual').addEventListener('close', ()=>{
@@ -851,11 +969,356 @@ $('#dlgManual').addEventListener('close', ()=>{
     if (r) RES.sort((a,b)=>b.puntaje-a.puntaje);
     pintarRes(); pintarLeads(); toast('Listo, puntaje actualizado'); return;
   }
-  const p = Object.assign({id:'m:'+Date.now(), fuente:'manual', ciudad: ($('#qCiudad').value.trim()||AJ.ciudad)}, d);
+  const pg = PEGADO; PEGADO = null;
+  if (pg){ if (d.web==='web propia' && pg.web) d.web = pg.web; if (d.social==='redes' && pg.social) d.social = pg.social; }
+  const p = Object.assign({id:'m:'+Date.now(), fuente:'manual', ciudad: (pg&&pg.ciudad) || ($('#qCiudad').value.trim()||AJ.ciudad)}, d, pg?{direccion:pg.direccion, lat:pg.lat, lng:pg.lng, osmUrl:pg.osmUrl}:{});
   Object.assign(p, evaluar(p));
   const l = aLead(p); LEADS.unshift(l); save('cc-leads', LEADS); pintarLeads();
   toast('Guardado en seguimiento'); abrirMensajes(l.id);
 });
+
+/* =========================================================
+   VENTAS — secuencia, bandeja, chequeo antes de enviar,
+   revisión de webs y respuestas sugeridas (ideas de Sellbird)
+   ========================================================= */
+const PASOS = ['Primer mensaje','Recordatorio','Último aviso'];
+const webReal = w => /^https?:/i.test(w||'') && !SOCIAL.test(w) && !MARKET.some(([re])=>re.test(w));
+const mailOk = e => /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(e||'');
+let BT = {}; // textos editados en la bandeja, por local
+
+function bajas(){ return load('cc-bajas', []); }
+function sumarBaja(l){ const b=bajas(); const w=telWa(l.tel); if (w && !b.includes(w)) b.push(w); if (mailOk(l.email) && !b.includes(l.email.toLowerCase())) b.push(l.email.toLowerCase()); save('cc-bajas', b); }
+function pidioBaja(l){ const b=bajas(); return (telWa(l.tel) && b.includes(telWa(l.tel))) || (mailOk(l.email) && b.includes(l.email.toLowerCase())); }
+
+function secuencia(p, paso){
+  const R = infoRubro(p.rubro);
+  if (!paso){ const m=mensajes(p); return {wa:m.whatsapp, asunto:m.asunto, mail:m.mail}; }
+  const ganar = {gastro:'reciba pedidos y reservas directo', turismo:'reciba reservas directo, sin comisión', salud:'le saquen turno sin llamar', belleza:'le saquen turno sin llamar', comercio:'muestre sus productos y le escriban directo'}[p.rubro] || 'aparezca en Google y le escriban directo';
+  const firma = `${AJ.nombre} · ${AJ.marca}`;
+  if (paso===1){
+    const wa = `${T('¡Hola! ¿Cómo va?','¡Hola! Buen día.')} ${T('Te','Le')} escribí hace unos días por ${p.nombre}. ¿${T('Pudiste','Pudo')} verlo?\n\nSi ${T('querés','quiere')}, esta semana ${T('te','le')} armo la prueba con ${T('tu','su')} local para que ${T('veas','vea')} cómo quedaría, sin costo y sin compromiso.\n\n${T('Si no te interesa, decímelo y no te escribo más.','Si no le interesa, avíseme y no le escribo más.')}`;
+    const mail = `${T('Hola','Hola, buen día')}:\n\n${T('Te','Le')} escribí hace unos días por ${p.nombre} y quería saber si ${T('pudiste','pudo')} verlo.\n\nMi propuesta es armar ${R.ofrece}, para que ${p.nombre} ${ganar}. Antes de decidir nada ${T('te','le')} muestro una prueba con ${T('tu','su')} local.\n\n¿${T('Te','Le')} parece que la prepare?\n\n${firma}\n${AJ.tel}\n\n${T('Si no te interesa, decímelo y no te escribo más.','Si no le interesa, avíseme y no le escribo más.')}`;
+    return {wa, asunto:'Re: '+mensajes(p).asunto, mail};
+  }
+  const wa = `${T('Hola','Hola, buen día')}. Este es mi último mensaje para no molestar${T('te','lo')}.\n\nSi en algún momento ${T('querés','quiere')} que ${p.nombre} ${ganar}, ${T('escribime','escríbame')} por acá y lo armamos. Mis trabajos: ${AJ.link}\n\n¡Que ${T('tengas','tenga')} muy buena semana!`;
+  const mail = `${T('Hola','Hola, buen día')}:\n\nEste es mi último mail para no llenar${T('te','le')} la casilla.\n\nSi más adelante ${T('querés','quiere')} que ${p.nombre} ${ganar}, ${T('respondé','responda')} este correo o ${T('escribime','escríbame')} al ${AJ.tel}. Mis trabajos: ${AJ.link}\n\n¡Que ${T('tengas','tenga')} buena semana!\n${firma}`;
+  return {wa, asunto:'Re: '+mensajes(p).asunto, mail};
+}
+function canalDe(l){ return telWa(l.tel) ? 'whatsapp' : mailOk(l.email) ? 'mail' : 'persona'; }
+function itemB(x){
+  const l = datosDe(x), paso = l.paso||0, seq = secuencia(l, paso);
+  const ed = BT[l.id] || {};
+  const canal = ed.canal || canalDe(l);
+  const texto = ed.texto ?? (canal==='mail' ? seq.mail : canal==='whatsapp' ? seq.wa : mensajes(l).persona);
+  const asunto = ed.asunto ?? seq.asunto;
+  return {l, paso, canal, texto, asunto};
+}
+function leerB(id){ const x=LEADS.find(l=>l.id===id); return x ? itemB(x) : null; }
+function enviadosHoy(){ const h=hoy().getTime(); return LEADS.reduce((n,l)=>n+(l.hist||[]).filter(e=>e.env && e.f>=h).length, 0); }
+function chequeo(b){
+  const out=[], l=b.l, txt=b.texto||'';
+  if (b.canal==='whatsapp') out.push(telWa(l.tel) ? {t:'WhatsApp válido: '+l.tel} : {t:'Falta un teléfono válido', c:'bad'});
+  if (b.canal==='mail'){
+    if (!mailOk(l.email)) out.push({t:'Falta un mail válido', c:'bad'});
+    else if (l.emailMx===false) out.push({t:'Ese mail parece no existir (su dominio no recibe correo)', c:'bad'});
+    else out.push({t:'Mail: '+l.email+(l.emailMx?' (verificado)':'')});
+  }
+  if (b.canal==='persona') out.push({t:'Sin teléfono ni mail: este va en persona (guion abajo)', c:'warn'});
+  if (pidioBaja(l) || l.estado==='No interesado') out.push({t:'Pidió que no le escribas', c:'bad'});
+  if (b.canal!=='persona'){
+    if (b.paso<2 && !/no (le|te) (vuelvo a escribir|escribo más)/i.test(txt)) out.push({t:'Falta la frase para darse de baja', c:'bad'});
+    if (/undefined|null|\{|\}/.test(txt)) out.push({t:'Hay un dato vacío en el texto', c:'bad'});
+    const max = b.canal==='whatsapp' ? 900 : 2200;
+    out.push(txt.length>max ? {t:`Muy largo (${txt.length} letras): mejor menos de ${max}`, c:'warn'} : {t:'Largo justo'});
+  }
+  const n=enviadosHoy(), lim=+AJ.limite||20;
+  out.push(n>=lim ? {t:`Ya mandaste ${n} hoy (tu máximo es ${lim})`, c:'warn'} : {t:`Hoy: ${n} de ${lim} mensajes`});
+  const d=new Date(), hr=d.getHours();
+  if (d.getDay()===0 || hr<9 || hr>=21) out.push({t:'Fuera de horario: mejor de lunes a sábado, de 9 a 21', c:'warn'});
+  return out;
+}
+function pintarChequeo(id){ const b=leerB(id), ul=document.getElementById('bc-'+id); if (!b||!ul) return;
+  const c=chequeo(b); ul.innerHTML=c.map(x=>`<li class="${x.c||''}">${esc(x.t)}</li>`).join('');
+  const env=document.getElementById('be-'+id); if (env) env.toggleAttribute('data-bloq', c.some(x=>x.c==='bad'));
+  if (env){ const bloq=c.some(x=>x.c==='bad'); env.classList.toggle('dis', bloq); env.setAttribute('aria-disabled', String(bloq)); env.style.pointerEvents = bloq?'none':''; env.style.opacity = bloq?'.45':''; }
+}
+function enBandeja(l, hasta){ return !['Cliente','No interesado','Respondió','Demo enviada'].includes(l.estado) && (l.paso||0)<3 && (l.proximo||0)<=hasta && !pidioBaja(l); }
+function pintarBandeja(){
+  const h=hoy().getTime()+DIA-1, ver=$('#vVer').value, hasta = ver==='semana' ? h+6*DIA : h;
+  const sel=$('#vCiudad'), prev=sel.value;
+  sel.innerHTML='<option value="">Todas</option>'+listaCiudades().map(c=>`<option value="${esc(claveC(c))}">${esc(corta(c))}</option>`).join('');
+  sel.value=[...sel.options].some(o=>o.value===prev)?prev:'';
+  const lista = LEADS.filter(l=>enBandeja(l, hasta) && (!sel.value || claveC(ciudadDe(l))===sel.value)).sort((a,b)=>(a.proximo||0)-(b.proximo||0) || b.puntaje-a.puntaje);
+  const deHoy = LEADS.filter(l=>enBandeja(l, h)).length;
+  $('#cntBandeja').textContent = deHoy; $('#cntBandeja').hidden = !deHoy;
+  const enSeq = LEADS.filter(l=>(l.paso||0)>0 && (l.paso||0)<3 && enBandeja(l, Infinity)).length;
+  const resp = LEADS.filter(l=>['Respondió','Demo enviada','Cliente'].includes(l.estado)).length;
+  const env = LEADS.filter(l=>(l.paso||0)>0).length;
+  $('#vKpis').innerHTML = `<div><span>Para hoy</span><b>${deHoy}</b></div><div><span>Mandados hoy</span><b>${enviadosHoy()} / ${+AJ.limite||20}</b></div><div><span>En secuencia</span><b>${enSeq}</b></div><div><span>Respondieron</span><b>${resp}</b></div><div><span>Tasa de respuesta</span><b>${env?Math.round(resp/env*100):0}%</b></div><div><span>Pidieron la baja</span><b>${bajas().length}</b></div>`;
+  $('#bandeja').innerHTML = lista.length ? lista.map(x=>{
+    const b=itemB(x), l=b.l;
+    const tienePersona = b.canal==='persona';
+    return `<article class="lead" data-b="${esc(l.id)}">
+      <h3 style="margin:0">${esc(l.nombre)}</h3>
+      <div class="bmeta"><span class="paso-tag">${PASOS[b.paso]} · ${b.paso+1} de 3</span><span>${esc(corta(ciudadDe(l)))} · ${esc(infoRubro(l.rubro).nombre)} · ${l.puntaje} pts${(l.proximo||0)>h?' · el '+fmtFecha(l.proximo):''}</span></div>
+      <div class="row" style="gap:8px"><label class="sub" for="bk-${esc(l.id)}" style="margin:0">Por</label><select id="bk-${esc(l.id)}" data-bcanal="${esc(l.id)}" style="max-width:190px">
+        <option value="whatsapp" ${b.canal==='whatsapp'?'selected':''}>WhatsApp</option><option value="mail" ${b.canal==='mail'?'selected':''}>Mail</option><option value="persona" ${tienePersona?'selected':''}>En persona</option></select></div>
+      ${b.canal==='mail'?`<label class="sr" for="ba-${esc(l.id)}">Asunto</label><input class="bt-asunto" id="ba-${esc(l.id)}" data-basunto="${esc(l.id)}" value="${esc(b.asunto)}">`:''}
+      <label class="sr" for="bt-${esc(l.id)}">Mensaje</label><textarea id="bt-${esc(l.id)}" data-btexto="${esc(l.id)}" style="min-height:${tienePersona?220:150}px">${esc(b.texto)}</textarea>
+      <ul class="chk" id="bc-${esc(l.id)}"></ul>
+      <div class="row">
+        ${b.canal==='whatsapp'?`<a class="btn wa sm" id="be-${esc(l.id)}" data-benviar="${esc(l.id)}" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>`:''}
+        ${b.canal==='mail'?`<a class="btn wa sm" id="be-${esc(l.id)}" data-benviar="${esc(l.id)}" href="#">Abrir en mi correo</a>`:''}
+        ${tienePersona?`<button class="btn pri sm" type="button" data-bhecho="${esc(l.id)}">Ya lo visité</button>`:`<button class="btn sm" type="button" data-bhecho="${esc(l.id)}">Ya lo mandé</button>`}
+        <button class="btn sm" type="button" data-bcopiar="${esc(l.id)}">Copiar</button>
+        <button class="btn sm" type="button" data-bmanana="${esc(l.id)}">Mañana</button>
+        <button class="btn sm" type="button" data-resp="${esc(l.id)}">Pegar su respuesta</button>
+        ${webReal(l.web)?`<button class="btn sm" type="button" data-revisar="${esc(l.id)}">${l.rev?'Volver a revisar su web':'Revisar su web'}</button>`:''}
+      </div>
+    </article>`;
+  }).join('') : `<p class="empty">${LEADS.length?'No hay mensajes pendientes'+(ver==='hoy'?' para hoy':' esta semana')+'. Cargá locales nuevos desde Buscar o Mapa.':'Todavía no tenés locales. Empezá por Buscar o Mapa.'}</p>`;
+  lista.forEach(l=>pintarChequeo(l.id));
+}
+
+/* ---------- revisar la web de un local ---------- */
+async function revisarWeb(id, silencioso){
+  const l = LEADS.find(x=>x.id===id); if (!l) return;
+  const w = datosDe(l).web; if (!webReal(w)) { if(!silencioso) toast('Este local no tiene web propia'); return; }
+  if (!silencioso) toast('Revisando '+l.nombre+'…');
+  try{
+    const r = await fetch('/api/revisar?url='+encodeURIComponent(w)); const j = await r.json();
+    if (!j.ok) throw new Error(j.error||'No se pudo revisar');
+    l.rev = {f:Date.now(), senales:j.senales||[], plataforma:j.plataforma||'', agencia:j.agencia||'', redes:j.redes||[]};
+    const okMail = (j.emails||[]).find(e=>e.mx!==false) || (j.emails||[])[0];
+    if (okMail && !mailOk(l.email)){ l.email = okMail.email; l.emailMx = okMail.mx; }
+    else if (okMail && l.email===okMail.email) l.emailMx = okMail.mx;
+    if (!l.tel){ const t = (j.whatsapp||[])[0] || (j.tels||[])[0]; if (t) l.tel = t; }
+    if (!l.social && (j.redes||[]).length) l.social = j.redes[0];
+    const ev = evaluar(datosDe(l)); l.puntaje=ev.puntaje; l.nivel=ev.nivel; l.faltas=ev.faltas;
+    l.hist.unshift({f:Date.now(), t:'Web revisada: '+((j.senales||[]).filter(x=>x.hot).map(x=>x.t).join(', ')||'sin problemas graves')});
+    save('cc-leads', LEADS); delete BT[id];
+    if (!silencioso){ pintarLeads(); pintarBandeja(); toast(`${l.nombre}: ${(j.senales||[]).filter(x=>x.hot||!x.ok).length} cosas para mejorar${okMail?' · encontré un mail':''}`); }
+    return true;
+  }catch(e){ if(!silencioso) toast(e.message||'No se pudo revisar la web'); return false; }
+}
+$('#btnRevisarTodas').onclick = async ()=>{
+  const pend = LEADS.filter(l=>webReal(datosDe(l).web) && !l.rev && !['Cliente','No interesado'].includes(l.estado)).slice(0,10);
+  if (!pend.length) return toast('No hay webs pendientes de revisar');
+  const b=$('#btnRevisarTodas'); b.disabled=true; let ok=0;
+  for (let i=0;i<pend.length;i++){ b.textContent=`Revisando ${i+1} de ${pend.length}…`; if (await revisarWeb(pend[i].id, true)) ok++; }
+  b.disabled=false; b.textContent='Revisar webs pendientes'; pintarLeads(); pintarBandeja(); toast(`Listo: revisé ${ok} webs`);
+};
+
+/* ---------- respuestas sugeridas ---------- */
+let RESP_ID = null, RESP_TIPO = null;
+const TIPOS = {
+  baja:{n:'Pidió la baja', q:'Lo paso a "No interesado" y no le vuelvo a escribir.'},
+  auto:{n:'Respuesta automática', q:'Es un mensaje automático: esperá la respuesta real. No cambio nada.'},
+  quien:{n:'Pregunta quién sos', q:'Contale quién sos y de dónde sacaste el contacto.'},
+  precio:{n:'Pregunta el precio', q:'Buena señal. No pases precio por mensaje: ofrecé la prueba y un presupuesto cerrado.'},
+  despues:{n:'Más adelante', q:'Lo saco de la secuencia y te lo recuerdo en un mes.'},
+  yatiene:{n:'Ya tiene quien se lo haga', q:'Dejá la puerta abierta sin insistir. Te lo recuerdo en 3 meses.'},
+  interes:{n:'Le interesa', q:'¡Bien! Pedile lo que necesitás para la prueba y poné fecha.'},
+  otro:{n:'Otra cosa', q:'Leela con calma y respondé vos; abajo tenés una base.'}
+};
+function clasificar(txt){
+  const t = ' '+norm(txt).replace(/\s+/g,' ')+' ';
+  const raw = String(txt||'').toLowerCase();
+  if (/no (me |nos )?(escrib|molest|contact|mand)|dar(me)? de baja| baja |no (me|nos) interesa|no gracias|no estamos interesad|no necesit|borr(a|e)(me)? |elimin|spam|bloque/.test(t+raw)) {
+    if (!/(mas adelante|por ahora|ahora no|despues|otro momento)/.test(t) || /no (me |nos )?(escrib|molest|contact)|baja|spam|bloque/.test(t+raw)) return 'baja';
+  }
+  if (/respuesta automatica|mensaje automatico|gracias por comunicarte|gracias por contactarte|en breve (te |le )?respond|fuera (del|de) horario|horario de atencion|te responderemos|le responderemos/.test(t)) return 'auto';
+  if (/quien (sos|es|habla|eres)|de donde (sacaste|saco|tenes|tiene)|como (conseguiste|tenes|tiene|consiguio) (mi|este|el)|quien (te|le) (paso|dio)/.test(t)) return 'quien';
+  if (/cuanto|precio|sale |cuesta|valor|presupuesto|cobras|cobra |costo|tarifa|\$/.test(t+raw)) return 'precio';
+  if (/mas adelante|por ahora|ahora no|despues|otro momento|temporada|el mes que viene|el ano que viene|ocupad|en (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)/.test(t)) return 'despues';
+  if (/ya (tengo|tenemos|cuento|contamos|hay)|tenemos (pagina|web|alguien|quien)|me (la |lo )?hace|nos (la |lo )?hace|mi (sobrin|hij|prim|amig)/.test(t)) return 'yatiene';
+  if (/^\s*(si|sí|dale|ok|okey|bueno|genial|perfecto|claro)\b|me interesa|interesad|mostrame|muestreme|mandame|mande|pasame|quiero|queremos|coordin|cuando (podes|puede)|veamos|charlemos|llamame|llameme|me gustaria/.test(t+' '+raw)) return 'interes';
+  return 'otro';
+}
+function sugerencia(tipo, l){
+  const R=infoRubro(l.rubro), gracias=T('¡Gracias por responder!','¡Muchas gracias por responder!');
+  const pide = {gastro:'la carta con precios, fotos de los platos y del local, horarios y si hacen delivery', turismo:'fotos del lugar, las tarifas o tipos de habitación y cómo toman las reservas hoy', salud:'los servicios que ofrecen, los horarios de atención y si trabajan con obras sociales', belleza:'la lista de servicios con precios, fotos de trabajos y horarios', comercio:'fotos de los productos con precios y los horarios', oficios:'los servicios que hacen, la zona que cubren y fotos de trabajos', deporte:'las actividades, horarios y precios de las cuotas', educacion:'los cursos o niveles, horarios y cómo se inscriben', profesionales:`los servicios, una foto ${T('tuya','suya')} o del estudio y los horarios`}[l.rubro] || 'fotos, lo que ofrecen y los horarios';
+  return {
+    baja: T(`Perfecto, disculpá la molestia. No te escribo más. ¡Que te vaya muy bien con ${l.nombre}!`, `Perfecto, disculpe la molestia. No le escribo más. ¡Que le vaya muy bien con ${l.nombre}!`),
+    auto: '',
+    quien: `${T('¡Hola!','¡Hola! Buen día.')} Soy ${AJ.nombre}, de ${AJ.marca}. Hago páginas y apps para negocios de ${corta(ciudadDe(l))} y la zona. Encontré ${T('tu','su')} contacto en la ficha pública de ${l.nombre}. Acá ${T('podés','puede')} ver mis trabajos: ${AJ.link}\n\n${T('Si preferís que no te escriba, avisame y listo.','Si prefiere que no le escriba, avíseme y listo.')}`,
+    precio: `${gracias} El precio depende de lo que ${T('necesites','necesite')}. Para ${l.nombre} lo que más sirve es ${R.ofrece}.\n\n${T('Te','Le')} propongo esto: ${T('te','le')} armo una prueba con ${T('tu','su')} local y ${T('te','le')} paso un presupuesto cerrado, sin compromiso. ¿Qué día ${T('te','le')} queda cómodo que ${T('te','se')} la muestre?`,
+    despues: T(`¡Dale, sin problema! Te escribo más adelante. Si antes lo querés ver, escribime cuando quieras.`, `¡Perfecto, sin problema! Le escribo más adelante. Si antes lo quiere ver, escríbame cuando quiera.`),
+    yatiene: T(`¡Qué bueno! Entonces no te molesto. Si algún día querés una segunda opinión o sumar algo, acá estoy. ¡Éxitos!`, `¡Qué bueno! Entonces no lo molesto. Si algún día quiere una segunda opinión o sumar algo, acá estoy. ¡Éxitos!`),
+    interes: `¡Buenísimo! Para armar la prueba de ${l.nombre} ${T('necesito','necesitaría')} ${pide}. ${T('Mandámelo','Me lo puede mandar')} por acá cuando ${T('puedas','pueda')}, aunque sea de a poco.\n\nCon eso en 2 o 3 días ${T('te','le')} muestro cómo quedaría. ¿${T('Te','Le')} parece bien?`,
+    otro: `${gracias} `
+  }[tipo];
+}
+function abrirResp(id){
+  const l = LEADS.find(x=>x.id===id) || (guardar(id,true)); if (!l) return;
+  RESP_ID = l.id; $('#rTexto').value=''; $('#rOut').hidden=true; $('#rSub').textContent = l.nombre+' · '+corta(ciudadDe(l));
+  $('#dlgResp').showModal(); $('#rTexto').focus();
+}
+$('#rClose').onclick = ()=>$('#dlgResp').close();
+$('#rAnalizar').onclick = ()=>{
+  const l = LEADS.find(x=>x.id===RESP_ID); const txt=$('#rTexto').value.trim(); if (!l || !txt) return toast('Pegá lo que te respondió');
+  const tipo = clasificar(txt); RESP_TIPO = tipo; const d = datosDe(l);
+  $('#rTipo').textContent = TIPOS[tipo].n; $('#rTipo').className = 'tipo'+(tipo==='baja'?' baja':''); $('#rQue').textContent = TIPOS[tipo].q;
+  $('#rSug').value = sugerencia(tipo, d); $('#rSug').parentElement.hidden=false;
+  const w = telWa(d.tel);
+  $('#rActs').innerHTML = (tipo==='auto' ? '' : (w?`<a class="btn wa" id="rWa" href="#" target="_blank" rel="noopener">Responder por WhatsApp</a>`:'') + `<button class="btn" type="button" id="rCopiar">Copiar</button>`) + `<button class="btn pri" type="button" id="rGuardar">${tipo==='auto'?'Anotar y cerrar':'Guardar y cerrar'}</button>`;
+  $('#rOut').hidden=false;
+  const wa=$('#rWa'); if (wa) wa.onclick=()=>{ wa.href=`https://wa.me/${w}?text=${encodeURIComponent($('#rSug').value)}`; aplicarResp(true); };
+  const cp=$('#rCopiar'); if (cp) cp.onclick=()=>navigator.clipboard.writeText($('#rSug').value).then(()=>toast('Copiado'),()=>{});
+  $('#rGuardar').onclick=()=>aplicarResp(false);
+};
+function aplicarResp(respondido){
+  const l = LEADS.find(x=>x.id===RESP_ID); if (!l) return; const tipo=RESP_TIPO, h=hoy().getTime();
+  const nota = $('#rTexto').value.trim().slice(0,300);
+  l.hist.unshift({f:Date.now(), t:`Respondió (${TIPOS[tipo].n}): "${nota.slice(0,80)}${nota.length>80?'…':''}"`});
+  if (tipo==='baja'){ l.estado='No interesado'; l.proximo=null; sumarBaja(l); }
+  else if (tipo==='despues'){ l.estado='Contactado'; l.paso=3; l.proximo=h+30*DIA; }
+  else if (tipo==='yatiene'){ l.estado='No interesado'; l.proximo=h+90*DIA; }
+  else if (tipo!=='auto'){ l.estado='Respondió'; l.proximo=h+2*DIA; }
+  if (respondido && tipo!=='auto') l.hist.unshift({f:Date.now(), t:'Le contestaste por WhatsApp'});
+  l.notas = (l.notas?l.notas+'\n':'') + fmtFecha(Date.now())+': '+nota;
+  save('cc-leads', LEADS); delete BT[l.id];
+  setTimeout(()=>$('#dlgResp').close(), respondido?400:0);
+  pintarLeads(); pintarBandeja(); toast(tipo==='baja'?'Listo, no le vas a volver a escribir':'Guardado');
+}
+
+/* ---------- pegar un local copiado de Google Maps ---------- */
+let PEGADO = null;
+function leerPegado(txt){
+  const urls = (txt.match(/https?:\/\/\S+/g)||[]).map(u=>u.replace(/[)\].,]+$/,''));
+  const lineas = txt.replace(/https?:\/\/\S+/g,'').split(/\n|\r/).map(x=>x.trim()).filter(Boolean)
+    .filter(x=>!/^(compartir|share|ver en google maps|abrir en maps|cómo llegar|como llegar)$/i.test(x));
+  const out = {link: urls.find(u=>/google\.[^/]+\/maps|maps\.app\.goo\.gl|goo\.gl\/maps|maps\.google\./i.test(u)) || '', web: urls.find(u=>!/google\.|goo\.gl/i.test(u)) || ''};
+  const rv = txt.match(/(\d[.,]\d)\s*(?:★|estrellas?)?\s*\(\s*([\d.]+)\s*\)/i);
+  if (rv){ out.rating = parseFloat(rv[1].replace(',','.')); out.resenas = parseInt(rv[2].replace(/\./g,'')); }
+  const limp = lineas.filter(x=>!/^\d[.,]\d\s*(★|\(|estrellas?)/i.test(x) && !/^\(\d+\)$/.test(x));
+  if (limp.length){ out.nombre = limp[0].replace(/^["“]|["”]$/g,'').slice(0,90); }
+  const dir = limp.slice(1).find(x=>/\d/.test(x) && /,/.test(x)) || limp.slice(1).find(x=>/,/.test(x));
+  if (dir) out.direccion = dir;
+  const sinUrl = lineas.join('\n');
+  const tel = sinUrl.match(/(?:\+?54\s?9?\s?)?\(?0?\d{2,4}\)?[\s-]?\d{3,4}[\s-]?\d{4}/); if (tel && !/\d{4}-\d{2}-\d{2}/.test(tel[0])) out.tel = tel[0].trim();
+  if (out.link) Object.assign(out, desdeUrlMaps(out.link), out.nombre?{nombre:out.nombre}:{});
+  return out;
+}
+function desdeUrlMaps(u){
+  const o={};
+  try{ const url=new URL(u);
+    const m=url.pathname.match(/\/maps\/place\/([^/]+)/); if (m) o.nombre=decodeURIComponent(m[1].replace(/\+/g,' ')).trim();
+    const q=url.searchParams.get('q')||url.searchParams.get('query'); if (!o.nombre && q && !/^-?\d/.test(q)) o.nombre=q.split(',')[0].trim();
+  }catch(e){}
+  const c=u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); if (c){ o.lat=+c[1]; o.lng=+c[2]; }
+  return o;
+}
+function ciudadDeTexto(txt){
+  const seg = String(txt||'').split(/,|\n/).map(x=>x.trim()).filter(Boolean);
+  const cp = seg.find(x=>/^[A-Z]?\d{4}[A-Z]{0,3}\s+\S/.test(x));
+  const base = cp ? cp.replace(/^[A-Z]?\d{4}[A-Z]{0,3}\s+/,'') : (seg.length>=3 ? seg.slice(0,-2).join(' ') : seg.join(' '));
+  const n = ' '+norm(base)+' ';
+  const c = (AJ.ciudades||[]).find(x=>{ const k=norm(corta(x)); return k && n.includes(' '+k+' '); });
+  return c || null;
+}
+async function buscarEnOSM(nombre, lat, lng){
+  const pal = norm(nombre).split(' ').filter(w=>w.length>2).slice(0,3);
+  if (!pal.length) return null;
+  const VOC = {a:'[aáàäâ]', e:'[eéèëê]', i:'[iíìïî]', o:'[oóòöô]', u:'[uúùüû]', n:'[nñ]'};
+  const rx = pal.map(w=>w.replace(/[^a-z0-9]/g,'').split('').map(ch=>VOC[ch]||ch).join('')).filter(Boolean).join('.*');
+  const area = (typeof lat==='number') ? `around:400,${lat},${lng}` : null;
+  let geo = null; if (!area){ try{ geo = await geocodificar($('#qCiudad').value||AJ.ciudad); }catch(e){ return null; } }
+  const filtro = area || `around:9000,${geo.lat},${geo.lng}`;
+  const q = `[out:json][timeout:15];nwr(${filtro})["name"~"${rx}",i];out center tags 15;`;
+  try{
+    const r = await fetch('https://overpass-api.de/api/interpreter',{method:'POST', body:'data='+encodeURIComponent(q), headers:{'Content-Type':'application/x-www-form-urlencoded'}});
+    if (!r.ok) return null; const j = await r.json();
+    const best = (j.elements||[]).map(e=>({e, s:parecido(nombre, (e.tags||{}).name)})).sort((a,b)=>b.s-a.s)[0];
+    if (!best || best.s<0.6) return null; const t=best.e.tags||{};
+    return {tel:t.phone||t['contact:phone']||t['contact:mobile']||t['contact:whatsapp']||'', web:t.website||t['contact:website']||'', email:t.email||t['contact:email']||'',
+      social:t['contact:instagram']||t['contact:facebook']||'', rubro:rubroDe('', t, ''), osmUrl:'https://www.openstreetmap.org/'+best.e.type+'/'+best.e.id};
+  }catch(e){ return null; }
+}
+function abrirPegar(){ $('#pTexto').value=''; $('#pResenas').value=''; $('#pRating').value=''; $('#pSt').textContent=''; $('#dlgPegar').showModal(); $('#pTexto').focus(); }
+$('#btnPegar').onclick = abrirPegar; $('#zPegar').onclick = abrirPegar;
+$('#pClose').onclick = ()=>$('#dlgPegar').close();
+$('#pLeer').onclick = async ()=>{ try{ $('#pTexto').value = await navigator.clipboard.readText(); }catch(e){ toast('Mantené apretado el cuadro y tocá Pegar'); } };
+$('#pOk').onclick = async ()=>{
+  const txt = $('#pTexto').value.trim(); if (!txt) return toast('Pegá lo que copiaste de Maps');
+  const pSt = (m,c='')=>{ $('#pSt').textContent=m; $('#pSt').className='status '+c; };
+  const b=$('#pOk'); b.disabled=true;
+  try{
+    let d = leerPegado(txt);
+    if (d.link && (!d.nombre || typeof d.lat!=='number') && /goo\.gl|g\.co/i.test(d.link)){
+      pSt('Abriendo el enlace de Maps…');
+      try{ const r=await fetch('/api/maps-link?u='+encodeURIComponent(d.link)); const j=await r.json(); if (j.ok){ const x=desdeUrlMaps(j.url); d = Object.assign({}, x, d, {nombre:d.nombre||x.nombre, lat:d.lat??x.lat, lng:d.lng??x.lng}); } }catch(e){}
+    }
+    if (!d.nombre) { pSt('No encontré el nombre del local. Copiá también el nombre y probá de nuevo.','err'); return; }
+    pSt('Buscando teléfono y web en OpenStreetMap…');
+    const o = await buscarEnOSM(d.nombre, d.lat, d.lng);
+    const ciudad = ciudadDeTexto((d.direccion||'')+' '+txt) || ($('#qCiudad').value || AJ.ciudad);
+    PEGADO = {direccion:d.direccion||'', lat:d.lat, lng:d.lng, ciudad, web:(o&&o.web)||d.web||'', social:(o&&o.social)||'', osmUrl:o&&o.osmUrl};
+    $('#dlgPegar').close();
+    abrirCarga(null);
+    $('#mNombre').value = d.nombre;
+    const zr = $('#v-mapa').classList.contains('on') ? $('#zRubro').value : $('#qRubro').value;
+    $('#mRubro').value = (o && RUBROS[o.rubro]) ? o.rubro : (RUBROS[zr] ? zr : 'otros');
+    $('#mTel').value = (o&&o.tel) || d.tel || '';
+    $('#mMail').value = (o&&o.email) || '';
+    $('#mEnMaps').value = 'si'; verCamposMaps();
+    const res = $('#pResenas').value || d.resenas, rat = $('#pRating').value || d.rating;
+    if (res) $('#mResenas').value = res; if (rat) $('#mRating').value = rat;
+    const web = PEGADO.web;
+    $('#mInternet').value = web ? (MARKET.some(([re])=>re.test(web)) ? 'market' : SOCIAL.test(web) ? 'redes' : 'web') : (PEGADO.social ? 'redes' : 'nada');
+    $('#mLink').value = d.link || web || '';
+    $('#mNotas').value = d.direccion || '';
+    $('#mTitulo').textContent = 'Revisá y guardá';
+    toast(o ? 'Datos completados (con OpenStreetMap)' : 'Datos completados. Revisá teléfono y web en Maps');
+  } finally { b.disabled=false; }
+};
+
+/* ---------- puente con Sellbird ---------- */
+$('#btnSbExport').onclick = ()=>{
+  const locales = LEADS.filter(l=>!['Cliente','No interesado'].includes(l.estado) && !pidioBaja(l)).map(x=>{ const l=datosDe(x);
+    return {id:l.id, nombre:l.nombre, web:webReal(l.web)?l.web:'', tel:l.tel||'', ciudad:ciudadDe(l), rubro:infoRubro(l.rubro).nombre, hallazgo:hallazgo(l), notas:l.notas||'', maps:l.maps||''}; });
+  if (!locales.length) return toast('No hay locales para exportar');
+  const blob=new Blob([JSON.stringify({version:1, origen:'Cazaclientes', locales},null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cazaclientes-para-sellbird.json'; a.click(); URL.revokeObjectURL(a.href);
+  toast(locales.length+' locales exportados ('+locales.filter(x=>x.web).length+' con web)');
+};
+function leerCsv(txt){
+  const filas=[]; let f=[], c='', q=false;
+  for (let i=0;i<txt.length;i++){ const ch=txt[i];
+    if (q){ if (ch==='"'){ if (txt[i+1]==='"'){ c+='"'; i++; } else q=false; } else c+=ch; }
+    else if (ch==='"') q=true; else if (ch===','){ f.push(c); c=''; } else if (ch==='\n'||ch==='\r'){ if (ch==='\r'&&txt[i+1]==='\n') i++; f.push(c); filas.push(f); f=[]; c=''; } else c+=ch; }
+  if (c||f.length){ f.push(c); filas.push(f); }
+  const cab = (filas.shift()||[]).map(x=>x.trim().replace(/^﻿/,''));
+  return filas.filter(r=>r.some(Boolean)).map(r=>Object.fromEntries(cab.map((k,i)=>[k, (r[i]||'').trim()])));
+}
+$('#inSb').onchange = async e=>{
+  const file=e.target.files[0]; if(!file) return; e.target.value='';
+  let filas; try{ filas = leerCsv(await file.text()); }catch(_){ return toast('No pude leer ese archivo'); }
+  if (!filas.length || !('company_name' in filas[0])) return toast('Ese no parece el prospects.csv de Sellbird');
+  const dom = w => { try{ return new URL(/^https?:/.test(w)?w:'https://'+w).hostname.replace(/^www\./,''); }catch(_){ return ''; } };
+  let act=0, nue=0, baj=0;
+  filas.forEach(r=>{
+    const d = dom(r.website||'');
+    let l = LEADS.find(x=>(d && dom(datosDe(x).web||'')===d) || parecido(x.nombre, r.company_name)>=0.85);
+    if (!l){
+      const p = {id:'s:'+(d||norm(r.company_name).replace(/\s/g,'-')), fuente:'sellbird', nombre:r.company_name, web:r.website||'', email:'', rubro:rubroDe(r.industry||'', null, 'otros'), ciudad:$('#qCiudad').value||AJ.ciudad};
+      if (LEADS.some(x=>x.id===p.id)) return;
+      Object.assign(p, evaluar(p)); l = aLead(p); LEADS.push(l); nue++;
+    } else act++;
+    const ok = ['verified','risky'].includes((r.email_status||'').toLowerCase());
+    if (r.email && ok){ l.email = r.email; l.emailMx = (r.email_status||'').toLowerCase()==='verified' ? true : undefined; }
+    const quien = [r.first_name, r.last_name].filter(Boolean).join(' ');
+    if (quien && !(l.notas||'').includes(quien)) l.notas = (l.notas?l.notas+'\n':'') + 'Contacto (Sellbird): '+quien+(r.title?' — '+r.title:'');
+    const stt = (r.status||'').toLowerCase();
+    if (stt==='opted_out'){ l.estado='No interesado'; l.proximo=null; sumarBaja(l); baj++; }
+    else if (['replied','meeting'].includes(stt) && !['Cliente','Demo enviada'].includes(l.estado)) l.estado='Respondió';
+    else if (stt==='contacted' && l.estado==='Por contactar'){ l.estado='Contactado'; l.paso=Math.max(l.paso||0,1); }
+    else if (stt==='closed') l.estado='Cliente';
+    l.hist.unshift({f:Date.now(), t:'Datos de Sellbird'+(r.email&&ok?': mail '+r.email:'')+(stt?' · estado '+stt:'')});
+  });
+  save('cc-leads', LEADS); pintarLeads(); pintarBandeja();
+  toast(`Sellbird: ${act} actualizados, ${nue} nuevos${baj?', '+baj+' bajas':''}`);
+};
 
 /* ---------- inicio ---------- */
 const opts = ['<option value="todos">Todos los rubros</option>'].concat(Object.entries(RUBROS).map(([k,r])=>`<option value="${k}">${r.nombre}</option>`)).join('');
@@ -865,7 +1328,8 @@ $('#mRubro').innerHTML = Object.entries(RUBROS).map(([k,r])=>`<option value="${k
 if (!Array.isArray(AJ.ciudades) || !AJ.ciudades.length) AJ.ciudades = AJ_DEF.ciudades.slice();
 $('#qCiudad').value = AJ.ciudad; $('#aCiudades').value = AJ.ciudades.join('\n'); pintarCiudades();
 document.querySelectorAll('[data-k]').forEach(i=>{ i.value = AJ[i.dataset.k] ?? ''; });
-pintarCupo(); pintarMapsLinks(); pintarLeads();
+$('#vDias1').textContent = +AJ.dias||3;
+pintarCupo(); pintarMapsLinks(); pintarLeads(); pintarBandeja();
 </script>
 </body>
 </html>

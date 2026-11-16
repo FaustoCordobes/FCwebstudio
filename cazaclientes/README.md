@@ -16,6 +16,13 @@ Herramienta interna para encontrar locales sin presencia online, armar el mensaj
    Un local con muchas reseñas y sin web suma extra: tiene clientes y le falta la página.
 3. **Arma los mensajes según el rubro y lo que le falta**: WhatsApp (se abre con el texto listo), mail (asunto y cuerpo) y un guion para la visita en persona, con respuestas a las objeciones típicas. No incluye precios. Siempre lleva una línea para que el local pueda pedir que no le escribas más.
 4. **Seguimiento**: estado de cada local (por contactar, contactado, respondió, demo enviada, cliente, no interesado), fecha para volver a escribir, notas, historial y un resumen con la tasa de cierre. Se descarga en Excel (CSV) y se puede hacer copia de seguridad.
+5. **Pegar local de Maps**: en Google Maps tocás Compartir → Copiar y lo pegás. Completa nombre, dirección, enlace y ciudad, y busca teléfono y web en OpenStreetMap (`api/maps-link.js` abre los enlaces cortos de Maps).
+6. **Ventas** (ideas de Sellbird, en español y con WhatsApp):
+   - Bandeja del día con secuencia de 3 mensajes (primero, recordatorio y último aviso). Si el local responde o pide la baja, se corta.
+   - Chequeo antes de enviar: contacto válido, frase de baja, largo, datos vacíos, máximo diario y horario.
+   - Revisar la web del local (`api/revisar.js`): si no se adapta al celular, carta en PDF, sin reservas, web vieja, sin WhatsApp, quién la hizo, y mails de contacto con verificación del dominio. El mensaje usa lo que encontró.
+   - Respuestas sugeridas: pegás lo que contestó y detecta si pidió la baja, pregunta el precio, le interesa, más adelante, ya tiene quien se lo haga o es automática.
+   - Puente con Sellbird para campañas de mail desde la PC: exporta los locales, `sellbird_puente.py` los carga en Sellbird y después se importa su `prospects.csv`.
 
 ## Publicarlo en Vercel
 
