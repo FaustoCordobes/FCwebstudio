@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>F-C Web Studio — Páginas web, apps y sistemas a medida para tu negocio</title>
-<meta name="description" content="Páginas web, turnos y reservas online, pedidos con Mercado Pago, stock y caja, facturación ARCA y bots de WhatsApp para comercios, gastronomía, turismo, salud y cooperativas. Sin comisión por venta y con soporte local en San Martín de los Andes, Patagonia.">
+<title>F-C Web Studio — Páginas web y sistemas para negocios de San Martín de los Andes</title>
+<meta name="description" content="Fausto Cordobes, de San Martín de los Andes: cartas digitales, páginas web, turnos y reservas online para negocios de la zona. Presupuesto cerrado en 24 h, prueba sin compromiso y soporte en persona.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"F-C Web Studio","url":"https://f-cwebstudio.vercel.app/","image":"https://f-cwebstudio.vercel.app/og.jpg","telephone":"+54 9 2944 242906","founder":{"@type":"Person","name":"Fausto Cordobes"},"address":{"@type":"PostalAddress","addressLocality":"San Martín de los Andes","addressRegion":"Neuquén","addressCountry":"AR"},"areaServed":["San Martín de los Andes","Junín de los Andes","Villa La Angostura","San Carlos de Bariloche"],"description":"Páginas web, cartas digitales y sistemas de turnos, reservas y pedidos para negocios de la Patagonia.","sameAs":["https://github.com/FaustoCordobes"]}</script>
 <link rel="icon" href="logo.png">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_AR">
@@ -297,6 +298,29 @@
   .work-card.is-soon{ cursor:default; }
   .work-card.is-soon:hover{ transform:none; box-shadow:none; border-color:var(--line); }
 
+  .work-badge{ display:inline-block; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:5px 9px; border-radius:20px; margin:0 6px 14px 0; vertical-align:top; }
+  .work-badge.real{ background:rgba(127,194,166,.16); color:#8FD1B4; }
+  .work-badge.demo{ background:rgba(250,247,240,.08); color:var(--ink-dim); }
+  .works-sub{ margin:64px 0 8px; font-family:'Fraunces',serif; font-size:22px; }
+  .works-sub + p{ color:var(--ink-dim); margin:0 0 26px; max-width:60ch; }
+  .works.personales .work-card{ opacity:.92; }
+  .confianza{ display:flex; flex-wrap:wrap; gap:8px 18px; margin:22px 0 0; padding:0; list-style:none; font-size:14px; color:var(--ink-dim); }
+  .confianza li{ display:flex; align-items:center; gap:8px; }
+  .confianza li::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:none; }
+  /* preguntas frecuentes */
+  .faq{ display:grid; gap:12px; max-width:860px; }
+  .faq details{ background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:0 22px; }
+  .faq details[open]{ border-color:var(--line-strong); }
+  .faq summary{ cursor:pointer; list-style:none; font-weight:600; font-size:16.5px; padding:19px 34px 19px 0; position:relative; }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:"+"; position:absolute; right:0; top:50%; transform:translateY(-50%); font-size:22px; color:var(--accent); font-weight:400; }
+  .faq details[open] summary::after{ content:"–"; }
+  .faq details p{ margin:0 0 20px; color:var(--ink-dim); font-size:15px; max-width:70ch; }
+  .testimonios{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px; }
+  .testimonio{ background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:24px; margin:0; }
+  .testimonio blockquote{ margin:0 0 14px; font-family:'Fraunces',serif; font-size:18px; line-height:1.45; }
+  .testimonio figcaption{ color:var(--ink-dim); font-size:14px; }
+
   /* ---------- Sistemas (adelanto del catálogo) ---------- */
   .sys-grid{ display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 20px; }
   .sys-card{
@@ -407,14 +431,14 @@
   <div class="wrap nav">
     <a class="brand" href="#top">
       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG0AAABwCAYAAAAUsP4TAAAidUlEQVR4nO2de9i31ZTHP8/hTclbykhFB6WpUCmHpjITOuk4hRxzyjk5FHMNM+QUY5ByiFBChJCmGUJEp0HFq+RYKlI66vBS6jnNH9+9nr3u9Vv7vn/vG//M1b6u59q/e9/73qe111rfvfba+5lY/serJ6lhgW6YcOkTIU98jt+1yvJhIeSdoFvXUN2x/lhv9jwUYv2ttFh/1mdf54qOUzbOEwDTQxncuxaxsgHM8mb5fV1Zp7K0VojltiaJvWtNlPhu3DaNk56NaUZUPyYxz8Q0oyH7uK8C/5x1uJXX5+/rhB/USFwvJSZCHDsc657v6UPfQEYi941LXxiSArHuxTzTjYYtND6KFWQcNM6Mj6ElJvzA+785NOhx4FcmTJW/hUZ5QwRp9W8c1eInQB93W1iAKh6z2TnO7B9quC8ri2NZsZypEs8mZa8FbAisA6wLPABYCqwBrAbcBxH3L8CdwB3A7cD1wB9KfDXw55LPwmRpxzyjXLeQpPl2902+IVE7NudFnZZVlqWNIx79uyEl7sNkSTduAlgV2BjYGtgB+Efg0Y0yVyTcCfwI+A5wLvBLRNA5al888eJEbgGmLK0p7pLnTAQvvp9Y/serh9g7hj7F2gpRVMT8UyV91r1bCjwOeA6wJ+ImH24Bfgz8FLgSDfYfgVsRV82WcqcR160JPAh4MLAFsB2aBFOh3F8CrwbOLO+WAnchAvsxGUdsjgu++iTZCAdOhxd9M6eF7lrKOebLggEJE39TwG7AyxCh7uPyfhv4JnAJItJvgbsb5Y4blgIbAZuhCfIURFDj8EcBZyAR+jTElYYD+qQLjTRLHxKVLZyhCt06bUhHjcNhfRwVZ6kBigU0+18OvARxA4hjTkIz/kLguqRNU3QRpImy+JwhywzITAHrATegCfFZxOkAbwTejYg2W+qdcuX0qZMYxhm/5jc2azI47UMLnAytMVoye76kbQm8BnGWhc8BpwDfoMtJ02ig/GAvoAHsQ2p9qMxAhxF+Dri2lL81lWA+rAPsDHwVgRybOJmoy9LGEbG92GC6p8AsZBC1VXkL+s8BDwFejwgGGqjjgQ8CN7v8HigZsTIi9OnULF9Mm3PvlqDJ8oJQzqolXgs4Gem+w5EkmC1tzdoXJ082RnF509t+P0MssaWPsndDs8rSJtHALEFcdTUi2I1ocDYE3oKAhIEHE5+GIrP6rb5xCJjpjAVG23k38DDgsPC9AZabkLjeAvh6+duaqpeNe337sna2+hGJF/s94fVZVmgGRTOwEnWGBevAHLAt8APguPL8cgQCPl3KWUKdRPOuPP/nO9gKfWh4iLj2/t963t0M7AgcgCTEbsDFwNuAVVDf/LhmEz0b54We95ZnArpK3H/Y16Gs8kyXeCX9NgTPt0FicEPgYwhKmwj0ImqBUS5otcPX72dq7Fc2KL6sKcQt2wMvTOowTpsofToNeCTw1pJ+BHAB8HDqcqPFBDHEsfTcNvJu0n1E+N2CtNnvyNY2AJsC3y8dug7YFSHE68iJFdvg68nkfSZKYmgBJq+fjRAAH0jKgEo0+2YJcBuakNuh5cBWwM+QCpihgpyWaI/9sHb1Bi9/M7ZsiZPWb2vkDLAX8As0c08GHoEsD0uoIjNrfAxZGyapkHuqkbcVMiBgUuHQ0t4s+Alu4MWItwz4JyrBjwM+7Mo1rhuX83zbooSYiECEkME+akH32KkJxGGHA19D3HQIgs63lWdvnhpqaHxnkH82/LXKysSlL3+BOskeAXyopJ/b6J//3v7mEFHuAl4LPKvkeSVamK9NXZb4eidCWoY2M+S5MEnesT590qfb5oCjgaOA5Uhhf5RqRYgAYyhY2/w6aj3gwFLHUcAT6bf2t8AMpdxZ4H7Al0vaUeUZtGbsK9eCodslwBeAxyBk/CTgu8D6VOK22jfusmVR3g6hsyGAYgT5NJptv0Iz9/uMrl/6Gp3JdlsurAa8EyG2UxA3Hw6chZYL87SBVawv/j4OQfjTgfMR0jWTmYWhbSDjummk37ZF+m0rhJo3oFpSWhLA2hTb2BkXXwC0OasPABjBTgaeh9YwO6C1WCRYCxVmYtc4bA7ZAH9GheJHoVn8ovL8VmAn6qAMBW+g/jAS35cj0XZQyfNZtJUTQ0vU2m8j3DVoN+JCRLBzkZSIbYxisAVKFsVnptMy6rdksKGujwLPBP4X2ANZ4I1ghPyx3JaeNBvfE5Ci3wjZIs2acg7wScR9IK7z5fStd0zHnIB0zxVooq2FjMYLaBIudd/FvhCe/d88EpW3IMP3D0v7zyh1tCZXXIqkgC9C/nFEpDXMuOBNaKF8GbB/aegUFR1GqJ6xf3yeQuBge6QTAP4FcfK1aEBMP5xU4qcga70NSDYZbdLtAFwEHAycDTweWTqM8Mejgfe7DNafEXHFqOSAatq6GS3Er0Dr1M9RdXzfuDdBWVy5t8RYHFhT4M8D3oG2Lp6MlK9xWBR1GRrKOmxia1O0RABxw/uoRuNZKuT+DVX37J102Mq2iXQskgjbIC7dFe3FrY6kBcAXQzuha6SO5Wf1GcdNl/J3R+J2T+A/6Y5Rn3qKYWIyZOjjNN/gWYSQPl3S90Izycw4QxVbeiSe1TGFxNPqSF99BHGX6ccJl28WmZEobWrVa+V/EyHcLZGUsHy7IpS3DHEfoS9/Sdoay86C2Vx/gyQRiKMPoiLKOMGz3x2d5jNE/ZIRcg64P3Cqa8A5pWGzNGbHQGy/bR32brQp+T/I4mDruxaQsXXVo+mK5sgBkwghHo6s9F7v/muJP0Fd+/n22TaRlzxDot7aOIvG57toXw6kTzehPWZNZJmZseyD1joNZDfcABHuaOqg+k75cmJDsnQTezsgoLEc6cpWB3z6hSXeAil6z4243wulratQdeIcmiA7lOevu/b7SX1nT/2t4MfVUOW7kd1yFeAzrpxsQmcqpmnGyjIb8Hg28HSkv16ZND7TU33w3iOuCapV4mUINi9hmGjXuLSNkj7Eembo6hSzYnwMuTGsymj4i/ud6WefHqVWHJNXIYCyE+J6M3Vl5Y0QL0NZGaw3LlgXLURBXGCG37jwHNKNsRNmo3sWEnFnAp+ny8G+PbHMO5CZDKq7QiuvvTOEugEyCICsGT544t3RaEecfD7NE9YvBX6PzHugNeeWpS1DLvoT0L8QjWgRBAqWos6dShspdiphdOCiXphBoOM9rh6ftyXfLZ4D/lSebW3VBxa8ONqrxL9CutEkCsB93Te3MRpaa8w+FGhi8hTksgBCk1k5mcQbQY8ZhLVB3Z7qy/HmUBDh25ZOzIK1YT/k4HMGguTGfTG0iGHiZabnG98mWzJYn46iojnLs5orw8RjBtiy9D5AZsEsPPui5Yrtw8V2d/ridZqf/RkUf3uJ34BMPlHXZCKxD+5bsFlt6O0DSRlZG32YpBp5/+jSWyLGUOqeyEa4nDrrvdntAe7b5Y32x7Kt3oVGPqtjCUKwR5a0d1InaqusjnhsKVbr3JPR4vBmBImt4tiB+LvFbR7czKO9qG2QrD8vlO9D1BUW1qAS7fcuzwTtyQgVgHwNWUSMyyzfQ10dtybtydoyhJYt9puut6L+H0RX3WRqJ3X9yjK+rsRvQzM5HtzIOtKS9xmn7FniLyHrypLY0PAcZ7IN7i3I+hDb4L+dQGJofaqL3IfcOxD3r47WUaC9spsabYlpEZD0idIlpdx3lPTDSuytLxYW6ROBSMw0h3z8dkWK+NOu0BbU9aHVaAumVw4oz9F8FLk1E4sg6AzyQ/kzXX+OWJ59c3B5voBch65DFY9Xownh+2MhQ4p9Ot0T01TD8UiKbQM8lVFw1yk302lRFtsC9zhkO4tn2uLsysRRRgTj8m2AzdGg/KLkizMtK8vn27HEF7v88XtLMwvEgeX5S+EbI+qGrp5LGN3EzCZUBvstZERcQON5OzLbAbwi1DESvEUkdtScSs2IekyJvS6LSDM+x4qzQbQB/1lpfGYPzQhmkuC+yLEGqs0w5rXfNlF2Rr6KdwEnun75bzZ2v3/q6vRc1AIakUAtNOnbdkyJd0GWHXPFi2qrIx59Qyz9xSU+HS2kp5K8JL9jyJCgha1LfEWJW2vH+K3l2xZZQW5Du9jQRWDZpDHdcTISS9mJWM9pl7vvW+X26XjIJ5FNgmnU//8u6YeGbzuEawER6/T+Je3k7OPGt1mj+hr+4BJf1igjfhMH7YUlPhEtsKfDt/6bOWTV2b28/5LL5+uGLnL8ddKmlm6LoS89lnNKifdE1pjUmDwdEn3nHon0za3I2u4bHSuNgGNo1vmyTNlfH961Omt1zCACPLekWYezb02HgkDPqsgCcmZorx/ET1LdBJaRDzL0T8wsXxwvqCrndCQxNkHGjLPpMtECCXrEdc58JU5HiMz7e2RwOuqfrANRpEyhNRZ0DbJ9nOwJ8AxkLf82ciKKttRMepgF5CTq7rLPb+Wfh1y+3053xkfQlU3aWF5fvyzNAIl5hT2TPHQMxla5wdAnl/jM8FGcxVG+Z88jFbt3tibL3MviNzagM8ADqdaE95U49sfr6HngsUh6gAhNkt9+20EQc65dEb2V6fpxw7dKvDuakCMTJlunzSM9YwDhXPfOx75xsYzIbfHPvp2lejytk+TP6rDnVyIryFloN9qbgHw+P3D7l/hi5GxjxMyCnUPwG6pDCDBrZyZtIuL2+c4v8Sbo9I59s1hOhJRGxK3K8wVof8kbUTN90RrkrJOx83Ye7aFJ3hhsi2hr5OsI8O89+a2uGUTgl5T0j5c4mq3it60Q8/sxyI5lZSol1mHcfQ1VCthlAB1XRxMnccCfUOLvhPSsshb0zWB+9t2NJTaTkYnAvjrN7HQccgT156Dj7LWJuD3wd+X3+e59bF+flCDkaxG8JV3o+Y1rq6mkXbNvbHCs0SYKdinxz3sqyNKGxGXUn1DXQJuihbL39ffl2T7XW5GB+SrkVgddh5+WWDL75mWoXxE1xkkWiTSuXusLme7PJsClJX4i1fdmMXhOM4T1QCQeoa6dskqz9NbAZVxj78yqvyl1QRtlvonFvali8bmMrsuyOmeRQn96eT4NicvWd31c1TcphoKJzvitb6/9vrLEGyCrlL2fgCqG/KCuT73t5ipXcEs/xd8toBLfW/x9qog0xOqRpLnJbQZ8paS9ChHb75xnnGLi5jFoAKBaTfzsbqG9FQEeKxr6yriSepvDeuFd5/iuhfVL/Et0NUPUe7Hivspb7yx9GvlenFaen03leM9ha6MF/n2QD+SH6fpBtoCEDfrjS/yX0i9rw7i62odxzgr0hUxd+HdTqJ3mgGtE6wARS5gMmX5Od7b6gu2bDLr2NdbLcR++WuLHIgOy+VHMI9H2ReDvEeFeRfVtHAc0QEVhV6EZHDmrDxxYsHGYRbp3aF25osHaZPWYXls/vO84q1riA0tsACHzjVwZiJwtFUy0nYGOB0E1ltqE+QJCURehTcts26ZVtxF/2/L8ezSLbX2WreliG6GCoEnkRXU51QV9ZTkvIu3Ifb8rcfQuS90NjNOuTd5lFVuBWTqN9z7YjH1XiZ+JjjbNIkP1Achguxd1Py9Dl7E+G4gHIn0IWnMOtce/N5ftOXQa6GJ0FmBdqtvd0Lm1FQl+3MwWawb1xa2jeDcWVMvEraGgDFGN24CW/jBum0J67SIEGo5ARDsQ7WXtTj3cEc8KZLPVnqG7xXKde9fSZ76ts8ig/T66l8G8F/l2rCyS9MEjZB/MQcnQ4+Lk8EdurGIz4Ho36KGZ6fNF7suIl3HoPPJFOZvqfvAjtL7KCNZCs1EyrOl+r5J84/NOUkXhQmnHR6ki6nfITeE75KK1D7QNhTixzY9zLZfWEY8+mK9fPIDep8eyhWj2HGF5LOfXVG6YQ1b8GxFSnGO0nFZZvj2+Hw9t9GGSatKaRZuqn0cOuUawLyNjs7+hAepg951AWplwV4mXhrI75iLrqFndh2R1ti6KIaK5bBbaOuxh6CDFui79de47H8eyWwti6Pr5P5ZqYbDrLGyJMYv22Q5Du8h+a+Q1SFQvp8vx40zaFQkZil3F9WeR06Kouis8Z2IgI0JGuBZHeVQ2g/atLkXy+/3Ujc1XoAW397ztW1v5xbLFV1B9ITdCBFhAAz9T4vsBLy153+/KnEHI9YNUVZLdf5KFlSVenKDxJqPUN8KIlp0caTWuVbknuH+2yTKLBvGYkv5aNEALyP75AuRGsBXyD8yWKLEtvoPTaOC/gI5PgUDEP6Pd6Hm0/tsdTQqvx38J7IMOA5p4jn1rLWVWNGQT2yTeHXRvbljwV/NZoqEWf/igb03kG25wvOVsOUE9rbIGsm48p+TbF3n62gAdhs6NPRwRbl9GgUaLu/0sBS0ndqGu1x5PtZKArA9nottTN0KL/RegJYY32HpV0FIHf61gB0mMHov98pDfBv7G8FG2qI4cZOl2+CETu7agnUFWj5PQdswlSH/8gkqwSbTkeCHarNwHWfTfS3cQW4MUEd0tiGivQ4cHV0Gc+1u0FpxGbhUPQAcxbPfA9G2rDi+OY7inBLx/iU0nL3K2X1xHohlqgrxR9p0RaEOkD7Zk9D6oCdT5NdBBg/MRwT6C9rk8wWzttgRtwprz5nuQv+KMKztrTwZ+ppDDzJsQ8f4R3YbwWgSAzkcEewkSox6gZOVn0qYPbA2FTJKZZepq924BurfQ2Ye2Et+8xN764Av1cn0SWeAPoy5m/UWbE8iicQk63nMb0iuvpBIh2hLNBHUc9ZjrF5GFwN98EzubgR8zWZnPh0H8o9AVEaZDjyc/JBn7nxFpZddnWfuhLqr/EDP7jltDzeZlLgdRAfvZZn4ZL0NG2WOQv8Y0AjR2nvlspK82QL6GmyBxFJcXEaFaPYcil7cHoQPmlse+yTggTi6rYwaBrP9CR2evL309i7pzEEOGWO8JkWJZvq023luW+PqYN1vB2+J2c2TSiijQBxuAt5TnY13l+6CF6A+RDrsBGVmfjvSVv7GgDwlOofXR00r6HqU+032+45EDfLAbgDZF68G9kMVlO+SSnpnIWsDrrwk4fJnGJFNUrzFvAwbyxfUNVB9EsyBkqM2+25aq/96COOFSxElPKunvRCjw63TFZksP+DbZdQ6X0r0Law/q+i371j/79eBPSltOK+2zG4DGWX/dUzE4blgXTS4QPXzdI86dkwiILCvPW5S4pc+gu7N6ELLN2XefRQP0Jrr3ZUVxmMl0q8NsgdPI6/fE8v4zSFn7A+bZ4t1A0IuRT+H9kD3RLBymT7Plg5X1tyLSRPizfhjBbqKqK8s/cprerA7fLfEjeyq0jiyjsvAMEjXHoO2Q51IvWfH6MQ5u/J3lsfhwtJm5DgIOrWATcg5JADvB+gbqzQItj+ShNv01QhS9nhFs0n8PLa69t1lzV/qcEpt482sVq8xW6Veiux23QseDHoVQ5OXUfzSQ7TK3ODcLtgyYRvrw4JK+H4Lppt88h82h9djnqLclPAPdJGDnxcfhrNjOexqi1PLpVv4/lPhM965mLP+2xOuqebTF/Vs0SJtRCRAb7WG/L6MlBuNgLIS4Ffx3Zpo6EjmqLiDn1Uvp3uO4BtKrOyPLxh5UH0lvsekjiB9I/3tFieeBUvbOwjyyRF2LtpS2RTrYn1IducPYOnFtyQyV2+Iut++ArXsiZ0UI70McgKxcH1sHTf+8Cy0DJtBNO9ZGu6Tme4hgV6CN1R/QhvSeMCS/YzvGDV5P9RHMj9V2iGA3ILvnSHsyT17Ta18v8W49leLemQi7JyIkzsgMrVob76CegNkRieQZZOE4D81SW25cxuj9XVZuVn5sU6udfd9kC/7su6gqjEnOom4Fdbg92wS1DHbl0L7U20BbDW51YkgctEKGVn1Zdh3f2dS14X8gnfVNhL6+hSbc9Ywe0/JlDnFAq80ZIYyz4roxkyKeoAaYJtBBeajjH8vp/Cuu2Mh5ZJPbEc3oj9Ndz8QOZbJ/nM7H7+IsjGX6cuaRzfDnVN8WkKvdgcgq04L0rXqyMKRzWyHT4YQ0qGL9cUg63ISsRsupAGvx+6jTcIVAPd5qu7gt0TeOTrB8fdC+T2zEmbmA0OHN1P04EPLdD93PaPo1TqQW5/g2jgM6IteSPPeJ0Vi2XUbzTbqisTMGUUlGnXIS0hNPRGuH7ERk/N0CHDFtnPS+AZtGhHko3f+/dl/XnujbmBEmAqasLyui74ZCplrM1cGYw276S9F5Jn8ts12abBZ222PKiNOaWTGtpfMyjoq//bOZpdZDKHEjulfivoxqRWkRPiNi1reszX0SxxO+Rfys389DqHcZAlKZOAVyOBrFw0dK/HzqtkgLiIwTMhQ1jk7x388hcHQG2gq6GDntfL7kOQJt4to/6fHlpLO30Z/mwDFKvCF1kOU1xA31kh2z3LTczpuXdELdyPwx0m1TyI8+Vvq3Cn0DBrJDboOkwdMQgT5Y3q1L1Q+tU6wt7vehhSwzqdDiJnry2m7+7miJcg3tq6wWQ7ZOixWATqmArvfbmK5Zq6WDWtw7pLey914szqF7gPcvafsii82qaAFt3PZGdClZvIsjcllsHyFva/JkorsFqoYQ8VtLfBRafy4J+TsTIfPl8A00bjuHejbs1SVuETyWkc3mliiJ+X2bzF/jIOrdkC9F59u834idp94Y7enZt60wJOL60rOyojhsfWtcth/yW7kJ+FR5l20TLZZj/5y8bxBtdm+LRCXI1LKMfGs+Q2NZudns8w30+Wwd83Ckv6bR9sohjO6FzaO1zuPQ7XI7kRvGV0a0rYjuHSpvAZ23+wnacH4+An3eVyard8QikokBc7JZRhWT73X5W/A5ltkSg32o09LNYv8VRLDvI4632WrBOMog847IVc52JIaWIy2itMRp/J2J4RgmqHr2pYhgF6G9x+wK4BHuzURcNitsJh+JtkZ2QZuK/jq9FoT2oq4PrWXB65Rj0VrxLuRal+1aWzvPojrd7pfU49vSN9Gy9vg4ckOmr7JxmEHE+kBJO5TuVUp9IKZpEcnExRJkx7O7+D+MjLPmGTUUMvAxBIJMjx1AvRHPnHyi/6OVOY22lewujuegBXf0X+wTzz5PRJkZcpwI+ePvjBuPLvGRSJx7Md+LcjOLSKvxttF4MvLAvQ/SK/67yGEtVBZDhhZtAf0QqgfWqVQ3t5bDqrXFTHDrI4sOdI8iRQ6g8TubbP77TFS2+muT8HB0hOtihBy9mG99v0ijPgQYG+w78grEdbuie42jH2JLDNLIkzXW0t+JFtJ30j1F0xpg6/w5rrxdkrwtomREir8zjuoDc1AJtiOC9iCzlTGD12Vx0nfq9Bbk2KnYMfubRgSzky1HIHc00zGtDsSOZCLAgqHFPZB5ByQWr6J7tbzvHOH375EYBblAQHdgWsCpr50+PQstkWv92Qj4Rkl7PtV/xozaLTDW4eRxOc3nMTR5JnW9dDra8jdv4VYZQ7PR8tnss/8McQGygFjn+9oH1SXhZ+V5O2TWineO+DpbHBOJ25IMsS9Wli2Z7o+s90uR9DB4P7STPsLVmbNq7Ez224yx70G2silkB9yA0f+ZMjR74iAZIjyU6rD5mhJHwOM5ywfLd0GJ16TeQmTfRAK1xiEDIf53Nul8HfPIWnMqQoxfRi6FBu8XknL6GKnjLxiVaAt+WrBGHYJcE9Yvsf9npdlaJpbhY4PDa1Fvl/ssXf+Olo70BLTZ+yOX7zEuXwu19onsFshojZNPPwGBoXOp4t630/ejDxQuikefcYU+poor+yeuj0Qc9yBG/2/KOINi7Xkj2om+m+py3rqdJ4PT9uwvZNs8yQ95ea13MT0DI16UzqNdkmeXtjwVAap4PdSQiurUN87iOn7oY7NNLkeg4SIk0s5BUN2jyr7BtbRZxKnmTPoJ5E3ld3CH0Kev53bqfZJ2802rny1wk7U7Bl+vR4LHI6R9GfIM87c0ROk2NFkW25AZjH3DLXMfujQn0j8haH0eOhL7I2Sv9KjSvskaaFz5emSdv5t6zW2rc1l7fZlz1P97tpp7l/UttisDJy3i2bP5o9wPncp5EboHZUdkEPYcln3fN6kXn6MPvJ9lsXOEdP+NEe52tGj8KhJvP0ZbJ7YZ2arPdNm61EMWH6EL8VtwOguTVNRm56iz48i+T336t4WAfbqtwzZBqmIf5C22M5VgQ6dy+vTtoiqL4jESpcWFMT9Uwt2BjjO9v6Sfjhbg83SPJ/lBsrQDqZe1fMqVm9Xty/DvY/tsiRARbYyz31m9sU4rdxYdlPw10u0nogl8K12RmIUWg2QSbxDy+wbHArKKvNHzddR/dHAEQk5bUjcl/cLerPi2V/d56hZMJkozBR5FqBHbbum50+WL/Roagxis3cZdqyPJcFpJey06b+A9wuL3kTh9aZ22RZ/HKB5bFfVxoqG8JYhbtkHHdndCCOoQ6v/Dniy/F9A5aLsd+zOuvAiAst9RF1mYpv5X+DuS9/GbljqIeWyNNYug/I8R4LgaicMPUC8hiOcZfMjwQhzbmL+5n9YSmTG0xNUCdQF+CTraa3foH4vWXbbPZTciHFDiK5CHlenK2JbI7X3tmaLe0nBTyDM0MWO6lw6zyKHoBLQNtGn5vTlCzv4ASmuMMn3WB7YW0yIw6Cs4I1xLp1gDvBvbmxGaPAuZvM5F57C3QsjuGaWME9FJVH8xjR+0rL2xTfZ+berVDvF/2djvjEsjVxmMt1te34xA0sFokj0JbR3dzSjgyCRF9mz19elWoP8Srux31BstaOq/sQ4sQVvruyMFfXmJlyFzk12//sVaRPOC0HHQHNTLXqCatFqSIw6WLUFmSx/WRLr5Gur/Rz0ETbrvMioOfVmRGD5EXebzpP3M/PhbBfqQzYKoB3yFxnU2EN9Auu4AtJ7zJ06fjmaz3VtlIsZgfB+R4u8nlvh2qn9L3Lfyg2rjMYeINV/aeQK6OedtSAe/ERkPPkqVCvPkE6IlxlttzvJ1+ukdezIx0aK8pUXC9AXfMFuE2jJhL4Q093d5voBsmWcw+v84TWRlgMHCPNKd2yPr+pPpmtVsAhhxfNgUuSk8EzkIgW59OBaJ72uo3GhIdZwxInmmkd6SZBORaONU0lL+WSWtGeQhsxEPpMhfhLhtI5f/W0j/XYj2oG5plAtV/zwY6bHV0BbSe1x9MayFxNyOiPsf5959G5mjTqUaCbyF3o9d7CP0T+hMavj0lJDRhS5WNKSzsvx9+i1r3AJd/WHp2yNvpd2ot9dYOA9ZG36DTq3ehBaxd6F/G3YL8ob+IAIHm6JN0Qcg1Lc22kbaDEH0neiGC9EWyvF0LxSL3lJ9E7Vv/MYhZIuIi0TLMmdQOzZkHGQ5rqi1eILuwfolyDS0d/l7NN0rbmMwn8zL0LrvaOSTsR7ayV6afHMVWmachibEze6dieKWY1CfhGpN/pWRTot57KqIofVJi7B9MNaXm00An8+/szIMjc2iwf4VMo2tjmyUD0Ec9GAkSrdAa6RlyLJiC3U7QLIZQq+XIVPTlQiuX4PON3uxGc+OZzfRtTjJj1mfhMrASFbOSJn+JOg4nNM3u8adKYMzKcljoMHsl1kwXbY39d9hPh9ZV+JtC1mId51k7YqhJY2gTTT/XYtL/btY/4RfwPaBhtiIISL1EWcIXWX1+sH2Z+r8jJ5H0Pzgku9IRDCvh6bCN56zM89eXP7YdntuEW6ldVZIi2Fh5OR80uhYQIsDW4Puy27VkTW0NRl8nTHcglDex6n/vTDWl4n2IWScIcQ+MZ+V0cdVPowjse4N94Z7w73h3nBv+H8R/g9IdK0K/4ipgwAAAABJRU5ErkJggg==" alt="Logo Fausto Cordobes">
-      <div class="brand-text">FC<span>diseñador web freelancer</span></div>
+      <div class="brand-text">F-C Web Studio<span>Fausto Cordobes · San Martín de los Andes</span></div>
     </a>
     <nav class="links" id="navLinks">
       <a href="#proceso">Cómo pedís</a>
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#trabajos">Trabajos</a>
       <a href="#servicios">Servicios</a>
-      <a href="#sistemas">Sistemas</a>
+      <a href="#preguntas">Preguntas</a>
       <a href="catalogo/" class="nav-catalogo">Catálogo</a>
       <a href="#contacto" class="nav-cta">Escribime</a>
     </nav>
@@ -429,11 +453,17 @@
     <div class="wrap">
       <div>
         <h1 class="hero-title">Creo el sitio web<br>para <em>mejorar tus ventas</em>.</h1>
-        <p class="lede">Diseño y armo sitios web simples: cartas digitales para restaurantes, páginas para experiencias y eventos, y sitios de trabajo. Sin vueltas, con pedido directo por WhatsApp.</p>
+        <p class="lede">Cartas digitales, páginas web y turnos online para negocios de San Martín de los Andes y la zona. Te visito en tu local, te muestro una prueba antes de que decidas y te paso un presupuesto cerrado.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">Pedir mi sitio por WhatsApp</a>
+          <a class="btn btn-primary" href="https://wa.me/5492944242906?text=Hola%20Fausto%2C%20quiero%20un%20presupuesto%20para%20mi%20negocio" target="_blank" rel="noopener">Pedir presupuesto por WhatsApp</a>
           <a class="btn btn-ghost" href="#trabajos">Ver trabajos</a>
         </div>
+        <ul class="confianza">
+          <li>Presupuesto cerrado en 24 h</li>
+          <li>Prueba sin compromiso</li>
+          <li>La página es tuya</li>
+          <li>Soporte en persona</li>
+        </ul>
       </div>
       <div>
         <div class="menu-card">
@@ -642,22 +672,23 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow-label">Sobre mí</span>
-        <h2>Diseño y programo, sin vueltas.</h2>
-        <p>Soy FC, diseñador web freelancer. Arranco cada sitio de cero — sin plantillas genéricas — pensado para que se vea bien en el celular y para que el cliente te escriba directo, sin intermediarios. Trabajo remoto, con base en la Patagonia.</p>
+        <h2>Soy Fausto, y estoy acá cerca.</h2>
+        <p>Soy Fausto Cordobes, técnico en computación y estudiante de Analista en Sistemas. Vivo en San Martín de los Andes: te visito en tu local, te explico todo en persona y, si algo falla, me tenés a un mensaje de distancia.</p>
+        <p>Arranco cada sitio de cero, sin plantillas, pensado para que se vea bien en el celular y para que tus clientes te escriban directo, sin intermediarios.</p>
       </div>
 
       <div class="about-stats">
         <div>
-          <span class="num">+4</span>
-          <span class="label">sitios en producción</span>
+          <span class="num">4</span>
+          <span class="label">negocios de la zona con su sitio funcionando</span>
         </div>
         <div>
-          <span class="num">100%</span>
-          <span class="label">responsive, mobile-first</span>
+          <span class="num">24 h</span>
+          <span class="label">para pasarte un presupuesto cerrado</span>
         </div>
         <div>
           <span class="num">1</span>
-          <span class="label">persona: diseño y desarrollo, de punta a punta</span>
+          <span class="label">persona que te atiende, de la primera charla al soporte</span>
         </div>
       </div>
 
@@ -718,26 +749,25 @@
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow-label">La carta de trabajos</span>
-        <h2>Sitios web creados por mí</h2>
-        <p>Cada uno pensado para el negocio real que lo pidió. Tocá para ver el sitio en vivo.</p>
+        <h2>Trabajos para negocios de la zona</h2>
+        <p>Los que dicen «Cliente real» están funcionando para un negocio. Los que dicen «Demo» son sistemas de ejemplo que adapto a tu negocio. Tocá para verlos en vivo.</p>
       </div>
 
       <div class="filter-tabs" role="tablist" aria-label="Filtrar trabajos por categoría">
         <button class="filter-tab is-active" data-filter="todos">Todos</button>
         <button class="filter-tab" data-filter="cartas">Cartas digitales</button>
-        <button class="filter-tab" data-filter="experiencias">Experiencias</button>
-        <button class="filter-tab" data-filter="herramientas">Herramientas</button>
-        <button class="filter-tab" data-filter="sistemas">Sistemas</button>
+        <button class="filter-tab" data-filter="sitios">Sitios y tiendas</button>
+        <button class="filter-tab" data-filter="sistemas">Sistemas (demos)</button>
       </div>
 
       <div class="works" id="worksGrid">
 
-        <!-- Cada mockup usa un placeholder como <img>. Reemplazá el "src" por una captura real de tu proyecto -->
         <a class="work-card" data-cat="cartas" href="https://creperia-lo-de-luis.vercel.app/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
             <iframe src="https://creperia-lo-de-luis.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Creperia Lo de Luis"></iframe>
           </div></div>
           <div class="work-body">
+            <span class="work-badge real">Cliente real</span>
             <span class="work-tag">Restaurante</span>
             <div class="name">Creperia Lo de Luis <span class="arrow">Ver sitio ↗</span></div>
             <p>Carta digital por categorías para la única creperia de San Martín de los Andes, con pedido directo por WhatsApp.</p>
@@ -750,6 +780,7 @@
             <iframe src="https://fito-s-cafeteria.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Fito's Cafetería"></iframe>
           </div></div>
           <div class="work-body">
+            <span class="work-badge real">Cliente real</span>
             <span class="work-tag">Cafetería</span>
             <div class="name">Fito's Cafetería <span class="arrow">Ver sitio ↗</span></div>
             <p>Carta digital con tarjetas desplegables para café, pastelería y salados, más pedido de delivery por WhatsApp.</p>
@@ -757,11 +788,12 @@
           </div>
         </a>
 
-        <a class="work-card" data-cat="experiencias" href="https://the-hunter-vr.vercel.app/" target="_blank" rel="noopener">
+        <a class="work-card" data-cat="sitios" href="https://the-hunter-vr.vercel.app/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
             <iframe src="https://the-hunter-vr.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de The Hunter VR"></iframe>
           </div></div>
           <div class="work-body">
+            <span class="work-badge real">Cliente real</span>
             <span class="work-tag">Experiencias</span>
             <div class="name">The Hunter VR <span class="arrow">Ver sitio ↗</span></div>
             <p>Sitio de presentación para un centro de realidad virtual con más de 90 juegos, reservas por WhatsApp y sus tres sucursales.</p>
@@ -769,51 +801,16 @@
           </div>
         </a>
 
-        <a class="work-card" data-cat="herramientas" href="https://barista-de-bolsillo.vercel.app/" target="_blank" rel="noopener">
+        <a class="work-card" data-cat="sitios" href="https://faustocordobes.github.io/el-atico-SMA-/" target="_blank" rel="noopener">
           <div class="phone"><div class="phone-screen">
-            <iframe src="https://barista-de-bolsillo.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Barista de Bolsillo"></iframe>
+            <iframe src="https://faustocordobes.github.io/el-atico-SMA-/" loading="lazy" tabindex="-1" title="Vista previa de El Ático de Hisui"></iframe>
           </div></div>
           <div class="work-body">
-            <span class="work-tag">Herramienta</span>
-            <div class="name">Barista de Bolsillo <span class="arrow">Ver sitio ↗</span></div>
-            <p>Calculadora y cronómetro para preparar café: elegís tu cafetera y te arma la proporción de agua, café y tiempo de extracción.</p>
-            <div class="work-meta">App web · Calculadora interactiva</div>
-          </div>
-        </a>
-
-        <a class="work-card" data-cat="sistemas" href="https://faustocordobes.github.io/Gestor-de-inventario-Argentina-v.2/" target="_blank" rel="noopener">
-          <div class="phone"><div class="phone-screen">
-            <iframe src="https://faustocordobes.github.io/Gestor-de-inventario-Argentina-v.2/" loading="lazy" tabindex="-1" title="Vista previa de Gestor de inventario Argentina"></iframe>
-          </div></div>
-          <div class="work-body">
-            <span class="work-tag">Sistema</span>
-            <div class="name">Gestor de inventario Argentina <span class="arrow">Ver sitio ↗</span></div>
-            <p>Gestor de inventario pensado para comercios argentinos: stock, productos y control del negocio en un solo lugar.</p>
-            <div class="work-meta">App web · Gestión de stock</div>
-          </div>
-        </a>
-
-        <a class="work-card" data-cat="herramientas" href="https://cazadordecartas-tcg.vercel.app" target="_blank" rel="noopener">
-          <div class="phone"><div class="phone-screen">
-            <iframe src="https://cazadordecartas-tcg.vercel.app" loading="lazy" tabindex="-1" title="Vista previa de Cazador de Cartas TCG"></iframe>
-          </div></div>
-          <div class="work-body">
-            <span class="work-tag">Herramienta</span>
-            <div class="name">Cazador de Cartas TCG <span class="arrow">Ver sitio ↗</span></div>
-            <p>Herramienta para coleccionistas de cartas coleccionables: buscá, organizá y seguí tus cartas fácilmente.</p>
-            <div class="work-meta">App web · TCG</div>
-          </div>
-        </a>
-
-        <a class="work-card" data-cat="herramientas" href="https://faustocordobes.github.io/probador-de-ropa-virtual/" target="_blank" rel="noopener">
-          <div class="phone"><div class="phone-screen">
-            <iframe src="https://faustocordobes.github.io/probador-de-ropa-virtual/" loading="lazy" tabindex="-1" title="Vista previa de Probador de ropa virtual"></iframe>
-          </div></div>
-          <div class="work-body">
-            <span class="work-tag">Herramienta</span>
-            <div class="name">Probador de ropa virtual <span class="arrow">Ver sitio ↗</span></div>
-            <p>Probador virtual para que los clientes vean cómo les queda la ropa antes de comprar.</p>
-            <div class="work-meta">App web · Moda</div>
+            <span class="work-badge real">Cliente real</span>
+            <span class="work-tag">Tienda online</span>
+            <div class="name">El Ático de Hisui <span class="arrow">Ver sitio ↗</span></div>
+            <p>Tienda de TCG, accesorios y juegos de mesa con carrito, pedido por WhatsApp y panel del local para editar precios y stock.</p>
+            <div class="work-meta">San Martín de los Andes · Tienda con panel</div>
           </div>
         </a>
 
@@ -822,10 +819,37 @@
             <iframe src="https://faustocordobes.github.io/Software-para-cl-nica-dental/" loading="lazy" tabindex="-1" title="Vista previa de Software para clínica dental"></iframe>
           </div></div>
           <div class="work-body">
+            <span class="work-badge demo">Demo</span>
             <span class="work-tag">Salud</span>
             <div class="name">Software para clínica dental <span class="arrow">Ver sitio ↗</span></div>
             <p>Sistema para clínicas odontológicas: agenda, pacientes y gestión del consultorio.</p>
             <div class="work-meta">Demo · Salud</div>
+          </div>
+        </a>
+
+        <a class="work-card" data-cat="sistemas" href="https://faustocordobes.github.io/organizador-para-locales-eventos/" target="_blank" rel="noopener">
+          <div class="phone"><div class="phone-screen">
+            <iframe src="https://faustocordobes.github.io/organizador-para-locales-eventos/" loading="lazy" tabindex="-1" title="Vista previa de Organizador para locales y eventos"></iframe>
+          </div></div>
+          <div class="work-body">
+            <span class="work-badge demo">Demo</span>
+            <span class="work-tag">Sistema</span>
+            <div class="name">Organizador para locales y eventos <span class="arrow">Ver sitio ↗</span></div>
+            <p>Organizador de turnos para locales y eventos, con demo funcional para probar.</p>
+            <div class="work-meta">Demo MVP · Turnos</div>
+          </div>
+        </a>
+
+        <a class="work-card" data-cat="sistemas" href="https://faustocordobes.github.io/Gestor-de-inventario-Argentina-v.2/" target="_blank" rel="noopener">
+          <div class="phone"><div class="phone-screen">
+            <iframe src="https://faustocordobes.github.io/Gestor-de-inventario-Argentina-v.2/" loading="lazy" tabindex="-1" title="Vista previa de Gestor de inventario Argentina"></iframe>
+          </div></div>
+          <div class="work-body">
+            <span class="work-badge demo">Demo</span>
+            <span class="work-tag">Sistema</span>
+            <div class="name">Gestor de inventario Argentina <span class="arrow">Ver sitio ↗</span></div>
+            <p>Gestor de inventario pensado para comercios argentinos: stock, productos y control del negocio en un solo lugar.</p>
+            <div class="work-meta">App web · Gestión de stock</div>
           </div>
         </a>
 
@@ -834,6 +858,7 @@
             <iframe src="https://faustocordobes.github.io/-Cooperativa-de-Agua-Demo-de-fichaje-y-rdenes-de-trabajo.VerN-2/" loading="lazy" tabindex="-1" title="Vista previa de Cooperativa de Agua"></iframe>
           </div></div>
           <div class="work-body">
+            <span class="work-badge demo">Demo</span>
             <span class="work-tag">Sistema</span>
             <div class="name">Cooperativa de Agua <span class="arrow">Ver sitio ↗</span></div>
             <p>Demo de fichaje del personal y órdenes de trabajo para cooperativas de agua.</p>
@@ -846,42 +871,20 @@
             <iframe src="https://faustocordobes.github.io/central-de-electrecidad-organizador-de-reportes-BETA-VER.1/" loading="lazy" tabindex="-1" title="Vista previa de Central de electricidad"></iframe>
           </div></div>
           <div class="work-body">
+            <span class="work-badge demo">Demo</span>
             <span class="work-tag">Sistema</span>
             <div class="name">Central de electricidad <span class="arrow">Ver sitio ↗</span></div>
             <p>Organizador de reportes para centrales eléctricas, para llevar el seguimiento de cada novedad.</p>
-            <div class="work-meta">Beta v.1 · Reportes</div>
+            <div class="work-meta">Demo · Reportes</div>
           </div>
         </a>
 
-        <a class="work-card" data-cat="herramientas" href="https://faustocordobes.github.io/el-atico-SMA-/" target="_blank" rel="noopener">
-          <div class="phone"><div class="phone-screen">
-            <iframe src="https://faustocordobes.github.io/el-atico-SMA-/" loading="lazy" tabindex="-1" title="Vista previa de El Ático de Hisui"></iframe>
-          </div></div>
-          <div class="work-body">
-            <span class="work-tag">Tienda online</span>
-            <div class="name">El Ático de Hisui <span class="arrow">Ver sitio ↗</span></div>
-            <p>Tienda de TCG, accesorios y juegos de mesa con carrito, pedido por WhatsApp y panel del local para editar precios y stock.</p>
-            <div class="work-meta">San Martín de los Andes · Tienda con panel</div>
-          </div>
-        </a>
-
-        <a class="work-card" data-cat="sistemas" href="https://faustocordobes.github.io/organizador-para-locales-eventos/" target="_blank" rel="noopener">
-          <div class="phone"><div class="phone-screen">
-            <iframe src="https://faustocordobes.github.io/organizador-para-locales-eventos/" loading="lazy" tabindex="-1" title="Vista previa de Organizador para locales y eventos"></iframe>
-          </div></div>
-          <div class="work-body">
-            <span class="work-tag">Sistema</span>
-            <div class="name">Organizador para locales y eventos <span class="arrow">Ver sitio ↗</span></div>
-            <p>Organizador de turnos para locales y eventos, con demo funcional para probar.</p>
-            <div class="work-meta">Demo MVP · Turnos</div>
-          </div>
-        </a>
-
-        <div class="work-card is-soon" data-cat="herramientas">
+        <div class="work-card is-soon" data-cat="sistemas">
           <div class="phone"><div class="phone-screen">
             <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20300%20640%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230E1613%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2323433C%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect%20width%3D%22300%22%20height%3D%22640%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Cg%20opacity%3D%220.55%22%20stroke%3D%22%23F3EEE3%22%20stroke-width%3D%222%22%20fill%3D%22none%22%3E%0A%3Crect%20x%3D%22110%22%20y%3D%22258%22%20width%3D%2280%22%20height%3D%2260%22%20rx%3D%226%22/%3E%0A%3Ccircle%20cx%3D%22130%22%20cy%3D%22276%22%20r%3D%226%22/%3E%0A%3Cpath%20d%3D%22M112%20310l22-20%2016%2014%2020-24%2018%2030%22/%3E%0A%3C/g%3E%0A%3Ctext%20x%3D%22150%22%20y%3D%22355%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2221%22%20fill%3D%22%23F3EEE3%22%20text-anchor%3D%22middle%22%3EComanda%20Caf%C3%A9%3C/text%3E%0A%3Ctext%20x%3D%22150%22%20y%3D%22378%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-size%3D%2212%22%20fill%3D%22%23F3EEE3%22%20opacity%3D%220.6%22%20text-anchor%3D%22middle%22%3EPr%C3%B3ximamente%3C/text%3E%0A%3C/svg%3E" alt="Captura de Comanda Café (próximamente)">
           </div></div>
           <div class="work-body">
+            <span class="work-badge demo">En desarrollo</span>
             <span class="work-tag">Sistema de pedidos</span>
             <div class="name">Comanda Café</div>
             <p>Sistema de comandas digitales para cafeterías: el mozo toma el pedido desde el celular y llega directo a la barra.</p>
@@ -889,6 +892,68 @@
           </div>
         </div>
 
+      </div>
+
+      <h3 class="works-sub">Proyectos personales</h3>
+      <p>Herramientas que armé por mi cuenta para practicar y probar ideas.</p>
+      <div class="works personales">
+
+        <a class="work-card" data-cat="personal" href="https://cazadordecartas-tcg.vercel.app" target="_blank" rel="noopener">
+          <div class="phone"><div class="phone-screen">
+            <iframe src="https://cazadordecartas-tcg.vercel.app" loading="lazy" tabindex="-1" title="Vista previa de Cazador de Cartas TCG"></iframe>
+          </div></div>
+          <div class="work-body">
+            <span class="work-badge demo">Proyecto personal</span>
+            <span class="work-tag">Herramienta</span>
+            <div class="name">Cazador de Cartas TCG <span class="arrow">Ver sitio ↗</span></div>
+            <p>Herramienta para coleccionistas de cartas coleccionables: buscá, organizá y seguí tus cartas fácilmente.</p>
+            <div class="work-meta">App web · TCG</div>
+          </div>
+        </a>
+
+        <a class="work-card" data-cat="personal" href="https://barista-de-bolsillo.vercel.app/" target="_blank" rel="noopener">
+          <div class="phone"><div class="phone-screen">
+            <iframe src="https://barista-de-bolsillo.vercel.app/" loading="lazy" tabindex="-1" title="Vista previa de Barista de Bolsillo"></iframe>
+          </div></div>
+          <div class="work-body">
+            <span class="work-badge demo">Proyecto personal</span>
+            <span class="work-tag">Herramienta</span>
+            <div class="name">Barista de Bolsillo <span class="arrow">Ver sitio ↗</span></div>
+            <p>Calculadora y cronómetro para preparar café: elegís tu cafetera y te arma la proporción de agua, café y tiempo de extracción.</p>
+            <div class="work-meta">App web · Calculadora interactiva</div>
+          </div>
+        </a>
+
+        <a class="work-card" data-cat="personal" href="https://faustocordobes.github.io/probador-de-ropa-virtual/" target="_blank" rel="noopener">
+          <div class="phone"><div class="phone-screen">
+            <iframe src="https://faustocordobes.github.io/probador-de-ropa-virtual/" loading="lazy" tabindex="-1" title="Vista previa de Probador de ropa virtual"></iframe>
+          </div></div>
+          <div class="work-body">
+            <span class="work-badge demo">Proyecto personal</span>
+            <span class="work-tag">Herramienta</span>
+            <div class="name">Probador de ropa virtual <span class="arrow">Ver sitio ↗</span></div>
+            <p>Probador virtual para que los clientes vean cómo les queda la ropa antes de comprar.</p>
+            <div class="work-meta">App web · Moda</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS: está oculto hasta tener testimonios reales con permiso.
+       Para activarlo, completá las tarjetas y borrá el atributo hidden de la sección. -->
+  <section id="testimonios" hidden>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Lo que dicen</span>
+        <h2>Negocios de la zona que ya trabajan conmigo.</h2>
+      </div>
+      <div class="testimonios">
+        <figure class="testimonio">
+          <blockquote>"Texto del testimonio."</blockquote>
+          <figcaption><b>Nombre</b> · Nombre del local, ciudad</figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -928,8 +993,48 @@
         </a>
       </div>
       <div class="sys-cta">
-        <p><b>13 rubros y 11 trabajos.</b> Mirá qué te puedo ofrecer según tu negocio y pedí tu presupuesto.</p>
+        <p><b>¿No sabés por dónde empezar?</b> Mirá qué le sirve a tu rubro y pedí tu presupuesto: te lo paso cerrado en 24 h.</p>
         <a class="btn btn-primary" href="catalogo/">Ver el catálogo completo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS FRECUENTES -->
+  <section id="preguntas">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow-label">Preguntas frecuentes</span>
+        <h2>Lo que todos me preguntan antes de arrancar.</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>¿Cuánto sale?</summary>
+          <p>Depende de lo que necesites: no es lo mismo una carta digital que un sistema de turnos. Después de una charla corta te paso un presupuesto cerrado en 24 h, sin compromiso. Se paga una vez para dejarlo funcionando y un abono mensual que incluye hosting, dominio, copias de seguridad, soporte y cambios chicos.</p>
+        </details>
+        <details>
+          <summary>¿La página es mía?</summary>
+          <p>Sí. El contenido, las fotos y el dominio son de tu negocio. Si algún día dejás el abono, te paso todo para que lo sigas usando con quien quieras.</p>
+        </details>
+        <details>
+          <summary>Ya tengo Instagram (o PedidosYa, o Booking). ¿Para qué quiero una página?</summary>
+          <p>Seguí usándolos: la página no los reemplaza, los completa. Te encuentran en Google, ven tu carta, precios y horarios ordenados, y te piden o reservan directo, sin pagar comisión.</p>
+        </details>
+        <details>
+          <summary>No aparezco en Google Maps. ¿Me ayudás?</summary>
+          <p>Sí, y es un buen primer paso: armo tu ficha de Google con fotos, horarios y teléfono, y si querés le sumamos una página simple. Es lo más rápido para que te encuentren.</p>
+        </details>
+        <details>
+          <summary>¿Quién me atiende si algo falla?</summary>
+          <p>Yo. Vivo en San Martín de los Andes, respondo por WhatsApp y, si hace falta, voy a tu local.</p>
+        </details>
+        <details>
+          <summary>¿Cuánto tarda?</summary>
+          <p>Una carta digital o una página simple suele estar lista en una semana desde que me pasás la información. Los sistemas dependen del caso: el plazo va en el presupuesto.</p>
+        </details>
+        <details>
+          <summary>¿Puedo verlo antes de pagar?</summary>
+          <p>Sí. Te muestro una prueba con tu negocio o una demo de tu rubro, y recién ahí decidís.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -939,8 +1044,8 @@
     <div class="wrap">
       <div class="contact-panel">
         <div>
-          <h2>Hacé tu pedido.</h2>
-          <p>Contame de tu negocio y en un rato te digo cómo seguimos. Respondo por WhatsApp o por mail, lo que te quede más cómodo.</p>
+          <h2>Contame de tu negocio.</h2>
+          <p>Decime a qué te dedicás y qué te gustaría resolver. En un rato te digo cómo seguimos, y en 24 h tenés tu presupuesto cerrado. Por WhatsApp o por mail, lo que te quede más cómodo.</p>
         </div>
         <div class="contact-actions">
           <a class="btn btn-whatsapp" href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">Escribir por WhatsApp</a>
@@ -957,15 +1062,15 @@
   <div class="wrap">
     <span class="fbrand" style="display:flex;align-items:center;gap:10px;">
       <img src="data:image/png;base64,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" alt="Logo Fausto Cordobes" style="height:26px;width:auto;">
-      FC diseñador web freelancer
+      F-C Web Studio · Fausto Cordobes
     </span>
     <div class="flinks">
       <a href="catalogo/">Catálogo</a>
       <a href="https://wa.me/5492944242906?text=Hola%2C%20quiero%20armar%20mi%20sitio%20web" target="_blank" rel="noopener">WhatsApp</a>
       <a href="mailto:faucordobes@gmail.com">Mail</a>
-      <a href="https://github.com/raikiry0" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/FaustoCordobes" target="_blank" rel="noopener">GitHub</a>
     </div>
-    <span class="floc">Sitios web · San Martín de los Andes, Patagonia</span>
+    <span class="floc">Páginas web y sistemas · San Martín de los Andes, Neuquén</span>
   </div>
 </footer>
 

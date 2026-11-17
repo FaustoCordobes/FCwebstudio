@@ -428,7 +428,7 @@ const RUBROS = {
   gastro:   {nombre:'Gastronomía', buscar:['restaurantes','cafeterías','rotiserías','pizzerías','heladerías','bares'],
              osm:['amenity~"^(restaurant|cafe|fast_food|bar|pub|ice_cream|biergarten)$"'],
              gtipos:/restaurant|cafe|coffee|bakery|bar|pub|meal_|food|ice_cream|pizza|sandwich|confectionery|dessert|brunch|steak|deli/,
-             ofrece:'una carta digital con pedidos por WhatsApp, sin pagar comisión como en PedidosYa', beneficio:'Sus clientes ven la carta en el celular y le piden directo, y usted cambia los precios cuando quiere', busqueda:'dónde comer'},
+             ofrece:'una carta digital con pedidos por WhatsApp, sin comisión por pedido', beneficio:'Sus clientes ven la carta en el celular y le piden directo, y usted cambia los precios cuando quiere', busqueda:'dónde comer'},
   comercio: {nombre:'Comercios', buscar:['ferreterías','almacenes','tiendas de ropa','librerías','verdulerías','kioscos'],
              osm:['shop~"^(hardware|doityourself|convenience|supermarket|clothes|shoes|books|stationery|greengrocer|butcher|bakery|gift|toys|sports|electronics|furniture|garden_centre|florist|pet|variety_store|wine|alcohol|beverages|deli)$"'],
              gtipos:/store|supermarket|market|shop|florist|liquor/,
@@ -753,7 +753,12 @@ function mensajes(p){
   const saludo = T('¡Hola! ', '¡Hola! Buen día. ');
   const yo = `Soy ${AJ.nombre}, de ${AJ.marca}, y hago páginas y apps para negocios de la zona.`;
   const baja = T('Si no te interesa, decímelo y no te vuelvo a escribir.', 'Si no le interesa, avíseme y no le vuelvo a escribir.');
-  const wa = `${saludo}${yo}\n\n${hallazgo(p)}\n\nLes armo ${R.ofrece}. ${R.beneficio}.\n\n${T('Si querés, te preparo','Si quiere, le preparo')} una prueba con ${T('tu','su')} local para que ${T('veas','vea')} cómo quedaría, sin compromiso. Acá ${T('podés','puede')} ver mis trabajos: ${AJ.link}\n\n${baja}`;
+  // Primer mensaje corto: quién sos, algo concreto que viste, una pregunta y la baja. Sin link.
+  const pila = String(AJ.nombre||'').trim().split(/\s+/)[0] || AJ.nombre;
+  const pregunta = (p.faltas||[]).some(f=>f.k==='nogoogle')
+    ? `¿${T('Te','Le')} sirve que ${T('te','se')} lo deje cargado?`
+    : `¿${T('Querés','Quiere')} que ${T('te','le')} muestre una prueba de cómo quedaría, sin compromiso?`;
+  const wa = `${T('¡Hola! ¿Cómo va?','¡Hola! Buen día.')} Soy ${pila}, de ${corta(AJ_DEF.ciudad)}.\n\n${hallazgo(p)} ${pregunta}\n\n${baja}`;
   const asunto = `${p.nombre}: una idea para que ${T('te','lo')} encuentren y ${T('te','le')} escriban más`;
   const mail = `${T('Hola','Hola, buen día')}:\n\n${yo}\n\n${hallazgo(p)}\n\nPara ${p.nombre} pensé en ${R.ofrece}. ${R.beneficio}.\n\nCómo trabajo:\n• ${T('Te','Le')} muestro una prueba armada con ${T('tu','su')} local antes de decidir.\n• Un pago para dejarlo funcionando y un abono mensual con hosting, dominio, copias de seguridad y soporte.\n• Soporte en persona: ${T('te','le')} explico todo con paciencia.\n\nMis trabajos: ${AJ.link}\n${T('Si te interesa','Si le interesa')}, ${T('respondeme','responda')} este mail o ${T('escribime','escríbame')} al WhatsApp ${AJ.tel}.\n\nSaludos,\n${AJ.nombre}\n${AJ.marca}\n\n${baja}`;
   const persona = `GUION PARA LA VISITA — ${p.nombre}\n\n1. Presentate: "${yo}"\n\n2. Lo que viste: "${hallazgo(p)}"\n\n3. Preguntá antes de ofrecer: "¿Qué es lo que más ${T('te','le')} complica hoy: que ${T('te','le')} hagan los pedidos o reservas, controlar la caja o que no falte mercadería?"\n\n4. Mostrá en el celular: una demo de su rubro o tus trabajos (${AJ.link}). Ofrecé: ${R.ofrece}.\n\n5. Hablá de lo que gana: ${R.beneficio}. Sin comisión por venta y con soporte en persona.\n\n6. Cerrá con un paso chico: "${T('Te','Le')} armo una prueba con ${T('tu','su')} local y ${T('te','se')} la muestro esta semana, sin compromiso. ¿Qué día ${T('te','le')} queda bien?"\n\nSi dice…\n• "Ya tengo Instagram": Instagram no aparece cuando alguien busca en Google, y no toma pedidos ni reservas solo.\n• "Es caro": empezamos por lo más simple y lo vamos sumando; ${T('te','le')} paso un presupuesto cerrado.\n• "No tengo tiempo": yo cargo todo; solo necesito fotos y precios.\n\nDejale tu tarjeta con el QR y anotá cuándo volver.`;
@@ -1012,7 +1017,7 @@ function secuencia(p, paso){
   const ganar = {gastro:'reciba pedidos y reservas directo', turismo:'reciba reservas directo, sin comisión', salud:'le saquen turno sin llamar', belleza:'le saquen turno sin llamar', comercio:'muestre sus productos y le escriban directo'}[p.rubro] || 'aparezca en Google y le escriban directo';
   const firma = `${AJ.nombre} · ${AJ.marca}`;
   if (paso===1){
-    const wa = `${T('¡Hola! ¿Cómo va?','¡Hola! Buen día.')} ${T('Te','Le')} escribí hace unos días por ${p.nombre}. ¿${T('Pudiste','Pudo')} verlo?\n\nSi ${T('querés','quiere')}, esta semana ${T('te','le')} armo la prueba con ${T('tu','su')} local para que ${T('veas','vea')} cómo quedaría, sin costo y sin compromiso.\n\n${T('Si no te interesa, decímelo y no te escribo más.','Si no le interesa, avíseme y no le escribo más.')}`;
+    const wa = `${T('¡Hola! ¿Cómo va?','¡Hola! Buen día.')} ${T('Te','Le')} escribí hace unos días por ${p.nombre}. ¿${T('Pudiste','Pudo')} leerlo?\n\nSi ${T('querés','quiere')}, esta semana ${T('te','le')} armo la prueba con ${T('tu','su')} local para que ${T('veas','vea')} cómo quedaría, sin costo y sin compromiso. Acá ${T('podés','puede')} ver lo que hago: ${AJ.link}\n\n${T('Si no te interesa, decímelo y no te escribo más.','Si no le interesa, avíseme y no le escribo más.')}`;
     const mail = `${T('Hola','Hola, buen día')}:\n\n${T('Te','Le')} escribí hace unos días por ${p.nombre} y quería saber si ${T('pudiste','pudo')} verlo.\n\nMi propuesta es armar ${R.ofrece}, para que ${p.nombre} ${ganar}. Antes de decidir nada ${T('te','le')} muestro una prueba con ${T('tu','su')} local.\n\n¿${T('Te','Le')} parece que la prepare?\n\n${firma}\n${AJ.tel}\n\n${T('Si no te interesa, decímelo y no te escribo más.','Si no le interesa, avíseme y no le escribo más.')}`;
     return {wa, asunto:'Re: '+mensajes(p).asunto, mail};
   }
